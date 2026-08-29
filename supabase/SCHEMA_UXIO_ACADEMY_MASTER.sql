@@ -1,29 +1,42 @@
 -- ==============================================================================
--- 🎓 UXIO ACADEMY · SCRIPT MAESTRO DE BASE DE DATOS (CONSOLIDADO COMPLETO)
+-- 🎓 UXIO ACADEMY · SCRIPT MAESTRO DE BASE DE DATOS (VERSION 100% RESILIENTE)
 -- Archivo: supabase/SCHEMA_UXIO_ACADEMY_MASTER.sql
 -- Instrucciones: Pega y ejecuta todo este script en el SQL Editor de Supabase
 -- Proyecto: https://xclmedxvoondijbdecsr.supabase.co
 -- ==============================================================================
 
 -- ==============================================================================
--- 1. EXTENSIÓN Y TABLA DE PERFILES DE USUARIO (PROFILES)
+-- 1. TABLA Y EXTENSIÓN DE PERFILES (PROFILES)
 -- ==============================================================================
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
   email text,
   avatar_url text,
-  role text not null default 'student' check (role in ('student', 'instructor', 'admin')),
-  bio text,
-  instagram text,
-  tiktok text,
-  youtube text,
-  website text,
-  city text,
-  profession text,
   created_at timestamptz default timezone('utc'::text, now()) not null,
   updated_at timestamptz default timezone('utc'::text, now()) not null
 );
+
+-- Asegurar que todas las columnas existan aunque la tabla ya existiera previamente
+alter table public.profiles
+  add column if not exists role text not null default 'student',
+  add column if not exists bio text,
+  add column if not exists instagram text,
+  add column if not exists tiktok text,
+  add column if not exists youtube text,
+  add column if not exists website text,
+  add column if not exists city text,
+  add column if not exists profession text;
+
+-- Asegurar restricción de valores en role
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'profiles_role_check'
+  ) then
+    alter table public.profiles add constraint profiles_role_check check (role in ('student', 'instructor', 'admin'));
+  end if;
+end $$;
 
 -- Índices de perfiles
 create index if not exists idx_profiles_role on public.profiles(role);
@@ -174,7 +187,7 @@ create policy "profiles_select_all" on public.profiles for select to authenticat
 drop policy if exists "profiles_update_own" on public.profiles;
 create policy "profiles_update_own" on public.profiles for update to authenticated using (auth.uid() = id);
 
--- COURSES & COHORTS (Lectura pública / para todos)
+-- COURSES & COHORTS (Lectura pública / para todos los autenticados)
 drop policy if exists "courses_select_public" on public.courses;
 create policy "courses_select_public" on public.courses for select to authenticated using (true);
 
