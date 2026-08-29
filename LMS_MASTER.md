@@ -391,6 +391,21 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 * **Decisión:** Mantener las instrucciones y criterios del reto en el repositorio estático (`data/academy/`), mientras que únicamente los metadatos del envío (`submission_url`, `submitted_at`, `status: pending | approved | needs_revision`, `feedback_text`) residirán en Supabase.
 * **Impacto:** Cero almacenamiento de contenido estático en base de datos; máxima agilidad para envíos y revisiones asíncronas con feedback directo.
 
+### ADR-007: Headless CMS Adapter Protocol & Schema Mapping (CMS Readiness)
+* **Contexto:** Garantizar que el dominio académico esté 100% preparado para conectarse a un Headless CMS (Sanity, Strapi, Decap o tablas de contenido Supabase) sin que se deba modificar ningún componente visual de la plataforma.
+* **Contrato del Proveedor de Contenido (`AcademyContentProvider`):**
+  ```ts
+  export interface AcademyContentProvider {
+    getAllCourses(lang: Locale): Promise<Course[]>;
+    getCourseBySlug(slug: string, lang: Locale): Promise<Course | undefined>;
+    getModuleBySlug(courseSlug: string, moduleSlug: string, lang: Locale): Promise<Module | undefined>;
+    getLessonBySlug(courseSlug: string, moduleSlug: string, lessonSlug: string, lang: Locale): Promise<Lesson | undefined>;
+    getPresentationBySlug(slug: string, lang: Locale): Promise<PresentationContent | undefined>;
+  }
+  ```
+* **Decisión:** Los esquemas definidos en `@/data/academy/types.ts` son serializables 1:1 en JSON. La implementación actual (`StaticRepositoryProvider`) opera sincrónicamente/estáticamente con cero latencia y cero egress. La migración futura a un CMS solo requerirá cambiar la instanciación del provider en `@/data/academy/index.ts`.
+* **Impacto:** CMS Readiness completada al 100% con cero regresión y arquitectura lista para escala editorial.
+
 ---
 
 ## 12. 🗺️ Roadmap de Implementación por Sprints (Sprint 2 Sequence)

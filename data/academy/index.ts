@@ -34,7 +34,8 @@ export function getAcademyCourses(lang: Locale = 'es'): CourseProgram[] {
   return getAllCourses(lang);
 }
 
-export function getCourseBySlug(slug: string, lang: Locale = 'es'): Course | undefined {
+export function getCourseBySlug(slug?: string, lang: Locale = 'es'): Course | undefined {
+  if (!slug) return undefined;
   const normalized = slug.toLowerCase();
   if (normalized === 'creator-lab' || normalized === 'contenido-que-vende') {
     return getCreatorLabCourse(lang);
@@ -43,10 +44,11 @@ export function getCourseBySlug(slug: string, lang: Locale = 'es'): Course | und
 }
 
 export function getModuleBySlug(
-  courseSlug: string,
-  moduleSlug: string,
+  courseSlug?: string,
+  moduleSlug?: string,
   lang: Locale = 'es'
 ): Module | undefined {
+  if (!courseSlug || !moduleSlug) return undefined;
   const course = getCourseBySlug(courseSlug, lang);
   if (!course) return undefined;
   const normalized = moduleSlug.toLowerCase();
@@ -56,11 +58,12 @@ export function getModuleBySlug(
 }
 
 export function getLessonBySlug(
-  courseSlug: string,
-  moduleSlug: string,
-  lessonSlug: string,
+  courseSlug?: string,
+  moduleSlug?: string,
+  lessonSlug?: string,
   lang: Locale = 'es'
 ): Lesson | undefined {
+  if (!courseSlug || !moduleSlug || !lessonSlug) return undefined;
   const moduleItem = getModuleBySlug(courseSlug, moduleSlug, lang);
   if (!moduleItem) return undefined;
   const normalized = lessonSlug.toLowerCase();
@@ -70,31 +73,35 @@ export function getLessonBySlug(
 }
 
 export function getLessonsByModule(
-  courseSlug: string,
-  moduleSlug: string,
+  courseSlug?: string,
+  moduleSlug?: string,
   lang: Locale = 'es'
 ): Lesson[] {
+  if (!courseSlug || !moduleSlug) return [];
   const moduleItem = getModuleBySlug(courseSlug, moduleSlug, lang);
   return moduleItem ? moduleItem.lessons : [];
 }
 
 export function getAdjacentLessons(
-  courseSlug: string,
-  moduleSlug: string,
-  lessonSlug: string,
+  courseSlug?: string,
+  moduleSlug?: string,
+  lessonSlug?: string,
   lang: Locale = 'es'
 ): {
   prevLesson?: { moduleSlug: string; lesson: Lesson };
   nextLesson?: { moduleSlug: string; lesson: Lesson };
 } {
+  if (!courseSlug || !moduleSlug || !lessonSlug) return {};
   const course = getCourseBySlug(courseSlug, lang);
   if (!course) return {};
 
   const flatLessons: Array<{ moduleSlug: string; lesson: Lesson }> = [];
   course.modules.forEach(m => {
-    m.lessons.forEach(l => {
-      flatLessons.push({ moduleSlug: m.slug, lesson: l });
-    });
+    if (Array.isArray(m.lessons)) {
+      m.lessons.forEach(l => {
+        flatLessons.push({ moduleSlug: m.slug, lesson: l });
+      });
+    }
   });
 
   const currentIndex = flatLessons.findIndex(
