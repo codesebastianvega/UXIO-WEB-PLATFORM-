@@ -1,6 +1,9 @@
 import { Locale } from '@/types';
 
 export type CohortStatus = 'open' | 'filling_fast' | 'last_spots' | 'closed';
+export type VideoProvider = 'youtube' | 'vimeo' | 'custom';
+export type LessonType = 'microclass' | 'live_lab';
+export type ResourceType = 'template' | 'pdf' | 'link' | 'prompt_pack';
 
 export interface CohortCapacity {
   capacity: number;
@@ -10,25 +13,71 @@ export interface CohortCapacity {
   status?: CohortStatus;
 }
 
-export interface LessonItem {
+export interface Microclass {
+  id: string;
   title: string;
-  topics: string[];
+  duration: string;
+  description: string;
+  videoUrl?: string;
+  videoProvider?: VideoProvider;
 }
 
-export interface CourseModule {
+export interface LessonResource {
+  id: string;
+  title: string;
+  type: ResourceType;
+  url: string;
+  description?: string;
+}
+
+export interface LessonChallenge {
+  title: string;
+  whatToDo: string;
+  whatToDeliver: string;
+  whereToSubmit: string;
+  evaluationCriteria: string[];
+}
+
+export interface Lesson {
+  id: string;
+  slug: string;
+  moduleSlug: string;
+  title: string;
+  type: LessonType;
+  duration: string;
+  objective: string;
+  topics: string[];
+  microclasses: Microclass[];
+  presentationSlug?: string;
+  resources: LessonResource[];
+  challenge?: LessonChallenge;
+}
+
+export interface ProjectDeliverable {
+  title: string;
+  description: string;
+  items: string[];
+}
+
+export interface Module {
+  id: string;
+  slug: string;
   weekNumber: number;
   weekTag: string;
   dates: string;
   title: string;
   subtitle: string;
   objective: string;
-  lessons: LessonItem[];
-  projectDeliverable: {
-    title: string;
-    description: string;
-    items: string[];
-  };
+  lessons: Lesson[];
+  projectDeliverable: ProjectDeliverable;
 }
+
+// Alias for backward compatibility with existing commercial syllabus components
+export type CourseModule = Module;
+export type LessonItem = {
+  title: string;
+  topics: string[];
+};
 
 export interface ScheduleEvent {
   dates: string;
@@ -57,7 +106,19 @@ export interface FeatureIncluded {
   icon: string;
 }
 
-export interface CourseProgram {
+export interface CertificateInfo {
+  title: string;
+  description: string;
+  disclaimer: string;
+  badge: string;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface Course {
   id: string;
   slug: string;
   title: string;
@@ -77,14 +138,12 @@ export interface CourseProgram {
   problems: string[];
   transformations: TransformationItem[];
   whatIncludes: FeatureIncluded[];
-  modules: CourseModule[];
+  modules: Module[];
   schedule: ScheduleEvent[];
   targetAudiences: TargetAudienceGroup[];
-  certificateInfo: {
-    title: string;
-    description: string;
-    disclaimer: string;
-    badge: string;
-  };
-  faqs: Array<{ question: string; answer: string }>;
+  certificateInfo: CertificateInfo;
+  faqs: FaqItem[];
 }
+
+// Alias for backward compatibility
+export type CourseProgram = Course;

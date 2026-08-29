@@ -1,20 +1,81 @@
 import { Locale } from '@/types';
-import { CourseProgram, CohortCapacity } from './types';
-import { getCreatorLabData } from './creator-lab';
+import { Course, CourseProgram, CohortCapacity, Module, Lesson } from './types';
+import { getCreatorLabCourse } from './creator-lab/course';
+import { getCreatorLabModules } from './creator-lab/modules';
+import {
+  getAllLessons,
+  getLessonBySlug as getLessonBySlugRaw,
+  getLessonsByModuleSlug,
+} from './creator-lab/lessons';
+import {
+  getAllPresentations,
+  getPresentationBySlug,
+  getPresentationByLessonId,
+} from './creator-lab/presentations';
 
+// Export all types and sub-domain modules
 export * from './types';
-export { getCreatorLabData };
+export * from './creator-lab/course';
+export * from './creator-lab/modules';
+export * from './creator-lab/lessons';
+export * from './creator-lab/presentations';
 
-export function getAcademyCourses(lang: Locale = 'es'): CourseProgram[] {
-  return [getCreatorLabData(lang)];
+// Backward compatibility alias for legacy data file
+export const getCreatorLabData = (lang: Locale = 'es'): CourseProgram => {
+  return getCreatorLabCourse(lang);
+};
+
+// Pure Content Domain Getters
+export function getAllCourses(lang: Locale = 'es'): Course[] {
+  return [getCreatorLabCourse(lang)];
 }
 
-export function getCourseBySlug(slug: string, lang: Locale = 'es'): CourseProgram | undefined {
+export function getAcademyCourses(lang: Locale = 'es'): CourseProgram[] {
+  return getAllCourses(lang);
+}
+
+export function getCourseBySlug(slug: string, lang: Locale = 'es'): Course | undefined {
   const normalized = slug.toLowerCase();
   if (normalized === 'creator-lab' || normalized === 'contenido-que-vende') {
-    return getCreatorLabData(lang);
+    return getCreatorLabCourse(lang);
   }
   return undefined;
+}
+
+export function getModuleBySlug(
+  courseSlug: string,
+  moduleSlug: string,
+  lang: Locale = 'es'
+): Module | undefined {
+  const course = getCourseBySlug(courseSlug, lang);
+  if (!course) return undefined;
+  const normalized = moduleSlug.toLowerCase();
+  return course.modules.find(
+    m => m.slug.toLowerCase() === normalized || m.id.toLowerCase() === normalized
+  );
+}
+
+export function getLessonBySlug(
+  courseSlug: string,
+  moduleSlug: string,
+  lessonSlug: string,
+  lang: Locale = 'es'
+): Lesson | undefined {
+  const moduleItem = getModuleBySlug(courseSlug, moduleSlug, lang);
+  if (!moduleItem) return undefined;
+  const normalized = lessonSlug.toLowerCase();
+  return moduleItem.lessons.find(
+    l => l.slug.toLowerCase() === normalized || l.id.toLowerCase() === normalized
+  );
+}
+
+export function getLessonsByModule(
+  courseSlug: string,
+  moduleSlug: string,
+  lang: Locale = 'es'
+): Lesson[] {
+  const moduleItem = getModuleBySlug(courseSlug, moduleSlug, lang);
+  return moduleItem ? moduleItem.lessons : [];
 }
 
 export function getCohortStatusInfo(capacity: CohortCapacity, lang: Locale = 'es') {

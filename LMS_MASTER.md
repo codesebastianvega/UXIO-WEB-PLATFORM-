@@ -365,6 +365,13 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 * **Elección:** Componente `VideoPlayer` que abstrae el origen (iniciando con YouTube unlisted).
 * **Por qué:** Permite migrar a Vimeo, Mux o almacenamiento propio en el futuro sin modificar las lecciones.
 
+### ADR-005: Content Source Agnostic Architecture (Desacoplamiento Total de la Fuente)
+* **Contexto:** Garantizar que el LMS pueda evolucionar a futuro sin que ningún componente de visualización o experiencia de estudiante dependa directamente del medio de persistencia.
+* **Elección:** El LMS debe consumir contenido **exclusivamente mediante la capa tipada `Academy Domain`** (getters y modelos puros en `@/data/academy`).
+* **Por qué:** La fuente de contenido podrá ser Static Repository, JSON, CMS headless o Supabase en el futuro. Ningún componente de *Student Experience* (Classroom, Lesson Viewer, Presentation Engine) deberá depender directamente de la fuente de persistencia del contenido.
+* **Alternativa descartada:** Hacer que componentes visuales consulten directamente tablas de base de datos o APIs de persistencia para obtener textos y temarios.
+* **Impacto:** Deja la puerta abierta a un CMS futuro sin hipotecar el rendimiento, estabilidad y cero costo de egress del presente.
+
 ---
 
 ## 12. 🗺️ Roadmap de Implementación por Sprints
