@@ -58,6 +58,20 @@ export const getLessonM0002 = (lang: Locale = 'es'): Lesson => {
         url: 'https://notion.so/uxio/apps-checklist',
         description: isEs ? 'Enlaces directos de descarga para iOS y Android.' : 'Direct download links for iOS and Android.',
       },
+      {
+        id: 'res-00-02-02',
+        title: isEs ? 'Prompt Pack: Fórmulas de Ideación Rápida con IA' : 'Prompt Pack: Rapid AI Ideation Formulas',
+        type: 'prompt_pack',
+        url: 'https://notion.so/uxio/prompts-kit',
+        description: isEs ? '10 prompts optimizados para ChatGPT y Claude.' : '10 optimized prompts for ChatGPT and Claude.',
+      },
+      {
+        id: 'res-00-02-03',
+        title: isEs ? 'Acceso al Canal de Soporte Técnico' : 'Technical Support Channel Access',
+        type: 'link',
+        url: 'https://discord.gg/uxio',
+        description: isEs ? 'Canal para dudas de configuración de audio y video.' : 'Discord channel for audio/video troubleshooting.',
+      },
     ],
     challenge: {
       title: isEs ? 'Reto 0.1: Foto de tu Espacio de Grabación' : 'Challenge 0.1: Your Shooting Setup Photo',

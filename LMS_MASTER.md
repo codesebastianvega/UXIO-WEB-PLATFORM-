@@ -372,6 +372,25 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 * **Alternativa descartada:** Hacer que componentes visuales consulten directamente tablas de base de datos o APIs de persistencia para obtener textos y temarios.
 * **Impacto:** Deja la puerta abierta a un CMS futuro sin hipotecar el rendimiento, estabilidad y cero costo de egress del presente.
 
+### ADR-006: Asynchronous Challenge Submissions & Review Lifecycle (Arquitectura Futura de Entregables)
+* **Contexto:** Definir cómo interactuarán los estudiantes, docentes y el sistema de evaluación cuando se active la persistencia de entregables y retos semanales.
+* **Ciclo de Vida:**
+  ```text
+  Student (Classroom)
+    ↓
+  Challenge (data/academy/)
+    ↓
+  Submission (Supabase / Storage: link, PDF o imagen)
+    ↓
+  Review Queue (Dashboard docente / Instructor panel)
+    ↓
+  Feedback & Approval (Comentarios / Rúbrica)
+    ↓
+  Capstone Completion & Certificate Generation
+  ```
+* **Decisión:** Mantener las instrucciones y criterios del reto en el repositorio estático (`data/academy/`), mientras que únicamente los metadatos del envío (`submission_url`, `submitted_at`, `status: pending | approved | needs_revision`, `feedback_text`) residirán en Supabase.
+* **Impacto:** Cero almacenamiento de contenido estático en base de datos; máxima agilidad para envíos y revisiones asíncronas con feedback directo.
+
 ---
 
 ## 12. 🗺️ Roadmap de Implementación por Sprints

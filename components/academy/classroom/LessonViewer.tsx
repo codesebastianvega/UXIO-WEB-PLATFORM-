@@ -2,12 +2,14 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Layers, FileText, Award, Sparkles, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Layers } from 'lucide-react';
 import { Lesson, Module } from '@/data/academy/types';
 import { Locale } from '@/types';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
 import MicroclassList from './MicroclassList';
+import LessonResources from './LessonResources';
+import LessonChallenge from './LessonChallenge';
 import LessonCompleteButton from './LessonCompleteButton';
 
 interface AdjacentLessonInfo {
@@ -82,127 +84,76 @@ export default function LessonViewer({
         />
       )}
 
-      {/* 4. Structural Blocks: Presentation, Resources & Challenge */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Presentation Block */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Layers size={16} className="text-[#FE385B]" />
-              <h3 className="font-display font-bold text-sm text-[#111111] dark:text-white">
-                {isEs ? 'Presentación 16:9' : '16:9 Presentation'}
+      {/* 4. Presentation Deck Card */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <Layers size={18} className="text-[#FE385B]" />
+            <div>
+              <h3 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white">
+                {isEs ? 'Diapositivas y Material Visual 16:9' : '16:9 Slide Deck & Visual Materials'}
               </h3>
+              <p className="text-xs text-[#8E8E93] font-sans">
+                {isEs
+                  ? 'Presentación interactiva para repasar conceptos, fórmulas y comparativas.'
+                  : 'Interactive presentation deck to review concepts, formulas, and frameworks.'}
+              </p>
             </div>
-            <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded-md">
-              {lesson.presentationSlug ? 'Diapositivas Listas' : 'En Preparación'}
-            </span>
           </div>
 
-          <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans leading-relaxed">
-            {isEs
-              ? 'Material visual y diapositivas de la clase para repasar o proyectar.'
-              : 'Visual slide deck for reviewing and classroom projection.'}
-          </p>
-
-          <div>
-            {lesson.presentationSlug ? (
-              <Link
-                href={`/${lang}/academy/classroom/${courseSlug}/${moduleItem.slug}/${lesson.slug}/slides`}
-                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 text-xs font-mono font-bold transition-all shadow-md shadow-[#FE385B]/20"
-              >
-                <Layers size={13} />
-                <span>{isEs ? 'Ver Diapositivas 16:9' : 'Open Slide Deck 16:9'}</span>
-              </Link>
-            ) : (
-              <button
-                type="button"
-                disabled
-                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] border border-black/[0.06] dark:border-white/[0.06] opacity-50"
-              >
-                <Layers size={13} />
-                <span>{isEs ? 'Sin Presentación' : 'No Slides Available'}</span>
-              </button>
-            )}
-          </div>
+          <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2.5 py-1 rounded-md border border-[#FE385B]/20 shrink-0">
+            {lesson.presentationSlug ? (isEs ? 'Diapositivas Listas' : 'Slides Ready') : (isEs ? 'En Preparación' : 'Pending')}
+          </span>
         </div>
 
-        {/* Resources Block */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <FileText size={16} className="text-[#FFCC48]" />
-              <h3 className="font-display font-bold text-sm text-[#111111] dark:text-white">
-                {isEs ? 'Recursos & Plantillas' : 'Resources & Templates'}
-              </h3>
-            </div>
-            <span className="font-mono text-[10px] text-[#8E8E93]">
-              {lesson.resources.length} {isEs ? 'disponible(s)' : 'item(s)'}
-            </span>
-          </div>
-
-          {lesson.resources.length > 0 ? (
-            <div className="space-y-2">
-              {lesson.resources.map(res => (
-                <div
-                  key={res.id}
-                  className="p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.04] text-xs font-sans flex items-center justify-between gap-2"
-                >
-                  <span className="font-medium text-[#111111] dark:text-white truncate">{res.title}</span>
-                  <span className="font-mono text-[10px] text-[#FFCC48] uppercase shrink-0">{res.type}</span>
-                </div>
-              ))}
-            </div>
+        <div>
+          {lesson.presentationSlug ? (
+            <Link
+              href={`/${lang}/academy/classroom/${courseSlug}/${moduleItem.slug}/${lesson.slug}/slides`}
+              className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 text-xs font-mono font-bold transition-all shadow-md shadow-[#FE385B]/20"
+            >
+              <Layers size={14} />
+              <span>{isEs ? 'Abrir Presentación Interactiva (16:9)' : 'Open Interactive Deck (16:9)'}</span>
+            </Link>
           ) : (
-            <p className="text-xs text-[#8E8E93] font-sans">
-              {isEs ? 'Esta lección no requiere archivos descargables adicionales.' : 'No downloadable files required for this lesson.'}
-            </p>
+            <button
+              type="button"
+              disabled
+              className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] border border-black/[0.06] dark:border-white/[0.06] opacity-50"
+            >
+              <Layers size={14} />
+              <span>{isEs ? 'Sin Diapositivas Asignadas' : 'No Slides Assigned'}</span>
+            </button>
           )}
         </div>
-
-        {/* Challenge Block */}
-        {lesson.challenge && (
-          <div className="p-6 rounded-3xl bg-white dark:bg-[#171719] border border-[#10B981]/20 shadow-soft space-y-4 md:col-span-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Award size={16} className="text-[#10B981]" />
-                <h3 className="font-display font-bold text-sm text-[#111111] dark:text-white">
-                  {lesson.challenge.title}
-                </h3>
-              </div>
-              <span className="font-mono text-[10px] text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded-md">
-                {isEs ? 'RETO SEMANAL' : 'WEEKLY CHALLENGE'}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans text-[#666666] dark:text-[#8E8E93]">
-              <div className="p-3.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02]">
-                <span className="font-mono text-[10px] text-[#10B981] uppercase block font-semibold mb-1">
-                  {isEs ? '¿QUÉ DEBES HACER?' : 'WHAT TO DO?'}
-                </span>
-                <p className="leading-relaxed">{lesson.challenge.whatToDo}</p>
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02]">
-                <span className="font-mono text-[10px] text-[#10B981] uppercase block font-semibold mb-1">
-                  {isEs ? '¿QUÉ DEBES ENTREGAR?' : 'WHAT TO DELIVER?'}
-                </span>
-                <p className="leading-relaxed">{lesson.challenge.whatToDeliver}</p>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
-      {/* 5. Completion Action Box */}
-      <div className="p-6 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* 5. Resources, Templates & Downloads */}
+      {lesson.resources && lesson.resources.length > 0 && (
+        <LessonResources
+          resources={lesson.resources}
+          lang={lang}
+        />
+      )}
+
+      {/* 6. Practical Challenge */}
+      {lesson.challenge && (
+        <LessonChallenge
+          challenge={lesson.challenge}
+          lang={lang}
+        />
+      )}
+
+      {/* 7. Lesson Completion Action Box */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-center sm:text-left">
-          <h4 className="font-display font-bold text-sm text-[#111111] dark:text-white">
+          <h4 className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white">
             {isEs ? '¿Terminaste de estudiar esta lección?' : 'Finished studying this lesson?'}
           </h4>
           <p className="text-xs text-[#8E8E93] font-sans mt-0.5">
             {isEs
-              ? 'Guarda tu progreso para actualizar tu porcentaje del curso.'
-              : 'Save your progress to update your completion percentage.'}
+              ? 'Guarda tu progreso para actualizar tu porcentaje del curso y avanzar a la siguiente lección.'
+              : 'Save your progress to update your course completion status and unlock the next lesson.'}
           </p>
         </div>
 
@@ -214,7 +165,7 @@ export default function LessonViewer({
         />
       </div>
 
-      {/* 6. Prev / Next Lesson Navigation Bar */}
+      {/* 8. Prev / Next Lesson Navigation Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-black/[0.06] dark:border-white/[0.06]">
         {prevLesson ? (
           <Link
