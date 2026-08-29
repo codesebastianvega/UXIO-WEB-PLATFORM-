@@ -433,15 +433,17 @@ SPRINT 2J: SIE Academy Product & UX Definition [COMPLETADO]
     ↓
 SPRINT 2K: Academy UI Polish & Productization [COMPLETADO - 98c2db6]
     ↓
-SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO]
+SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO - 8d20651]
+    ↓
+SPRINT 3B: Instructor Review & Feedback [COMPLETADO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE (Sprints 2A → 3A):**
-  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), RLS estricto y trigger seguro `handle_new_user()`.
+* **DONE (Sprints 2A → 3B):**
+  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), roles (`student`, `instructor`, `admin`), RLS estricto y trigger seguro `handle_new_user()`.
   - Dominio académico tipado y modular (`@/data/academy`).
   - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
   - Lesson Viewer con reproductor de video responsivo y conmutador de microclases.
@@ -449,7 +451,8 @@ SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO]
   - Presentation Engine 16:9 con soporte para 10 tipos de slides, atajos de teclado y exportación a PDF vía `@media print`.
   - Grid de recursos descargables (templates, PDFs, prompt packs, enlaces) y fichas de retos prácticos.
   - Formulario de entrega asíncrona de retos (`ChallengeSubmission`) con estados (`submitted`, `pending_review`, `needs_revision`, `approved`) y retroalimentación docente.
-  - Suite de pruebas E2E con 15/15 casos superados y 0 regresiones.
-* **NEXT (Sprint 3B+):**
-  - Panel de revisión de entregas para instructores (Review Queue), feedback en tiempo real y certificación.
+  - Panel operativo de revisión docente (`/academy/instructor`) con filtros por estado, búsqueda de estudiantes, checklist de rúbrica de evaluación, emisión de feedback y acciones de aprobación/solicitud de ajustes.
+  - Suite de pruebas E2E con todas las rutas públicas y protegidas validadas y 0 regresiones.
+* **NEXT (Sprint 3C+):**
+  - Certificados dinámicos de graduación de cohorte y analíticas de desempeño.
 
