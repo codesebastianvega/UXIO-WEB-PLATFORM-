@@ -8,7 +8,6 @@ import { Locale } from '@/types';
 import { LessonSubmission } from '@/lib/supabase/academy-submissions';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
-import MicroclassList from './MicroclassList';
 import LessonResources from './LessonResources';
 import LessonChallenge from './LessonChallenge';
 import ChallengeSubmission from './ChallengeSubmission';
@@ -103,22 +102,15 @@ export default function LessonViewer({
 
   return (
     <div className="space-y-8">
-      {/* 1. Lesson Header */}
+      {/* 1. Unified Lesson Header & Microclasses Grid with Spotlight Effect */}
       <LessonHeader
         lesson={lesson}
         moduleItem={moduleItem}
+        microclasses={lesson.microclasses}
+        selectedMicroclassIndex={selectedMicroclassIndex}
+        onSelectMicroclass={setSelectedMicroclassIndex}
         lang={lang}
       />
-
-      {/* 2. Microclass Switcher Grid (ABOVE the video) */}
-      {lesson.microclasses.length > 0 && (
-        <MicroclassList
-          microclasses={lesson.microclasses}
-          selectedIndex={selectedMicroclassIndex}
-          onSelect={setSelectedMicroclassIndex}
-          lang={lang}
-        />
-      )}
 
       {/* 3. Video Player Stage with Controller Bar */}
       <div id="video-stage" className="space-y-3 scroll-mt-24">
