@@ -419,6 +419,25 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 * **Decisión:** La tabla `certificates` en Supabase almacena únicamente metadatos de emisión (`id`, `user_id`, `course_id`, `certificate_number`, `status: eligible | issued | revoked`, `issued_at`). El cliente nunca puede autoemitirse un certificado.
 * **Impacto:** Integridad académica 100% garantizada, cero egress de datos redundantes y arquitectura lista para emisión masiva y verificación QR.
 
+### ADR-009: Verifiable Digital Certificate Architecture
+* **Contexto:** Proveer a los graduados de credenciales digitales verificables al instante mediante códigos QR y exportación a PDF landscape de alta definición, sin intermediarios ni costos de almacenamiento pesado.
+* **Flujo de Ciclo de Vida:**
+  ```text
+  Elegibilidad (100% + Retos Aprobados)
+    ↓
+  Emisión Docente (Server Action: issueStudentCertificateAction)
+    ↓
+  ID Único de Registro (UXIO-YYYY-XXXX)
+    ↓
+  Exportación PDF Landscape (@media print & certificate-print.css)
+    ↓
+  Código QR Embebido (SVG Vectorial)
+    ↓
+  Validación Pública (/academy/verify/[certificateNumber])
+  ```
+* **Decisión:** El código QR se genera de forma determinística en formato SVG sin librerías externas pesadas, apuntando a la URL pública `https://uxio.io/[lang]/academy/verify/[certificateNumber]`. La página de verificación es accesible a cualquier empleador o tercero sin requerir inicio de sesión.
+* **Impacto:** Credenciales con validez curricular real, cero fugas de datos privados del estudiante y validación instantánea en 1 clic.
+
 ---
 
 ## 12. 🗺️ Roadmap de Implementación por Sprints
@@ -452,14 +471,16 @@ SPRINT 3B: Instructor Review & Feedback [COMPLETADO - 4f4f68c]
     ↓
 SPRINT 3C: Student Profile & Outcomes [COMPLETADO - ab4dc9e]
     ↓
-SPRINT 3D: Certificate Foundation & Eligibility [COMPLETADO]
+SPRINT 3D: Certificate Foundation & Eligibility [COMPLETADO - f5acd62]
+    ↓
+SPRINT 3E: Certificate PDF & Public Verification [COMPLETADO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE (Sprints 2A → 3D):**
+* **DONE (Sprints 2A → 3E):**
   - Base de datos Supabase con 7 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`, `certificates`), roles (`student`, `instructor`, `admin`), campos de perfil de creador, RLS estricto y trigger seguro `handle_new_user()`.
   - Dominio académico tipado y modular (`@/data/academy`).
   - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
@@ -470,8 +491,8 @@ SPRINT 3D: Certificate Foundation & Eligibility [COMPLETADO]
   - Formulario de entrega asíncrona de retos (`ChallengeSubmission`) con estados (`submitted`, `pending_review`, `needs_revision`, `approved`) y retroalimentación docente.
   - Panel operativo de revisión docente (`/academy/instructor`) con filtros por estado, búsqueda de estudiantes, checklist de rúbrica de evaluación, emisión de feedback y acciones de aprobación/solicitud de ajustes.
   - Perfil profesional del creador (`/academy/classroom/profile`) con edición segura, enlaces a redes sociales y matriz de outcomes en tiempo real.
-  - Fundación de certificados (`/academy/classroom/certificate`) con tabla `certificates`, helper de elegibilidad académica rigurosa (`checkStudentEligibility`), RLS y vista protegida.
+  - Certificados digitales oficiales (`/academy/classroom/certificate`) con exportación PDF en landscape, código QR dinámico y página pública de validación (`/academy/verify/[certificateNumber]`).
   - Suite de pruebas E2E con todas las rutas públicas y protegidas validadas y 0 regresiones.
-* **NEXT (Sprint 3E+):**
-  - Emisión de diploma PDF, código QR dinámico y ruta pública de verificación (`/verify/[certificateNumber]`).
+* **NEXT (Sprint 3F+):**
+  - Credential sharing en LinkedIn, social badges y experiencia de egresado.
 

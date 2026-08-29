@@ -16,6 +16,7 @@ import {
 import { Locale } from '@/types';
 import { InstructorQueueItem } from '@/lib/supabase/instructor';
 import { reviewSubmissionAction } from '@/app/[lang]/academy/actions/instructor';
+import { issueStudentCertificateAction } from '@/app/[lang]/academy/actions/certificates';
 
 interface SubmissionReviewProps {
   item: InstructorQueueItem;
@@ -34,10 +35,32 @@ export default function SubmissionReview({
   const [feedback, setFeedback] = useState(item.feedbackText || '');
   const [checkedCriteria, setCheckedCriteria] = useState<Record<number, boolean>>({});
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [certIssuedMsg, setCertIssuedMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const toggleCriterion = (idx: number) => {
     setCheckedCriteria(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const handleIssueCertificate = () => {
+    setErrorMsg(null);
+    setCertIssuedMsg(null);
+    startTransition(async () => {
+      const res = await issueStudentCertificateAction({
+        studentId: item.userId,
+        courseSlug: item.courseSlug,
+        lang,
+      });
+      if (res.success && res.certificateNumber) {
+        setCertIssuedMsg(
+          isEs
+            ? `✓ ¡Certificado ${res.certificateNumber} emitido con éxito!`
+            : `✓ Certificate ${res.certificateNumber} issued successfully!`
+        );
+      } else {
+        setErrorMsg(res.error || (isEs ? 'Error al emitir certificado.' : 'Failed to issue certificate.'));
+      }
+    });
   };
 
   const handleReview = (status: 'approved' | 'needs_revision') => {
@@ -51,6 +74,7 @@ export default function SubmissionReview({
     }
 
     setErrorMsg(null);
+    setCertIssuedMsg(null);
 
     startTransition(async () => {
       const res = await reviewSubmissionAction({
@@ -101,60 +125,45 @@ export default function SubmissionReview({
         </button>
       </div>
 
-      {/* 1. Student Deliverable Link Card */}
-      <div className="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] space-y-3">
-        <div className="flex items-center justify-between text-xs font-mono text-[#8E8E93]">
-          <span className="flex items-center gap-1.5">
-            <LinkIcon size={13} className="text-[#00F0FF]" />
-            {isEs ? 'Entregable del Alumno:' : 'Student Deliverable:'}
-          </span>
-          <span className="uppercase text-[10px] text-[#00F0FF] bg-[#00F0FF]/10 px-2 py-0.5 rounded">
-            {item.submissionType}
-          </span>
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <a
-            href={item.submissionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-mono text-[#00F0FF] hover:underline truncate max-w-md"
-          >
-            <ExternalLink size={14} className="shrink-0" />
-            <span className="truncate">{item.submissionUrl}</span>
-          </a>
+      {/* Deliverable Info */}
+      <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded uppercase font-bold">
+              {item.submissionType}
+            </span>
+            <span className="font-mono text-xs text-[#8E8E93]">
+              {new Date(item.submittedAt).toLocaleDateString()}
+            </span>
+          </div>
 
           <a
             href={item.submissionUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#00F0FF] text-black font-display font-bold text-xs hover:bg-[#00F0FF]/90 transition-all shadow-md shadow-[#00F0FF]/20 shrink-0"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF] hover:bg-[#00F0FF]/25 font-mono text-xs transition-colors"
           >
-            <span>{isEs ? 'Abrir en pestaña nueva' : 'Open in new tab'}</span>
+            <span>{isEs ? 'Abrir Entregable' : 'Open Link'}</span>
             <ExternalLink size={12} />
           </a>
         </div>
-      </div>
 
-      {/* 2. Challenge Instructions Briefing */}
-      {item.challengePrompt && (
-        <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.04] space-y-2 text-xs font-sans">
-          <span className="font-mono text-[10px] text-[#FE385B] uppercase font-bold block">
-            {isEs ? 'Consigna del Reto:' : 'Challenge Brief:'}
-          </span>
-          <p className="text-[#111111] dark:text-[#E5E5E7] leading-relaxed">
+        {item.challengePrompt && (
+          <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans border-t border-black/[0.04] dark:border-white/[0.04] pt-2">
+            <strong>{isEs ? 'Consigna del reto: ' : 'Challenge prompt: '}</strong>
             {item.challengePrompt}
           </p>
-          {item.challengeDeliverable && (
-            <p className="text-[#8E8E93] italic">
-              <strong>{isEs ? 'Entregable esperado: ' : 'Expected deliverable: '}</strong>
-              {item.challengeDeliverable}
-            </p>
-          )}
-        </div>
-      )}
+        )}
 
-      {/* 3. Evaluation Criteria Rubric */}
+        {item.challengeDeliverable && (
+          <p className="text-xs text-[#8E8E93] italic">
+            <strong>{isEs ? 'Entregable esperado: ' : 'Expected deliverable: '}</strong>
+            {item.challengeDeliverable}
+          </p>
+        )}
+      </div>
+
+      {/* Evaluation Criteria Rubric */}
       {item.challengeCriteria.length > 0 && (
         <div className="space-y-2">
           <span className="font-mono text-xs text-[#8E8E93] block">
@@ -182,26 +191,33 @@ export default function SubmissionReview({
         </div>
       )}
 
-      {/* 4. Feedback Textarea */}
+      {/* Feedback Textarea */}
       <div className="space-y-1.5">
         <label className="font-mono text-xs text-[#8E8E93] flex items-center justify-between">
           <span>{isEs ? 'Comentarios / Feedback para el Alumno:' : 'Feedback for Student:'}</span>
           <span className="text-[10px]">{feedback.length} carácteres</span>
         </label>
         <textarea
-          rows={4}
+          rows={3}
           value={feedback}
           onChange={e => setFeedback(e.target.value)}
           placeholder={
             isEs
-              ? 'Ej: ¡Excelente gancho inicial! Te recomiendo mejorar la iluminación en el segundo plano para mayor nitidez.'
-              : 'E.g., Great hook! Suggest improving the lighting in the b-roll for higher sharpness.'
+              ? 'Ej: ¡Excelente gancho inicial! Te recomiendo mejorar la iluminación en el segundo plano.'
+              : 'E.g., Great hook! Suggest improving the lighting in the b-roll.'
           }
-          className="w-full p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#00F0FF]/50"
+          className="w-full p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#00F0FF]/50"
         />
       </div>
 
-      {/* Error Message */}
+      {/* Alerts */}
+      {certIssuedMsg && (
+        <div className="p-3 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 flex items-center gap-2 text-xs text-[#10B981] font-bold font-mono">
+          <CheckCircle2 size={14} className="shrink-0" />
+          <span>{certIssuedMsg}</span>
+        </div>
+      )}
+
       {errorMsg && (
         <div className="p-3 rounded-xl bg-[#FE385B]/10 border border-[#FE385B]/20 flex items-center gap-2 text-xs text-[#FE385B]">
           <AlertCircle size={14} className="shrink-0" />
@@ -209,25 +225,37 @@ export default function SubmissionReview({
         </div>
       )}
 
-      {/* 5. Review Actions */}
+      {/* Review Actions */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
         <button
           type="button"
           onClick={onClose}
           disabled={isPending}
-          className="w-full sm:w-auto py-3 px-4 rounded-xl text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-colors"
+          className="w-full sm:w-auto py-2.5 px-3 rounded-xl text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-colors"
         >
-          {isEs ? 'Cerrar sin guardar' : 'Close'}
+          {isEs ? 'Cerrar' : 'Close'}
         </button>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          {item.status === 'approved' && (
+            <button
+              type="button"
+              onClick={handleIssueCertificate}
+              disabled={isPending}
+              className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF] hover:bg-[#00F0FF]/25 font-mono text-xs border border-[#00F0FF]/30 transition-all disabled:opacity-50"
+            >
+              {isPending && <Loader2 size={12} className="animate-spin" />}
+              <span>{isEs ? '🎓 Emitir Certificado' : '🎓 Issue Certificate'}</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => handleReview('needs_revision')}
             disabled={isPending}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-[#FF7F07]/15 text-[#FF7F07] hover:bg-[#FF7F07]/25 font-display font-bold text-xs border border-[#FF7F07]/30 transition-all disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF7F07]/15 text-[#FF7F07] hover:bg-[#FF7F07]/25 font-display font-bold text-xs border border-[#FF7F07]/30 transition-all disabled:opacity-50"
           >
-            {isPending && <Loader2 size={13} className="animate-spin" />}
+            {isPending && <Loader2 size={12} className="animate-spin" />}
             <span>{isEs ? '↻ Solicitar Ajustes' : 'Request Revision'}</span>
           </button>
 
@@ -235,10 +263,10 @@ export default function SubmissionReview({
             type="button"
             onClick={() => handleReview('approved')}
             disabled={isPending}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 py-3 px-6 rounded-2xl bg-[#10B981] text-white hover:bg-[#10B981]/90 font-display font-bold text-xs shadow-md shadow-[#10B981]/20 transition-all disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-5 rounded-xl bg-[#10B981] text-white hover:bg-[#10B981]/90 font-display font-bold text-xs shadow-md shadow-[#10B981]/20 transition-all disabled:opacity-50"
           >
-            {isPending && <Loader2 size={13} className="animate-spin" />}
-            <span>{isEs ? '✓ Aprobar Reto' : 'Approve Challenge'}</span>
+            {isPending && <Loader2 size={12} className="animate-spin" />}
+            <span>{isEs ? '✓ Aprobar Reto' : 'Approve'}</span>
           </button>
         </div>
       </div>

@@ -11,6 +11,8 @@ import {
   X,
   BookOpen,
   CheckCircle2,
+  User,
+  Award,
 } from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
@@ -169,6 +171,24 @@ export default function ClassroomSidebar({
             </div>
           );
         })}
+      </div>
+
+      {/* Classroom Quick Links: Profile & Certificate */}
+      <div className="pt-2 border-t border-black/[0.06] dark:border-white/[0.06] space-y-1.5">
+        <Link
+          href={`/${lang}/academy/classroom/profile`}
+          className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#00F0FF] transition-colors"
+        >
+          <User size={14} className="text-[#00F0FF]" />
+          <span>{isEs ? 'Mi Perfil & Resultados' : 'My Profile & Outcomes'}</span>
+        </Link>
+        <Link
+          href={`/${lang}/academy/classroom/certificate`}
+          className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#10B981] transition-colors"
+        >
+          <Award size={14} className="text-[#10B981]" />
+          <span>{isEs ? 'Estado de Certificado' : 'Certificate Status'}</span>
+        </Link>
       </div>
     </div>
   );
