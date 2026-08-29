@@ -406,6 +406,19 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 * **Decisión:** Los esquemas definidos en `@/data/academy/types.ts` son serializables 1:1 en JSON. La implementación actual (`StaticRepositoryProvider`) opera sincrónicamente/estáticamente con cero latencia y cero egress. La migración futura a un CMS solo requerirá cambiar la instanciación del provider en `@/data/academy/index.ts`.
 * **Impacto:** CMS Readiness completada al 100% con cero regresión y arquitectura lista para escala editorial.
 
+### ADR-008: Certificate & Credential Architecture
+* **Contexto:** Garantizar que los certificados de SIE Academy sean inmutables, basados en méritos estrictos y verificables públicamente, sin persistir porcentajes calculados ni duplicar contenido pedagógico.
+* **Regla de Elegibilidad:**
+  ```text
+  eligible = (100% Lecciones completadas) + (Todos los retos obligatorios aprobados por docente)
+  ```
+* **Fases del Sistema de Certificación:**
+  1. **Fase 3D (Foundation):** Tabla `public.certificates`, helpers server-side de elegibilidad (`checkStudentEligibility`), RLS estricto y vista preliminar de credencial académica.
+  2. **Fase 3E (Issuance & Verification):** Generación de PDF estandarizado, código QR criptográfico, número único de diploma (`UXIO-YYYY-XXXX`) y ruta pública `/verify/[certificateNumber]`.
+  3. **Fase 3F (Credential Experience & Sharing):** Compartir en LinkedIn/redes, badges de egresado y visualización de portafolio validado.
+* **Decisión:** La tabla `certificates` en Supabase almacena únicamente metadatos de emisión (`id`, `user_id`, `course_id`, `certificate_number`, `status: eligible | issued | revoked`, `issued_at`). El cliente nunca puede autoemitirse un certificado.
+* **Impacto:** Integridad académica 100% garantizada, cero egress de datos redundantes y arquitectura lista para emisión masiva y verificación QR.
+
 ---
 
 ## 12. 🗺️ Roadmap de Implementación por Sprints
@@ -437,15 +450,17 @@ SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO - 8d20651]
     ↓
 SPRINT 3B: Instructor Review & Feedback [COMPLETADO - 4f4f68c]
     ↓
-SPRINT 3C: Student Profile & Outcomes [COMPLETADO]
+SPRINT 3C: Student Profile & Outcomes [COMPLETADO - ab4dc9e]
+    ↓
+SPRINT 3D: Certificate Foundation & Eligibility [COMPLETADO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE (Sprints 2A → 3C):**
-  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), roles (`student`, `instructor`, `admin`), campos de perfil de creador, RLS estricto y trigger seguro `handle_new_user()`.
+* **DONE (Sprints 2A → 3D):**
+  - Base de datos Supabase con 7 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`, `certificates`), roles (`student`, `instructor`, `admin`), campos de perfil de creador, RLS estricto y trigger seguro `handle_new_user()`.
   - Dominio académico tipado y modular (`@/data/academy`).
   - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
   - Lesson Viewer con reproductor de video responsivo y conmutador de microclases.
@@ -454,8 +469,9 @@ SPRINT 3C: Student Profile & Outcomes [COMPLETADO]
   - Grid de recursos descargables (templates, PDFs, prompt packs, enlaces) y fichas de retos prácticos.
   - Formulario de entrega asíncrona de retos (`ChallengeSubmission`) con estados (`submitted`, `pending_review`, `needs_revision`, `approved`) y retroalimentación docente.
   - Panel operativo de revisión docente (`/academy/instructor`) con filtros por estado, búsqueda de estudiantes, checklist de rúbrica de evaluación, emisión de feedback y acciones de aprobación/solicitud de ajustes.
-  - Perfil profesional del creador (`/academy/classroom/profile`) con edición segura, enlaces a redes sociales, matriz de outcomes en tiempo real y vista previa de credencial/diploma.
+  - Perfil profesional del creador (`/academy/classroom/profile`) con edición segura, enlaces a redes sociales y matriz de outcomes en tiempo real.
+  - Fundación de certificados (`/academy/classroom/certificate`) con tabla `certificates`, helper de elegibilidad académica rigurosa (`checkStudentEligibility`), RLS y vista protegida.
   - Suite de pruebas E2E con todas las rutas públicas y protegidas validadas y 0 regresiones.
-* **NEXT (Sprint 3D+):**
-  - Certificados digitales dinámicos y analíticas avanzadas.
+* **NEXT (Sprint 3E+):**
+  - Emisión de diploma PDF, código QR dinámico y ruta pública de verificación (`/verify/[certificateNumber]`).
 
