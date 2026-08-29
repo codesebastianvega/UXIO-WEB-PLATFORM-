@@ -1,0 +1,20 @@
+{
+  "name": "@uxio/ui",
+  "version": "1.0.0",
+  "description": "UXIO CLI - One-click component installer for Next.js & React",
+  "type": "module",
+  "bin": {
+    "uxio": "./bin/uxio.js"
+  },
+  "keywords": [
+    "uxio",
+    "ui",
+    "components",
+    "react",
+    "nextjs",
+    "tailwind",
+    "cli"
+  ],
+  "author": "UXIO Studio & Labs",
+  "license": "MIT"
+}

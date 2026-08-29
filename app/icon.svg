@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="uxio-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFCC48"/>
+      <stop offset="35%" stop-color="#FF7F07"/>
+      <stop offset="70%" stop-color="#FE385B"/>
+      <stop offset="100%" stop-color="#00F0FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="#111111"/>
+  <path d="M7 10 L12 22 L17 10" stroke="url(#uxio-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="23" cy="16" r="3.5" stroke="url(#uxio-grad)" stroke-width="2.5" fill="none"/>
+</svg>
