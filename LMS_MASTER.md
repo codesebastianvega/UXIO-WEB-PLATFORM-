@@ -393,37 +393,43 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 
 ---
 
-## 12. 🗺️ Roadmap de Implementación por Sprints
+## 12. 🗺️ Roadmap de Implementación por Sprints (Sprint 2 Sequence)
 
 ```text
-SPRINT 0: Auditoría, Contrato Arquitectónico y Aprobación (LMS_MASTER.md) [COMPLETADO]
+SPRINT 2A: LMS Database Foundation + RLS [COMPLETADO - 50a753f]
     ↓
-SPRINT 1: Infraestructura Supabase, Auth & Migraciones SQL (lib/supabase/, profiles, RLS)
+SPRINT 2B: Academy Content Domain + ADR-005 [COMPLETADO - 04fe6d9]
     ↓
-SPRINT 2: Dominio Académico & Desglose de Lecciones (data/academy/creator-lab/)
+SPRINT 2C: Classroom Foundation & Navigation [COMPLETADO - f42f380]
     ↓
-SPRINT 3: Presentation Engine v1.0 & Diapositivas M00.01 (16:9, slides, print PDF)
+SPRINT 2D: Lesson Viewer & Video Foundation [COMPLETADO - 741d46c]
     ↓
-SPRINT 4: Experiencia Classroom & Dashboard del Alumno (Login, /classroom, Course View)
+SPRINT 2E: Lesson Progress & Completion Action [COMPLETADO - 981814b]
     ↓
-SPRINT 5: Lesson Player & Sistema de Progreso (Video, microclases, challenge, persistencia)
+SPRINT 2F: Presentation Engine v1 (16:9 & Print PDF) [COMPLETADO - 40400ad]
     ↓
-SPRINT 6: Verificación Integral de Calidad (TypeScript 0 errores, audit:files, build de producción)
+SPRINT 2G: Lesson Resources & Challenges + ADR-006 [COMPLETADO - b503baf]
+    ↓
+SPRINT 2H: LMS End-to-End QA Validation [COMPLETADO]
+    ↓
+SPRINT 2I: LMS Hardening & CMS Readiness Audit [EN CURSO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE:**
-  - Frontend comercial completo de UXIO Academy y Creator Lab (`/[lang]/academy`, `/[lang]/academy/creator-lab`, `/[lang]/academy/creator-lab/enroll`).
-  - Modelo inicial de cohortes y capacidad configurable sin falsa urgencia.
-  - Auditoría del repositorio y definición del contrato maestro `LMS_MASTER.md`.
-* **IN PROGRESS:**
-  - Aprobación del contrato maestro para inicio del Sprint 1 (Auth & Supabase Foundation).
-* **NEXT (Sprint 1):**
-  - Instalación de `@supabase/supabase-js` y `@supabase/ssr`.
-  - Configuración de `lib/supabase/` (`client.ts`, `server.ts`, `middleware.ts`).
-  - Creación del archivo de migración SQL con tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`) y políticas RLS.
+* **DONE (Sprints 2A → 2H):**
+  - Base de datos Supabase con 5 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`), RLS estricto y trigger seguro `handle_new_user()`.
+  - Dominio académico tipado y modular (`@/data/academy`).
+  - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
+  - Lesson Viewer con reproductor de video responsivo y conmutador de microclases.
+  - Sistema de progreso granular con Server Action optimista y cálculo dinámico de porcentajes.
+  - Presentation Engine 16:9 con soporte para 10 tipos de slides, atajos de teclado y exportación a PDF vía `@media print`.
+  - Grid de recursos descargables (templates, PDFs, prompt packs, enlaces) y fichas de retos prácticos.
+  - Suite de pruebas E2E con 15/15 casos superados y 0 regresiones.
+* **IN PROGRESS (Sprint 2I):**
+  - LMS Hardening & CMS Readiness Audit.
 * **FUTURE:**
-  - Automatizaciones de pago, analítica de retención, marketplace UGC y red de creadores.
+  - Persistencia de submissions de estudiantes, feedback docente, emisión de certificados y CMS headless.
+
