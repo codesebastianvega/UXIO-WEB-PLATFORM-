@@ -5,11 +5,13 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Layers } from 'lucide-react';
 import { Lesson, Module } from '@/data/academy/types';
 import { Locale } from '@/types';
+import { LessonSubmission } from '@/lib/supabase/academy-submissions';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
 import MicroclassList from './MicroclassList';
 import LessonResources from './LessonResources';
 import LessonChallenge from './LessonChallenge';
+import ChallengeSubmission from './ChallengeSubmission';
 import LessonCompleteButton from './LessonCompleteButton';
 
 interface AdjacentLessonInfo {
@@ -23,6 +25,7 @@ interface LessonViewerProps {
   courseSlug: string;
   lang: Locale;
   isLessonCompleted?: boolean;
+  initialSubmission?: LessonSubmission | null;
   prevLesson?: AdjacentLessonInfo;
   nextLesson?: AdjacentLessonInfo;
 }
@@ -33,6 +36,7 @@ export default function LessonViewer({
   courseSlug,
   lang,
   isLessonCompleted = false,
+  initialSubmission = null,
   prevLesson,
   nextLesson,
 }: LessonViewerProps) {
@@ -144,7 +148,17 @@ export default function LessonViewer({
         />
       )}
 
-      {/* 7. Lesson Completion Action Box */}
+      {/* 7. Challenge Submission Form & Status */}
+      {lesson.challenge && (
+        <ChallengeSubmission
+          courseSlug={courseSlug}
+          lessonId={lesson.id}
+          initialSubmission={initialSubmission}
+          lang={lang}
+        />
+      )}
+
+      {/* 8. Lesson Completion Action Box */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-center sm:text-left">
           <h4 className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white">
@@ -165,7 +179,7 @@ export default function LessonViewer({
         />
       </div>
 
-      {/* 8. Prev / Next Lesson Navigation Bar */}
+      {/* 9. Prev / Next Lesson Navigation Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-black/[0.06] dark:border-white/[0.06]">
         {prevLesson ? (
           <Link

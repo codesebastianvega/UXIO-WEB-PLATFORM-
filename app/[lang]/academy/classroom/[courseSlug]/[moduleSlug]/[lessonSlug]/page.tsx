@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import { Locale } from '@/types';
 import { getUserEnrollments } from '@/lib/supabase/academy';
 import { getCourseProgress } from '@/lib/supabase/academy-progress';
+import { getLessonSubmission } from '@/lib/supabase/academy-submissions';
 import {
   getCourseBySlug,
   getModuleBySlug,
@@ -105,8 +106,12 @@ export default async function LessonClassroomPage({
     lang
   );
 
-  // Fetch progress for this course
-  const progressInfo = await getCourseProgress(courseSlug, lang);
+  // Fetch progress and challenge submission for this lesson
+  const [progressInfo, initialSubmission] = await Promise.all([
+    getCourseProgress(courseSlug, lang),
+    getLessonSubmission(courseSlug, lesson.id),
+  ]);
+
   const isLessonCompleted = progressInfo.completedLessonIds.includes(lesson.id);
 
   return (
@@ -138,6 +143,7 @@ export default async function LessonClassroomPage({
             courseSlug={course.slug}
             lang={lang}
             isLessonCompleted={isLessonCompleted}
+            initialSubmission={initialSubmission}
             prevLesson={prevLesson}
             nextLesson={nextLesson}
           />

@@ -408,7 +408,7 @@ Para preservar la velocidad de entrega y la estabilidad arquitectónica, **queda
 
 ---
 
-## 12. 🗺️ Roadmap de Implementación por Sprints (Sprint 2 Sequence)
+## 12. 🗺️ Roadmap de Implementación por Sprints
 
 ```text
 SPRINT 2A: LMS Database Foundation + RLS [COMPLETADO - 50a753f]
@@ -425,26 +425,31 @@ SPRINT 2F: Presentation Engine v1 (16:9 & Print PDF) [COMPLETADO - 40400ad]
     ↓
 SPRINT 2G: Lesson Resources & Challenges + ADR-006 [COMPLETADO - b503baf]
     ↓
-SPRINT 2H: LMS End-to-End QA Validation [COMPLETADO]
+SPRINT 2H: LMS End-to-End QA Validation [COMPLETADO - 4b821b3]
     ↓
-SPRINT 2I: LMS Hardening & CMS Readiness Audit [EN CURSO]
+SPRINT 2I: LMS Hardening & CMS Readiness Audit [COMPLETADO - 5e74353]
+    ↓
+SPRINT 2J: SIE Academy Product & UX Definition [COMPLETADO]
+    ↓
+SPRINT 2K: Academy UI Polish & Productization [COMPLETADO - 98c2db6]
+    ↓
+SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE (Sprints 2A → 2H):**
-  - Base de datos Supabase con 5 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`), RLS estricto y trigger seguro `handle_new_user()`.
+* **DONE (Sprints 2A → 3A):**
+  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), RLS estricto y trigger seguro `handle_new_user()`.
   - Dominio académico tipado y modular (`@/data/academy`).
   - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
   - Lesson Viewer con reproductor de video responsivo y conmutador de microclases.
   - Sistema de progreso granular con Server Action optimista y cálculo dinámico de porcentajes.
   - Presentation Engine 16:9 con soporte para 10 tipos de slides, atajos de teclado y exportación a PDF vía `@media print`.
   - Grid de recursos descargables (templates, PDFs, prompt packs, enlaces) y fichas de retos prácticos.
+  - Formulario de entrega asíncrona de retos (`ChallengeSubmission`) con estados (`submitted`, `pending_review`, `needs_revision`, `approved`) y retroalimentación docente.
   - Suite de pruebas E2E con 15/15 casos superados y 0 regresiones.
-* **IN PROGRESS (Sprint 2I):**
-  - LMS Hardening & CMS Readiness Audit.
-* **FUTURE:**
-  - Persistencia de submissions de estudiantes, feedback docente, emisión de certificados y CMS headless.
+* **NEXT (Sprint 3B+):**
+  - Panel de revisión de entregas para instructores (Review Queue), feedback en tiempo real y certificación.
 
