@@ -38,6 +38,20 @@ export interface LessonChallenge {
   evaluationCriteria: string[];
 }
 
+export interface QuizQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correctOptionIndex: number;
+  explanation: string;
+}
+
+export interface LessonQuiz {
+  title: string;
+  description: string;
+  questions: QuizQuestion[];
+}
+
 export interface Lesson {
   id: string;
   slug: string;
@@ -50,6 +64,7 @@ export interface Lesson {
   microclasses: Microclass[];
   presentationSlug?: string;
   resources: LessonResource[];
+  quiz?: LessonQuiz;
   challenge?: LessonChallenge;
 }
 

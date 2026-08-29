@@ -10,6 +10,7 @@ import {
   ArrowRight,
   CheckCircle2,
   Calendar,
+  ClipboardCheck,
 } from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
@@ -76,11 +77,18 @@ export default function StudentDashboard({
 
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
+            href={`/${lang}/academy/classroom/grades`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] text-xs font-mono text-[#10B981] hover:bg-[#10B981]/10 transition-colors border border-[#10B981]/25"
+          >
+            <ClipboardCheck size={14} />
+            <span>{isEs ? 'Mis Calificaciones' : 'My Grades'}</span>
+          </Link>
+          <Link
             href={`/${lang}/academy/classroom/profile`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] text-xs font-mono text-[#00F0FF] hover:bg-[#00F0FF]/10 transition-colors border border-[#00F0FF]/25"
           >
             <User size={14} />
-            <span>{isEs ? 'Mi Perfil & Logros' : 'My Profile & Outcomes'}</span>
+            <span>{isEs ? 'Mi Perfil' : 'My Profile'}</span>
           </Link>
           <Link
             href={`/${lang}/academy`}

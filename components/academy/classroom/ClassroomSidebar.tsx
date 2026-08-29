@@ -13,6 +13,8 @@ import {
   CheckCircle2,
   User,
   Award,
+  ClipboardCheck,
+  Lock,
 } from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
@@ -116,6 +118,34 @@ export default function ClassroomSidebar({
                     const isLessonActive =
                       lesson.slug === activeLessonSlug || lesson.id === activeLessonSlug;
                     const isCompleted = completedLessonIds.includes(lesson.id);
+                    const allLessons = course.modules.flatMap(m => m.lessons);
+                    const lessonIndex = allLessons.findIndex(l => l.id === lesson.id);
+                    const isUnlocked = lessonIndex === 0 || completedLessonIds.includes(allLessons[lessonIndex - 1]?.id);
+
+                    if (!isUnlocked) {
+                      return (
+                        <div
+                          key={lesson.id}
+                          className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs font-sans text-[#8E8E93]/60 cursor-not-allowed select-none opacity-60"
+                          title={isEs ? 'Completa la clase anterior para desbloquear' : 'Complete previous lesson to unlock'}
+                        >
+                          <div className="mt-0.5 shrink-0">
+                            <Lock size={13} className="text-[#8E8E93]/70" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="leading-snug line-clamp-2">{lesson.title}</p>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="font-mono text-[10px] text-[#8E8E93]/60">
+                                {lesson.duration}
+                              </span>
+                              <span className="font-mono text-[9px] text-[#FF7F07]/80">
+                                🔒 {isEs ? 'Bloqueada' : 'Locked'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
 
                     return (
                       <Link
@@ -173,21 +203,28 @@ export default function ClassroomSidebar({
         })}
       </div>
 
-      {/* Classroom Quick Links: Profile & Certificate */}
-      <div className="pt-2 border-t border-black/[0.06] dark:border-white/[0.06] space-y-1.5">
+      {/* Classroom Quick Links: Grades, Profile & Certificate */}
+      <div className="pt-2 border-t border-black/[0.06] dark:border-white/[0.06] space-y-1">
+        <Link
+          href={`/${lang}/academy/classroom/grades`}
+          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#10B981] transition-colors"
+        >
+          <ClipboardCheck size={14} className="text-[#10B981]" />
+          <span>{isEs ? 'Mis Calificaciones' : 'My Grades & Feedback'}</span>
+        </Link>
         <Link
           href={`/${lang}/academy/classroom/profile`}
-          className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#00F0FF] transition-colors"
+          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#00F0FF] transition-colors"
         >
           <User size={14} className="text-[#00F0FF]" />
-          <span>{isEs ? 'Mi Perfil & Resultados' : 'My Profile & Outcomes'}</span>
+          <span>{isEs ? 'Mi Perfil' : 'My Profile'}</span>
         </Link>
         <Link
           href={`/${lang}/academy/classroom/certificate`}
-          className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#10B981] transition-colors"
+          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#FE385B] transition-colors"
         >
-          <Award size={14} className="text-[#10B981]" />
-          <span>{isEs ? 'Estado de Certificado' : 'Certificate Status'}</span>
+          <Award size={14} className="text-[#FE385B]" />
+          <span>{isEs ? 'Certificado' : 'Certificate'}</span>
         </Link>
       </div>
     </div>

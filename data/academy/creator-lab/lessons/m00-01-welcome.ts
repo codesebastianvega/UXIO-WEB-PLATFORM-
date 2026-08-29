@@ -50,6 +50,56 @@ export const getLessonM0001 = (lang: Locale = 'es'): Lesson => {
         videoProvider: 'youtube',
       },
     ],
+    quiz: {
+      title: isEs ? 'Mini-Evaluación: Mentalidad & Metodología' : 'Checkpoint Quiz: Mindset & Methodology',
+      description: isEs
+        ? 'Valida los conceptos clave de la clase de bienvenida antes de desbloquear tus plantillas.'
+        : 'Validate key takeaways from the welcome lesson before downloading your templates.',
+      questions: [
+        {
+          id: 'q-00-01-01',
+          question: isEs
+            ? '¿Cuál es el objetivo principal de crear contenido en Creator Lab?'
+            : 'What is the primary goal of creating content in Creator Lab?',
+          options: isEs
+            ? [
+                'Hacerse viral y conseguir millones de seguidores sin importar las ventas',
+                'Crear un sistema de contenido comercial que genere clientes y ventas reales',
+                'Comprar cámaras costosas para grabar en alta definición',
+              ]
+            : [
+                'Go viral and gain followers without focusing on revenue',
+                'Build a commercial content system that drives real customers and sales',
+                'Buy expensive studio cameras for high-end production',
+              ],
+          correctOptionIndex: 1,
+          explanation: isEs
+            ? 'Creator Lab está enfocado en generar resultados comerciales para tu negocio con tu celular.'
+            : 'Creator Lab focuses on driving revenue and real business outcomes with your smartphone.',
+        },
+        {
+          id: 'q-00-01-02',
+          question: isEs
+            ? '¿Qué regla de oro rige el ritmo de entregables en el programa?'
+            : 'What golden rule drives the weekly milestone pace?',
+          options: isEs
+            ? [
+                'Esperar a tener el video perfecto antes de publicar',
+                'Acción y progreso sobre perfeccionismo inicial',
+                'Grabar solo cuando tengas un equipo de producción profesional',
+              ]
+            : [
+                'Wait for absolute perfection before posting anything',
+                'Action and progress over initial perfectionism',
+                'Film only when you hire a production crew',
+              ],
+          correctOptionIndex: 1,
+          explanation: isEs
+            ? 'Publicar y recibir feedback real es la única forma de acelerar tu aprendizaje.'
+            : 'Publishing and getting real feedback is the only way to accelerate growth.',
+        },
+      ],
+    },
     resources: [
       {
         id: 'res-00-01-01',

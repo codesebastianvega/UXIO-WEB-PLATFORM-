@@ -10,17 +10,9 @@ import {
   Clock,
   Edit3,
   Link as LinkIcon,
-  FileText,
-  Image as ImageIcon,
-  Video,
-  MessageSquare,
 } from 'lucide-react';
 import { Locale } from '@/types';
-import {
-  LessonSubmission,
-  SubmissionType,
-  SubmissionStatus,
-} from '@/lib/supabase/academy-submissions';
+import { LessonSubmission } from '@/lib/supabase/academy-submissions';
 import { upsertLessonSubmissionAction } from '@/app/[lang]/academy/actions/submissions';
 
 interface ChallengeSubmissionProps {
@@ -29,13 +21,6 @@ interface ChallengeSubmissionProps {
   initialSubmission?: LessonSubmission | null;
   lang: Locale;
 }
-
-const FORMAT_OPTIONS = [
-  { type: 'link' as const, labelEs: 'Enlace / Notion', labelEn: 'Link / Notion', icon: LinkIcon },
-  { type: 'document' as const, labelEs: 'Doc / Drive', labelEn: 'Doc / Drive', icon: FileText },
-  { type: 'image' as const, labelEs: 'Imagen / Foto', labelEn: 'Image / Photo', icon: ImageIcon },
-  { type: 'video' as const, labelEs: 'Video / Reel', labelEn: 'Video / Reel', icon: Video },
-];
 
 export default function ChallengeSubmission({
   courseSlug,
@@ -47,13 +32,11 @@ export default function ChallengeSubmission({
   const [submission, setSubmission] = useState<LessonSubmission | null>(initialSubmission);
   const [isEditing, setIsEditing] = useState(false);
   const [urlInput, setUrlInput] = useState(initialSubmission?.submissionUrl || '');
-  const [typeInput, setTypeInput] = useState<SubmissionType>(initialSubmission?.submissionType || 'link');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const handleOpenForm = () => {
     setUrlInput(submission?.submissionUrl || '');
-    setTypeInput(submission?.submissionType || 'link');
     setErrorMsg(null);
     setIsEditing(true);
   };
@@ -71,7 +54,7 @@ export default function ChallengeSubmission({
         courseSlug,
         lessonId,
         submissionUrl: cleanUrl,
-        submissionType: typeInput,
+        submissionType: 'link',
         lang,
       });
       if (res.success && res.submission) {
@@ -84,125 +67,162 @@ export default function ChallengeSubmission({
   };
 
   const statusMeta = {
-    approved: { label: isEs ? 'Reto Aprobado ✓' : 'Approved ✓', bg: 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30' },
-    needs_revision: { label: isEs ? 'Requiere Ajustes' : 'Needs Revision', bg: 'bg-[#FF7F07]/15 text-[#FF7F07] border-[#FF7F07]/30' },
-    pending_review: { label: isEs ? 'En Revisión' : 'Under Review', bg: 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/30' },
-    submitted: { label: isEs ? 'Entrega Enviada' : 'Submitted', bg: 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30' },
+    approved: {
+      label: isEs ? 'Reto Aprobado ✓' : 'Approved ✓',
+      bg: 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30',
+      icon: CheckCircle2,
+    },
+    needs_revision: {
+      label: isEs ? 'Requiere Ajustes' : 'Needs Revision',
+      bg: 'bg-[#FF7F07]/15 text-[#FF7F07] border-[#FF7F07]/30',
+      icon: AlertCircle,
+    },
+    pending_review: {
+      label: isEs ? 'En Revisión' : 'Under Review',
+      bg: 'bg-[#0284C7]/15 dark:bg-[#00F0FF]/15 text-[#0369A1] dark:text-[#00F0FF] border-[#0284C7]/30 dark:border-[#00F0FF]/30',
+      icon: Clock,
+    },
+    submitted: {
+      label: isEs ? 'Entrega Enviada' : 'Submitted',
+      bg: 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30',
+      icon: CheckCircle2,
+    },
   }[submission?.status || 'submitted'];
+
+  const StatusIcon = statusMeta.icon;
 
   return (
     <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.06] dark:border-white/[0.06] pb-4">
         <div className="flex items-center gap-2.5">
-          <UploadCloud size={18} className="text-[#00F0FF]" />
+          <UploadCloud size={18} className="text-[#FE385B]" />
           <div>
             <h3 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white">
               {isEs ? 'Entrega de Reto Práctico' : 'Challenge Submission'}
             </h3>
             <p className="text-xs text-[#8E8E93] font-sans">
-              {isEs ? 'Sube tu enlace de Notion, Drive, Figma o video para recibir feedback.' : 'Submit your link to receive review.'}
+              {isEs
+                ? 'Sube el enlace público de tu tarea (Google Drive, Notion, Instagram o TikTok) para recibir feedback.'
+                : 'Submit your public work link (Google Drive, Notion, Instagram, or TikTok) to receive feedback.'}
             </p>
           </div>
         </div>
+
         {submission && !isEditing && (
-          <span className={`font-mono text-xs font-bold px-3 py-1 rounded-full border ${statusMeta.bg}`}>
-            {statusMeta.label}
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border font-semibold ${statusMeta.bg}`}>
+            <StatusIcon size={13} />
+            <span>{statusMeta.label}</span>
           </span>
         )}
       </div>
 
-      {isEditing ? (
+      {/* Form or Submitted State */}
+      {!submission || isEditing ? (
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {FORMAT_OPTIONS.map(item => {
-              const isSelected = typeInput === item.type;
-              const IconComp = item.icon;
-              return (
-                <button
-                  key={item.type}
-                  type="button"
-                  onClick={() => setTypeInput(item.type)}
-                  className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-mono border transition-all ${
-                    isSelected ? 'bg-[#00F0FF]/15 border-[#00F0FF]/40 text-[#00F0FF] font-bold' : 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06] text-[#8E8E93]'
-                  }`}
-                >
-                  <IconComp size={13} />
-                  <span>{isEs ? item.labelEs : item.labelEn}</span>
-                </button>
-              );
-            })}
-          </div>
+          <div className="space-y-2">
+            <label className="block font-mono text-[11px] text-[#8E8E93]">
+              {isEs ? 'ENLACE PÚBLICO DE TU TAREA (DRIVE, NOTION, REEL, TIKTOK) *' : 'PUBLIC WORK LINK (DRIVE, NOTION, REEL, TIKTOK) *'}
+            </label>
 
-          <div className="relative">
-            <input
-              type="url"
-              required
-              value={urlInput}
-              onChange={e => setUrlInput(e.target.value)}
-              placeholder="https://notion.so/... o https://drive.google.com/..."
-              className="w-full py-3 pl-4 pr-10 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono text-[#111111] dark:text-white placeholder-[#8E8E93]/60 focus:outline-none focus:border-[#00F0FF]/50"
-            />
-            <LinkIcon size={14} className="absolute right-3.5 top-3.5 text-[#8E8E93]" />
+            <div className="relative">
+              <input
+                type="url"
+                required
+                value={urlInput}
+                onChange={e => setUrlInput(e.target.value)}
+                placeholder="https://drive.google.com/... o https://notion.so/... o https://instagram.com/reel/..."
+                className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#F7F7F5] dark:bg-[#0D0D0E] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white focus:outline-none focus:border-[#FE385B] transition-colors"
+              />
+              <LinkIcon size={15} className="absolute left-3.5 top-3.5 text-[#8E8E93]" />
+            </div>
+
+            <p className="text-[11px] text-[#8E8E93] font-sans">
+              {isEs
+                ? '💡 Consejo: Si es Google Drive, asegúrate de que el archivo esté configurado como "Cualquier persona con el enlace puede ver".'
+                : '💡 Tip: If using Google Drive, make sure the link access is set to "Anyone with the link can view".'}
+            </p>
           </div>
 
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-[#FE385B]/10 border border-[#FE385B]/20 flex items-center gap-2 text-xs text-[#FE385B]">
-              <AlertCircle size={14} className="shrink-0" />
+            <div className="p-3.5 rounded-xl bg-[#FE385B]/10 border border-[#FE385B]/20 text-xs font-sans text-[#FE385B] flex items-center gap-2">
+              <AlertCircle size={15} className="shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <button type="button" onClick={() => setIsEditing(false)} disabled={isPending} className="py-2.5 px-4 rounded-xl text-xs font-mono text-[#8E8E93]">
-              {isEs ? 'Cancelar' : 'Cancel'}
-            </button>
-            <button type="submit" disabled={isPending} className="inline-flex items-center gap-2 py-2.5 px-5 rounded-xl bg-[#00F0FF] text-black font-display font-bold text-xs hover:bg-[#00F0FF]/90">
-              {isPending && <Loader2 size={13} className="animate-spin" />}
-              <span>{isPending ? (isEs ? 'Guardando...' : 'Saving...') : (isEs ? 'Confirmar Entrega' : 'Submit Challenge')}</span>
+            {isEditing && (
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="px-4 py-2.5 rounded-xl text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-colors"
+              >
+                {isEs ? 'Cancelar' : 'Cancel'}
+              </button>
+            )}
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-[#FE385B] hover:bg-[#FE385B]/90 disabled:opacity-50 text-white font-display font-bold text-xs transition-all shadow-md shadow-[#FE385B]/20 active:scale-[0.98]"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" />
+                  <span>{isEs ? 'Guardando entrega...' : 'Submitting...'}</span>
+                </>
+              ) : (
+                <span>{isEditing ? (isEs ? 'Actualizar Entrega' : 'Update Submission') : (isEs ? 'Confirmar Entrega' : 'Confirm Submission')}</span>
+              )}
             </button>
           </div>
         </form>
-      ) : submission ? (
+      ) : (
         <div className="space-y-4">
           <div className="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] space-y-3">
-            <div className="flex items-center justify-between text-xs font-mono text-[#8E8E93]">
-              <div className="flex items-center gap-2">
-                <Clock size={13} />
-                <span>{isEs ? 'Enviado el:' : 'Submitted:'} {new Date(submission.submittedAt).toLocaleDateString(isEs ? 'es-CO' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-              </div>
-              <span className="text-[10px] text-[#00F0FF] uppercase bg-[#00F0FF]/10 px-2 py-0.5 rounded border border-[#00F0FF]/20">{submission.submissionType}</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <span className="font-mono text-[11px] text-[#8E8E93] uppercase font-bold">
+                {isEs ? 'ENLACE ENTREGADO' : 'SUBMITTED LINK'}
+              </span>
+              <span className="font-mono text-[10px] text-[#8E8E93]">
+                {isEs ? 'Enviado el' : 'Submitted on'} {new Date(submission.submittedAt).toLocaleDateString()}
+              </span>
             </div>
-            <div className="flex items-center justify-between gap-3 pt-1">
-              <a href={submission.submissionUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs font-mono text-[#00F0FF] hover:underline truncate max-w-lg">
+
+            <div className="flex items-center justify-between gap-3">
+              <a
+                href={submission.submissionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[#0284C7] dark:text-[#00F0FF] hover:underline flex items-center gap-1.5 truncate max-w-lg"
+              >
                 <ExternalLink size={13} className="shrink-0" />
                 <span className="truncate">{submission.submissionUrl}</span>
               </a>
-              <button type="button" onClick={handleOpenForm} className="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] text-xs font-mono text-[#111111] dark:text-white border border-black/[0.06] dark:border-white/[0.06] shrink-0">
-                <Edit3 size={12} />
-                <span>{isEs ? 'Editar Entrega' : 'Edit Submission'}</span>
+
+              <button
+                type="button"
+                onClick={handleOpenForm}
+                className="inline-flex items-center gap-1 text-xs font-mono text-[#8E8E93] hover:text-[#FE385B] transition-colors shrink-0"
+              >
+                <Edit3 size={13} />
+                <span>{isEs ? 'Editar' : 'Edit'}</span>
               </button>
             </div>
           </div>
+
+          {/* Feedback Display */}
           {submission.feedbackText && (
-            <div className="p-4 rounded-2xl bg-[#10B981]/[0.05] border border-[#10B981]/25 space-y-1.5">
-              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#10B981]">
-                <MessageSquare size={13} />
-                <span>{isEs ? 'Feedback del Docente:' : 'Instructor Feedback:'}</span>
+            <div className="p-5 rounded-2xl bg-[#0284C7]/5 dark:bg-[#00F0FF]/5 border border-[#0284C7]/20 dark:border-[#00F0FF]/20 space-y-1.5">
+              <div className="font-mono text-[10px] text-[#0369A1] dark:text-[#00F0FF] uppercase font-bold tracking-wider">
+                // {isEs ? 'RETROALIMENTACIÓN DOCENTE' : 'INSTRUCTOR FEEDBACK'}
               </div>
-              <p className="text-xs font-sans text-white leading-relaxed">{submission.feedbackText}</p>
+              <p className="text-xs sm:text-sm text-[#111111] dark:text-[#E5E5E7] font-sans leading-relaxed">
+                "{submission.feedbackText}"
+              </p>
             </div>
           )}
-        </div>
-      ) : (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.04]">
-          <div>
-            <h4 className="font-display font-bold text-sm text-[#111111] dark:text-white">{isEs ? '¿Terminaste tu entregable?' : 'Finished your deliverable?'}</h4>
-            <p className="text-xs text-[#8E8E93] font-sans">{isEs ? 'Envía tu enlace para registrar tu entrega y recibir feedback.' : 'Submit your link to receive review.'}</p>
-          </div>
-          <button type="button" onClick={handleOpenForm} className="inline-flex items-center justify-center gap-2 py-2.5 px-5 rounded-xl bg-[#00F0FF] text-black font-display font-bold text-xs hover:bg-[#00F0FF]/90 shadow-md shadow-[#00F0FF]/20 shrink-0">
-            <UploadCloud size={14} />
-            <span>{isEs ? 'Entregar Reto' : 'Submit Challenge'}</span>
-          </button>
         </div>
       )}
     </div>

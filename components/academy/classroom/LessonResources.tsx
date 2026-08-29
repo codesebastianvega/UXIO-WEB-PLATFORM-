@@ -5,8 +5,9 @@ import {
   Terminal,
   ExternalLink,
   Download,
-  Sparkles,
   FolderDown,
+  Lock,
+  Unlock,
 } from 'lucide-react';
 import { LessonResource, ResourceType } from '@/data/academy/types';
 import { Locale } from '@/types';
@@ -14,6 +15,7 @@ import { Locale } from '@/types';
 interface LessonResourcesProps {
   resources: LessonResource[];
   lang: Locale;
+  isUnlocked?: boolean;
 }
 
 function getResourceMeta(type: ResourceType, isEs: boolean) {
@@ -54,7 +56,11 @@ function getResourceMeta(type: ResourceType, isEs: boolean) {
   }
 }
 
-export default function LessonResources({ resources, lang }: LessonResourcesProps) {
+export default function LessonResources({
+  resources,
+  lang,
+  isUnlocked = true,
+}: LessonResourcesProps) {
   const isEs = lang === 'es';
 
   if (!resources || resources.length === 0) {
@@ -64,7 +70,7 @@ export default function LessonResources({ resources, lang }: LessonResourcesProp
   return (
     <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.06] pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-black/[0.06] dark:border-white/[0.06] pb-4">
         <div className="flex items-center gap-2.5">
           <FolderDown size={18} className="text-[#FFCC48]" />
           <div>
@@ -79,9 +85,25 @@ export default function LessonResources({ resources, lang }: LessonResourcesProp
           </div>
         </div>
 
-        <span className="font-mono text-xs text-[#8E8E93] shrink-0">
-          {resources.length} {isEs ? 'recurso(s)' : 'item(s)'}
-        </span>
+        <div className="flex items-center gap-2 shrink-0">
+          <span
+            className={`font-mono text-[10px] font-bold px-2.5 py-1 rounded-md border flex items-center gap-1.5 ${
+              isUnlocked
+                ? 'bg-[#10B981]/10 border-[#10B981]/25 text-[#10B981]'
+                : 'bg-[#FF7F07]/10 border-[#FF7F07]/25 text-[#FF7F07]'
+            }`}
+          >
+            {isUnlocked ? <Unlock size={11} /> : <Lock size={11} />}
+            <span>
+              {isUnlocked
+                ? (isEs ? 'Desbloqueados ✓' : 'Unlocked ✓')
+                : (isEs ? 'Completa la clase para descargar' : 'Complete lesson to unlock')}
+            </span>
+          </span>
+          <span className="font-mono text-xs text-[#8E8E93]">
+            {resources.length} {isEs ? 'recurso(s)' : 'item(s)'}
+          </span>
+        </div>
       </div>
 
       {/* Grid of Resource Cards */}
@@ -93,7 +115,11 @@ export default function LessonResources({ resources, lang }: LessonResourcesProp
           return (
             <div
               key={res.id}
-              className="p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] hover:border-black/[0.15] dark:hover:border-white/[0.15] transition-all flex flex-col justify-between space-y-4 group"
+              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between space-y-4 group ${
+                isUnlocked
+                  ? 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06] hover:border-black/[0.15] dark:hover:border-white/[0.15]'
+                  : 'bg-black/[0.01] dark:bg-white/[0.01] border-black/[0.04] dark:border-white/[0.04] opacity-75'
+              }`}
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
@@ -116,15 +142,22 @@ export default function LessonResources({ resources, lang }: LessonResourcesProp
               </div>
 
               <div>
-                <a
-                  href={res.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-white dark:bg-black/[0.4] border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-mono text-[#111111] dark:text-white transition-colors"
-                >
-                  <span>{meta.cta}</span>
-                  <ExternalLink size={12} className="text-[#8E8E93]" />
-                </a>
+                {isUnlocked ? (
+                  <a
+                    href={res.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-white dark:bg-black/[0.4] border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-mono text-[#111111] dark:text-white transition-colors shadow-2xs"
+                  >
+                    <span>{meta.cta}</span>
+                    <ExternalLink size={12} className="text-[#8E8E93]" />
+                  </a>
+                ) : (
+                  <div className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/[0.06] dark:border-white/[0.06] text-xs font-mono text-[#8E8E93] cursor-not-allowed select-none">
+                    <Lock size={12} className="text-[#FF7F07]" />
+                    <span>{isEs ? 'Recurso Bloqueado' : 'Locked Resource'}</span>
+                  </div>
+                )}
               </div>
             </div>
           );

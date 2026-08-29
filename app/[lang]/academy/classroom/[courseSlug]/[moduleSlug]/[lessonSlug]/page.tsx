@@ -114,6 +114,11 @@ export default async function LessonClassroomPage({
 
   const isLessonCompleted = progressInfo.completedLessonIds.includes(lesson.id);
 
+  // Calculate sequential unlock condition
+  const allLessons = course.modules.flatMap(m => m.lessons);
+  const currentLessonIndex = allLessons.findIndex(l => l.id === lesson.id);
+  const isUnlocked = currentLessonIndex <= 0 || progressInfo.completedLessonIds.includes(allLessons[currentLessonIndex - 1]?.id);
+
   return (
     <main className="flex-1 min-w-0 max-w-[1440px] w-full mx-auto p-6 md:p-10 space-y-6 transition-colors min-h-[85vh]">
       {/* Breadcrumbs */}
@@ -143,6 +148,7 @@ export default async function LessonClassroomPage({
             courseSlug={course.slug}
             lang={lang}
             isLessonCompleted={isLessonCompleted}
+            isUnlocked={isUnlocked}
             initialSubmission={initialSubmission}
             prevLesson={prevLesson}
             nextLesson={nextLesson}

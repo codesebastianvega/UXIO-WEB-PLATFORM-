@@ -79,3 +79,58 @@ export async function getLessonSubmission(
     return null;
   }
 }
+
+export async function getAllUserSubmissions(
+  courseSlug?: string
+): Promise<LessonSubmission[]> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (!user || authError) {
+      return [];
+    }
+
+    let query = supabase
+      .from('submissions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('submitted_at', { ascending: false });
+
+    if (courseSlug) {
+      const { data: courseRow } = await supabase
+        .from('courses')
+        .select('id')
+        .eq('slug', courseSlug)
+        .single();
+      if (courseRow) {
+        query = query.eq('course_id', courseRow.id);
+      }
+    }
+
+    const { data, error } = await query;
+    if (error || !data) {
+      return [];
+    }
+
+    return data.map((d: any) => ({
+      id: d.id,
+      userId: d.user_id,
+      courseId: d.course_id,
+      lessonId: d.lesson_id,
+      submissionUrl: d.submission_url,
+      submissionType: d.submission_type as SubmissionType,
+      status: d.status as SubmissionStatus,
+      feedbackText: d.feedback_text,
+      reviewedAt: d.reviewed_at,
+      submittedAt: d.submitted_at,
+      updatedAt: d.updated_at,
+    }));
+  } catch {
+    return [];
+  }
+}
+
