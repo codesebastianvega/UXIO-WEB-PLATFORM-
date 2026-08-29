@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Layers, Lock } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Layers, Lock, ChevronLeft, ChevronRight, PlayCircle } from 'lucide-react';
 import { Lesson, Module } from '@/data/academy/types';
 import { Locale } from '@/types';
 import { LessonSubmission } from '@/lib/supabase/academy-submissions';
@@ -54,6 +54,21 @@ export default function LessonViewer({
   const currentVideoDuration = activeMicroclass?.duration || lesson.duration;
   const currentVideoProvider = activeMicroclass?.videoProvider || 'youtube';
 
+  const totalMicroclasses = lesson.microclasses.length;
+  const hasMultipleMicroclasses = totalMicroclasses > 1;
+
+  const handlePrevMicroclass = () => {
+    if (selectedMicroclassIndex > 0) {
+      setSelectedMicroclassIndex(prev => prev - 1);
+    }
+  };
+
+  const handleNextMicroclass = () => {
+    if (selectedMicroclassIndex < totalMicroclasses - 1) {
+      setSelectedMicroclassIndex(prev => prev + 1);
+    }
+  };
+
   // If lesson is locked due to sequential progression
   if (!isUnlocked) {
     return (
@@ -95,27 +110,7 @@ export default function LessonViewer({
         lang={lang}
       />
 
-      {/* 2. Video Player Stage */}
-      <div className="space-y-4">
-        <VideoPlayer
-          provider={currentVideoProvider}
-          videoUrl={currentVideoUrl}
-          title={currentVideoTitle}
-          duration={currentVideoDuration}
-        />
-
-        {/* Active Microclass Description */}
-        {activeMicroclass?.description && (
-          <div className="p-4 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-xs text-[#666666] dark:text-[#8E8E93] font-sans leading-relaxed">
-            <span className="font-bold text-[#111111] dark:text-white mr-1.5">
-              {activeMicroclass.title}:
-            </span>
-            {activeMicroclass.description}
-          </div>
-        )}
-      </div>
-
-      {/* 3. Microclass Switcher List (if multiple) */}
+      {/* 2. Microclass Switcher Grid (ABOVE the video) */}
       {lesson.microclasses.length > 0 && (
         <MicroclassList
           microclasses={lesson.microclasses}
@@ -124,6 +119,66 @@ export default function LessonViewer({
           lang={lang}
         />
       )}
+
+      {/* 3. Video Player Stage with Controller Bar */}
+      <div id="video-stage" className="space-y-3 scroll-mt-24">
+        <VideoPlayer
+          provider={currentVideoProvider}
+          videoUrl={currentVideoUrl}
+          title={currentVideoTitle}
+          duration={currentVideoDuration}
+        />
+
+        {/* Active Microclass Description + Inline Chevrons */}
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1 min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[10px] font-bold text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded border border-[#FE385B]/20">
+                #{String(selectedMicroclassIndex + 1).padStart(2, '0')}
+              </span>
+              <h3 className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white truncate">
+                {activeMicroclass?.title || lesson.title}
+              </h3>
+            </div>
+            {activeMicroclass?.description && (
+              <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans leading-relaxed">
+                {activeMicroclass.description}
+              </p>
+            )}
+          </div>
+
+          {/* Chevrons Navigation */}
+          {hasMultipleMicroclasses && (
+            <div className="flex items-center gap-2 shrink-0 border-t sm:border-t-0 pt-3 sm:pt-0 border-black/[0.06] dark:border-white/[0.06]">
+              <button
+                type="button"
+                onClick={handlePrevMicroclass}
+                disabled={selectedMicroclassIndex === 0}
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] hover:bg-black/[0.06] dark:hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed text-xs font-mono text-[#111111] dark:text-white transition-colors"
+                title={isEs ? 'Microclase anterior' : 'Previous microclass'}
+              >
+                <ChevronLeft size={14} />
+                <span>{isEs ? 'Anterior' : 'Prev'}</span>
+              </button>
+
+              <span className="font-mono text-xs text-[#8E8E93] px-1">
+                {selectedMicroclassIndex + 1}/{totalMicroclasses}
+              </span>
+
+              <button
+                type="button"
+                onClick={handleNextMicroclass}
+                disabled={selectedMicroclassIndex === totalMicroclasses - 1}
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-[#FE385B] hover:bg-[#FE385B]/90 disabled:opacity-30 disabled:cursor-not-allowed text-xs font-mono font-bold text-white transition-colors shadow-sm"
+                title={isEs ? 'Siguiente microclase' : 'Next microclass'}
+              >
+                <span>{isEs ? 'Siguiente' : 'Next'}</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* 4. Presentation Deck Card */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-4">
