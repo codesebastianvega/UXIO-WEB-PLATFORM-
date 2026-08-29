@@ -15,23 +15,12 @@ import {
 import { Locale } from '@/types';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
 
-interface LiveLinksState {
-  liveSessionUrl: string;
-  liveSessionDate: string;
-  recordingUrl: string;
-  recordingTitle: string;
-  whatsappGroupUrl: string;
-  whatsappGroupName: string;
-}
-
-const DEFAULT_LINKS: LiveLinksState = {
-  liveSessionUrl: 'https://meet.google.com/uxio-creator-lab-live',
-  liveSessionDate: 'Cada Jueves · 7:00 PM (Hora Colombia)',
-  recordingUrl: 'https://youtube.com/watch?v=live-recording-demo',
-  recordingTitle: 'Grabación Sesión 0: Feedback de Inducción y Setup',
-  whatsappGroupUrl: 'https://chat.whatsapp.com/CreatorLabCohorte01',
-  whatsappGroupName: 'UXIO Creator Lab · Cohorte 01',
-};
+import {
+  AcademyLiveLinks,
+  getStoredLiveLinks,
+  saveStoredLiveLinks,
+  DEFAULT_ACADEMY_LIVE_LINKS,
+} from '@/lib/academy/live-links-store';
 
 interface InstructorLiveLinksProps {
   lang: Locale;
@@ -41,11 +30,16 @@ export default function InstructorLiveLinks({
   lang,
 }: InstructorLiveLinksProps) {
   const isEs = lang === 'es';
-  const [links, setLinks] = useState<LiveLinksState>(DEFAULT_LINKS);
+  const [links, setLinks] = useState<AcademyLiveLinks>(DEFAULT_ACADEMY_LIVE_LINKS);
   const [saved, setSaved] = useState(false);
+
+  React.useEffect(() => {
+    setLinks(getStoredLiveLinks());
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    saveStoredLiveLinks(links);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };

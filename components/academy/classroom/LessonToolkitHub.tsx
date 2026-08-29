@@ -14,11 +14,19 @@ import {
   FileSpreadsheet,
   FileText,
   Terminal,
+  Video,
+  Radio,
 } from 'lucide-react';
 import { LessonQuiz, LessonResource, ResourceType } from '@/data/academy/types';
 import { Locale } from '@/types';
+import {
+  AcademyLiveLinks,
+  getStoredLiveLinks,
+  DEFAULT_ACADEMY_LIVE_LINKS,
+} from '@/lib/academy/live-links-store';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
 import LessonQuizModal from './LessonQuizModal';
+import LessonLiveSessionRow from './LessonLiveSessionRow';
 
 interface LessonToolkitHubProps {
   presentationSlug?: string;
@@ -77,6 +85,15 @@ export default function LessonToolkitHub({
 }: LessonToolkitHubProps) {
   const isEs = lang === 'es';
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [liveLinks, setLiveLinks] = useState<AcademyLiveLinks>(DEFAULT_ACADEMY_LIVE_LINKS);
+
+  React.useEffect(() => {
+    setLiveLinks(getStoredLiveLinks());
+
+    const handleUpdate = () => setLiveLinks(getStoredLiveLinks());
+    window.addEventListener('uxio-live-links-updated', handleUpdate);
+    return () => window.removeEventListener('uxio-live-links-updated', handleUpdate);
+  }, []);
 
   const isUnlocked = isLessonCompleted || isQuizPassed;
 
@@ -191,7 +208,10 @@ export default function LessonToolkitHub({
             )}
           </div>
 
-          {/* Row 2: Descargables y Plantillas */}
+          {/* Row 2: Sesión Semanal & Grabación en Vivo */}
+          <LessonLiveSessionRow liveLinks={liveLinks} lang={lang} />
+
+          {/* Row 3: Descargables y Plantillas */}
           {resources.length > 0 && (
             <div className="pt-2 space-y-3">
               <span className="font-mono text-xs text-[#8E8E93] block">
