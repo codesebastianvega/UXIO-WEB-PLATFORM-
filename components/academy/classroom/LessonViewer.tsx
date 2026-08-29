@@ -105,14 +105,24 @@ export default function LessonViewer({
           </p>
 
           <div>
-            <button
-              type="button"
-              disabled={!lesson.presentationSlug}
-              className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-[#FE385B]/10 text-xs font-mono text-[#111111] dark:text-white hover:text-[#FE385B] transition-colors border border-black/[0.06] dark:border-white/[0.06] disabled:opacity-50"
-            >
-              <Layers size={13} />
-              <span>{isEs ? 'Ver Presentación 16:9 (Sprint 2F)' : 'View Slides 16:9 (Sprint 2F)'}</span>
-            </button>
+            {lesson.presentationSlug ? (
+              <Link
+                href={`/${lang}/academy/classroom/${courseSlug}/${moduleItem.slug}/${lesson.slug}/slides`}
+                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 text-xs font-mono font-bold transition-all shadow-md shadow-[#FE385B]/20"
+              >
+                <Layers size={13} />
+                <span>{isEs ? 'Ver Diapositivas 16:9' : 'Open Slide Deck 16:9'}</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] border border-black/[0.06] dark:border-white/[0.06] opacity-50"
+              >
+                <Layers size={13} />
+                <span>{isEs ? 'Sin Presentación' : 'No Slides Available'}</span>
+              </button>
+            )}
           </div>
         </div>
 
