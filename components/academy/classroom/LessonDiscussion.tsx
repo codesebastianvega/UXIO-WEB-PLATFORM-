@@ -1,53 +1,56 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MessageSquare, Send, User, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MessageSquare, Send, CheckCircle2 } from 'lucide-react';
 import { Locale } from '@/types';
-
-interface CommentItem {
-  id: string;
-  author: string;
-  avatarText: string;
-  role: 'student' | 'instructor';
-  date: string;
-  text: string;
-}
+import { getStoredQAMessages, saveQAMessage, QAMessage } from '@/lib/academy/qa-store';
 
 interface LessonDiscussionProps {
+  courseSlug?: string;
+  lessonId?: string;
   lessonTitle: string;
   lang: Locale;
 }
 
-export default function LessonDiscussion({ lessonTitle, lang }: LessonDiscussionProps) {
+export default function LessonDiscussion({
+  courseSlug = 'creator-lab',
+  lessonId = 'm00-01-bienvenida-metodologia',
+  lessonTitle,
+  lang,
+}: LessonDiscussionProps) {
   const isEs = lang === 'es';
   const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState<CommentItem[]>([
-    {
-      id: 'c1',
-      author: 'UXIO Docencia',
-      avatarText: 'U',
-      role: 'instructor',
-      date: isEs ? 'Hace 2 horas' : '2 hours ago',
-      text: isEs
-        ? '¡Bienvenidos a esta cápsula! Si tienes cualquier duda sobre la práctica o la configuración de tu celular, déjanos tu pregunta aquí.'
-        : 'Welcome to this lesson! If you have any questions regarding gear setup or the exercise, drop your comment here.',
-    },
-  ]);
+  const [messages, setMessages] = useState<QAMessage[]>([]);
+
+  useEffect(() => {
+    const loadMessages = () => {
+      const all = getStoredQAMessages();
+      // Filter for this lesson or show lesson-related queries
+      const lessonMsgs = all.filter(m => m.lessonId === lessonId || m.lessonTitle === lessonTitle);
+      setMessages(lessonMsgs);
+    };
+
+    loadMessages();
+    window.addEventListener('uxio-qa-updated', loadMessages);
+    return () => window.removeEventListener('uxio-qa-updated', loadMessages);
+  }, [lessonId, lessonTitle]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!commentText.trim()) return;
+    const clean = commentText.trim();
+    if (!clean) return;
 
-    const newComment: CommentItem = {
-      id: `c-${Date.now()}`,
-      author: isEs ? 'Tú (Estudiante)' : 'You (Student)',
-      avatarText: 'T',
-      role: 'student',
-      date: isEs ? 'Justo ahora' : 'Just now',
-      text: commentText.trim(),
-    };
+    saveQAMessage({
+      courseSlug,
+      lessonId,
+      lessonTitle,
+      lessonWeekTag: 'Semana 0',
+      studentName: 'Sebas Vega (Tú)',
+      studentEmail: 'sebaschanvega@gmail.com',
+      studentAvatarText: 'S',
+      questionText: clean,
+    });
 
-    setComments(prev => [newComment, ...prev]);
     setCommentText('');
   };
 
@@ -70,7 +73,7 @@ export default function LessonDiscussion({ lessonTitle, lang }: LessonDiscussion
         </div>
 
         <span className="font-mono text-xs text-[#8E8E93]">
-          {comments.length} {isEs ? 'mensaje(s)' : 'comment(s)'}
+          {messages.length} {isEs ? 'pregunta(s)' : 'question(s)'}
         </span>
       </div>
 
@@ -103,40 +106,60 @@ export default function LessonDiscussion({ lessonTitle, lang }: LessonDiscussion
       </form>
 
       {/* Discussion List */}
-      <div className="space-y-3 pt-2">
-        {comments.map(c => (
-          <div
-            key={c.id}
-            className={`p-4 rounded-2xl border text-xs font-sans space-y-2 ${
-              c.role === 'instructor'
-                ? 'bg-[#FE385B]/[0.03] border-[#FE385B]/20'
-                : 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.04] dark:border-white/[0.04]'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center font-mono text-[10px] font-bold text-white ${
-                    c.role === 'instructor' ? 'bg-[#FE385B]' : 'bg-[#8E8E93]'
-                  }`}
-                >
-                  {c.avatarText}
+      <div className="space-y-4 pt-2">
+        {messages.length === 0 ? (
+          <p className="text-xs text-[#8E8E93] font-sans text-center py-4">
+            {isEs
+              ? 'No hay preguntas aún en esta cápsula. ¡Sé el primero en preguntar!'
+              : 'No questions yet in this lesson. Be the first to ask!'}
+          </p>
+        ) : (
+          messages.map(m => (
+            <div
+              key={m.id}
+              className="p-5 rounded-2xl border border-black/[0.06] dark:border-white/[0.06] bg-black/[0.02] dark:bg-white/[0.02] space-y-3"
+            >
+              {/* Question */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center font-mono text-[11px] font-bold text-white bg-[#8E8E93]">
+                    {m.studentAvatarText}
+                  </div>
+                  <div>
+                    <span className="font-bold text-xs text-[#111111] dark:text-white">{m.studentName}</span>
+                    <span className="text-[10px] text-[#8E8E93] ml-2 font-mono">({m.studentEmail})</span>
+                  </div>
                 </div>
-                <span className="font-bold text-[#111111] dark:text-white">{c.author}</span>
-                {c.role === 'instructor' && (
-                  <span className="font-mono text-[9px] text-[#FE385B] bg-[#FE385B]/10 px-1.5 py-0.2 rounded border border-[#FE385B]/20 font-semibold">
-                    INSTRUCTOR
-                  </span>
-                )}
+                <span className="font-mono text-[10px] text-[#8E8E93]">{m.askedAt}</span>
               </div>
-              <span className="font-mono text-[10px] text-[#8E8E93]">{c.date}</span>
-            </div>
 
-            <p className="text-[#444444] dark:text-[#CCCCCC] leading-relaxed pl-8">
-              {c.text}
-            </p>
-          </div>
-        ))}
+              <p className="text-xs sm:text-sm text-[#333333] dark:text-[#CCCCCC] leading-relaxed pl-9">
+                "{m.questionText}"
+              </p>
+
+              {/* Official Instructor Reply */}
+              {m.replyText ? (
+                <div className="ml-9 p-4 rounded-xl bg-[#FE385B]/[0.05] border border-[#FE385B]/20 space-y-1.5">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-[#FE385B] font-bold flex items-center gap-1">
+                      <CheckCircle2 size={12} />
+                      // {isEs ? 'RESPUESTA OFICIAL (UXIO DOCENCIA)' : 'OFFICIAL INSTRUCTOR REPLY'}
+                    </span>
+                    <span className="text-[#8E8E93]">{m.repliedAt || (isEs ? 'Reciente' : 'Recent')}</span>
+                  </div>
+                  <p className="text-xs text-[#111111] dark:text-white font-sans leading-relaxed">
+                    {m.replyText}
+                  </p>
+                </div>
+              ) : (
+                <div className="ml-9 text-[11px] font-mono text-[#FF7F07] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF7F07] animate-pulse" />
+                  <span>{isEs ? 'Esperando respuesta del equipo docente...' : 'Waiting for instructor reply...'}</span>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   PlayCircle,
@@ -10,10 +10,13 @@ import {
   CheckCircle2,
   Lock,
   Layers,
+  Video,
+  ExternalLink,
 } from 'lucide-react';
 import { Module, Lesson, Course } from '@/data/academy/types';
 import { Locale } from '@/types';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
+import { getStoredLiveLinks, AcademyLiveLinks, DEFAULT_ACADEMY_LIVE_LINKS } from '@/lib/academy/live-links-store';
 
 interface CourseModuleCardProps {
   moduleItem: Module;
@@ -31,11 +34,24 @@ export default function CourseModuleCard({
   lang,
 }: CourseModuleCardProps) {
   const isEs = lang === 'es';
+  const [liveLinks, setLiveLinks] = useState<AcademyLiveLinks>(DEFAULT_ACADEMY_LIVE_LINKS);
 
-  const moduleCompletedCount = moduleItem.lessons.filter(l =>
+  useEffect(() => {
+    setLiveLinks(getStoredLiveLinks());
+  }, []);
+
+  const videoLessons = moduleItem.lessons.filter(
+    l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo')
+  );
+
+  const allVideoLessons = allLessons.filter(
+    l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo')
+  );
+
+  const moduleCompletedCount = videoLessons.filter(l =>
     completedLessonIds.includes(l.id)
   ).length;
-  const moduleTotalCount = moduleItem.lessons.length;
+  const moduleTotalCount = videoLessons.length;
   const modulePercent = Math.round(
     (moduleCompletedCount / (moduleTotalCount || 1)) * 100
   );
@@ -74,7 +90,7 @@ export default function CourseModuleCard({
 
             <div className="text-right sm:text-right shrink-0">
               <span className="font-mono text-xs font-bold text-[#111111] dark:text-white">
-                {moduleCompletedCount} / {moduleTotalCount} {isEs ? 'lecciones' : 'lessons'}
+                {moduleCompletedCount} / {moduleTotalCount} {isEs ? 'cápsulas' : 'lessons'}
               </span>
               <span className="block font-mono text-[11px] text-[#8E8E93]">
                 {modulePercent}% {isEs ? 'completado' : 'done'}
@@ -93,14 +109,14 @@ export default function CourseModuleCard({
           </div>
         </div>
 
-        {/* Lessons Grid */}
+        {/* Video Lessons Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {moduleItem.lessons.map(lesson => {
+          {videoLessons.map(lesson => {
             const isCompleted = completedLessonIds.includes(lesson.id);
-            const lessonIndex = allLessons.findIndex(l => l.id === lesson.id);
+            const lessonIndex = allVideoLessons.findIndex(l => l.id === lesson.id);
             const isUnlocked =
               lessonIndex === 0 ||
-              completedLessonIds.includes(allLessons[lessonIndex - 1]?.id);
+              completedLessonIds.includes(allVideoLessons[lessonIndex - 1]?.id);
 
             if (!isUnlocked) {
               return (
@@ -146,10 +162,8 @@ export default function CourseModuleCard({
                     <div className="mt-0.5 shrink-0">
                       {isCompleted ? (
                         <CheckCircle2 size={16} className="text-[#10B981]" />
-                      ) : lesson.type === 'live_lab' ? (
-                        <Radio size={16} className="text-[#FE385B]" />
                       ) : (
-                        <PlayCircle size={16} className="text-[#0284C7] dark:text-[#00F0FF]" />
+                        <PlayCircle size={16} className="text-[#FE385B]" />
                       )}
                     </div>
                     <div className="min-w-0">
@@ -186,6 +200,45 @@ export default function CourseModuleCard({
               </Link>
             );
           })}
+        </div>
+
+        {/* Dedicated Live Session & Recording Row for the Week */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#FE385B] animate-pulse" />
+              <span className="font-mono text-[10px] text-[#FE385B] uppercase font-bold tracking-wider">
+                {isEs ? 'SESIÓN EN VIVO SEMANAL & FEEDBACK' : 'WEEKLY LIVE FEEDBACK & WORKSHOP'}
+              </span>
+            </div>
+            <p className="font-display font-bold text-xs sm:text-sm text-[#111111] dark:text-white">
+              {liveLinks.liveSessionDate || (isEs ? 'Cada Jueves · 7:00 PM (Hora Colombia)' : 'Every Thursday · 7:00 PM (GMT-5)')}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            <a
+              href={liveLinks.liveSessionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FE385B] hover:bg-[#FE385B]/90 text-white font-display font-bold text-xs shadow-sm transition-all active:scale-[0.98]"
+            >
+              <Video size={13} />
+              <span>{isEs ? 'Unirme a la Sala Virtual ↗' : 'Join Live Class ↗'}</span>
+            </a>
+
+            {liveLinks.recordingUrl && (
+              <a
+                href={liveLinks.recordingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] text-[#111111] dark:text-white font-display font-bold text-xs border border-black/[0.06] dark:border-white/[0.06] transition-all"
+              >
+                <Radio size={13} className="text-[#FE385B]" />
+                <span>{isEs ? 'Ver Grabación ↗' : 'Watch Recording ↗'}</span>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </AuroraSpotlightCard>

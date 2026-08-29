@@ -48,7 +48,7 @@ export default async function PublicSlideDeckPage({
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#080808] flex items-center justify-center p-4 sm:p-8">
+    <div className="w-full min-h-screen bg-[#F0F2F5] dark:bg-[#080808] flex items-center justify-center p-3 sm:p-6 lg:p-8 transition-colors">
       <PresentationEngine
         presentation={presentation}
         lang={lang}

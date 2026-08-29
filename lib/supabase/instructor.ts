@@ -20,6 +20,7 @@ export interface InstructorQueueItem {
   submissionType: SubmissionType;
   status: SubmissionStatus;
   feedbackText?: string | null;
+  approvedCriteria?: string[];
   reviewedAt?: string | null;
   submittedAt: string;
   updatedAt: string;
@@ -122,32 +123,12 @@ export async function getInstructorReviewQueue(
     }
 
     // Query submissions
-    const { data, error } = await supabase
+    const { data: submissionsData, error: subError } = await supabase
       .from('submissions')
-      .select(`
-        id,
-        user_id,
-        course_id,
-        lesson_id,
-        submission_url,
-        submission_type,
-        status,
-        feedback_text,
-        reviewed_at,
-        submitted_at,
-        updated_at,
-        courses (
-          slug,
-          title
-        ),
-        profiles (
-          full_name,
-          email
-        )
-      `)
+      .select('*')
       .order('submitted_at', { ascending: false });
 
-    if (error || !data) {
+    if (subError || !submissionsData || submissionsData.length === 0) {
       return {
         items: [],
         metrics: {
@@ -161,11 +142,23 @@ export async function getInstructorReviewQueue(
       };
     }
 
+    const userIds = Array.from(new Set(submissionsData.map((s: any) => s.user_id)));
+    const courseIds = Array.from(new Set(submissionsData.map((s: any) => s.course_id)));
+
+    const [{ data: profilesData }, { data: coursesData }] = await Promise.all([
+      supabase.from('profiles').select('id, full_name, email').in('id', userIds),
+      supabase.from('courses').select('id, slug, title').in('id', courseIds),
+    ]);
+
+    const profileMap = new Map<string, any>((profilesData || []).map((p: any) => [p.id, p]));
+    const courseMap = new Map<string, any>((coursesData || []).map((c: any) => [c.id, c]));
     const uniqueStudents = new Set<string>();
 
-    const items: InstructorQueueItem[] = data.map((row: any) => {
+    const items: InstructorQueueItem[] = submissionsData.map((row: any) => {
       uniqueStudents.add(row.user_id);
-      const courseSlug = row.courses?.slug || 'creator-lab';
+      const matchedProfile = profileMap.get(row.user_id);
+      const matchedCourse = courseMap.get(row.course_id);
+      const courseSlug = matchedCourse?.slug || 'creator-lab';
       const staticCourse = getCourseBySlug(courseSlug, lang);
 
       // Find matching lesson & module in static repo
@@ -194,10 +187,10 @@ export async function getInstructorReviewQueue(
       return {
         id: row.id,
         userId: row.user_id,
-        studentName: row.profiles?.full_name || 'Alumno',
-        studentEmail: row.profiles?.email || 'alumno@uxio.com',
+        studentName: matchedProfile?.full_name || 'Alumno',
+        studentEmail: matchedProfile?.email || 'alumno@uxio.com',
         courseSlug,
-        courseTitle: row.courses?.title || staticCourse?.title || 'Creator Lab',
+        courseTitle: matchedCourse?.title || staticCourse?.title || 'Creator Lab',
         lessonId: row.lesson_id,
         lessonTitle,
         moduleWeekTag,

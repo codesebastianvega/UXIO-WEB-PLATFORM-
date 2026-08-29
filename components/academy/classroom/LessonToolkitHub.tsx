@@ -7,7 +7,6 @@ import {
   HelpCircle,
   FolderDown,
   ExternalLink,
-  CheckCircle2,
   Lock,
   Unlock,
   Sparkles,
@@ -78,15 +77,15 @@ export default function LessonToolkitHub({
   const isEs = lang === 'es';
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const isUnlocked = isLessonCompleted || isQuizPassed;
+  const isUnlocked = quiz ? isQuizPassed : true;
 
   return (
     <>
       <AuroraSpotlightCard
         primaryColor={isUnlocked ? '#10B981' : '#FE385B'}
-        spotlightRadius={280}
+        spotlightRadius={300}
         spotlightOpacity={0.08}
-        className="rounded-3xl shadow-soft"
+        className="rounded-3xl shadow-soft backdrop-blur-2xl bg-white/80 dark:bg-[#121214]/80 border border-black/[0.08] dark:border-white/[0.08]"
       >
         <div className="p-6 sm:p-8 space-y-6">
           {/* Header */}
@@ -95,29 +94,29 @@ export default function LessonToolkitHub({
               <FolderDown size={18} className="text-[#FE385B]" />
               <div>
                 <h3 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white">
-                  {isEs ? 'Materiales & Recursos de la Clase' : 'Lesson Materials & Resources'}
+                  {isEs ? 'Materiales & Recursos de la Lección' : 'Lesson Materials & Resources'}
                 </h3>
                 <p className="text-xs text-[#8E8E93] font-sans">
                   {isEs
-                    ? 'Evaluación rápida de conceptos, diapositivas y plantillas de trabajo.'
-                    : 'Quick concept checkpoint, slides, and workbook templates.'}
+                    ? 'Diapositivas interactivas, evaluación formativa y plantillas editables.'
+                    : 'Interactive slides, quiz checkpoint, and workbooks.'}
                 </p>
               </div>
             </div>
 
             <span
-              className={`font-mono text-[10px] font-bold px-2.5 py-1 rounded-md border flex items-center gap-1.5 shrink-0 self-start sm:self-auto ${
+              className={`font-mono text-[10px] font-bold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 shrink-0 self-start sm:self-auto backdrop-blur-md transition-all duration-150 ${
                 isUnlocked
-                  ? 'bg-[#10B981]/10 border-[#10B981]/25 text-[#10B981]'
-                  : 'bg-[#FF7F07]/10 border-[#FF7F07]/25 text-[#FF7F07]'
+                  ? 'bg-[#10B981]/10 border-[#10B981]/30 text-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.15)]'
+                  : 'bg-black/[0.03] dark:bg-white/[0.04] border-black/[0.08] dark:border-white/[0.08] text-[#8E8E93]'
               }`}
             >
-              {isUnlocked ? <Unlock size={11} /> : <Lock size={11} />}
+              {isUnlocked ? <Unlock size={12} /> : <Lock size={12} />}
               <span>
                 {isUnlocked
                   ? isEs
-                    ? 'Recursos Desbloqueados ✓'
-                    : 'Resources Unlocked ✓'
+                    ? 'Plantillas Desbloqueadas ✓'
+                    : 'Templates Unlocked ✓'
                   : isEs
                     ? 'Completa el test para desbloquear'
                     : 'Complete quiz to unlock'}
@@ -125,22 +124,22 @@ export default function LessonToolkitHub({
             </span>
           </div>
 
-          {/* 1. Primary Highlight Card: Evaluación Rápida (Typeform) */}
+          {/* 1. Mini-Evaluación Formativa (Glassmorphism Puro Ultraligero 120fps) */}
           {quiz && (
             <div
-              className={`p-5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+              className={`p-5 sm:p-6 rounded-2xl border transition-all duration-150 flex flex-col sm:flex-row sm:items-center justify-between gap-4 backdrop-blur-xl ${
                 isQuizPassed
-                  ? 'bg-[#10B981]/[0.05] border-[#10B981]/25'
-                  : 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06]'
+                  ? 'bg-[#10B981]/[0.06] dark:bg-[#10B981]/[0.08] border-[#10B981]/30 shadow-[0_4px_20px_-5px_rgba(16,185,129,0.15)]'
+                  : 'bg-[#FF7F07]/[0.04] dark:bg-[#FF7F07]/[0.06] border-[#FF7F07]/25 dark:border-[#FF7F07]/30 shadow-sm'
               }`}
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${
+                    className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-lg border backdrop-blur-md ${
                       isQuizPassed
-                        ? 'bg-[#10B981]/15 text-[#10B981] border-[#10B981]/30'
-                        : 'bg-[#FF7F07]/10 text-[#FF7F07] border-[#FF7F07]/20'
+                        ? 'bg-[#10B981]/20 text-[#047857] dark:text-[#10B981] border-[#10B981]/30'
+                        : 'bg-[#FF7F07]/15 text-[#C2410C] dark:text-[#FFA048] border-[#FF7F07]/30'
                     }`}
                   >
                     {isQuizPassed
@@ -151,134 +150,133 @@ export default function LessonToolkitHub({
                   </span>
                   <HelpCircle
                     size={14}
-                    className={isQuizPassed ? 'text-[#10B981]' : 'text-[#FF7F07]'}
+                    className={
+                      isQuizPassed
+                        ? 'text-[#059669] dark:text-[#10B981]'
+                        : 'text-[#FF7F07]'
+                    }
                   />
                 </div>
-                <h4 className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white">
-                  {isEs ? 'Mini-Evaluación Formativa' : 'Quick Learning Checkpoint'}
+                <h4 className="font-display font-bold text-sm text-[#111111] dark:text-white">
+                  {isEs ? 'Mini-Evaluación de la Lección' : 'Lesson Quiz Checkpoint'}
                 </h4>
-                <p className="text-xs text-[#8E8E93] font-sans">
+                <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans">
                   {isEs
-                    ? 'Valida los conceptos clave de la lección antes de aplicar tus plantillas.'
-                    : 'Validate core takeaways before applying templates.'}
+                    ? 'Valida tu comprensión de la clase para desbloquear las plantillas editables.'
+                    : 'Verify your understanding of this capsule to unlock editable workbooks.'}
                 </p>
               </div>
 
+              {/* Botón 1: Glassmorphism Verde con Hover Ultra-Fluido 120fps */}
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className={`inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl text-xs font-mono font-bold transition-all shadow-sm shrink-0 ${
+                className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-display font-bold text-xs transition-all duration-150 shrink-0 backdrop-blur-xl active:scale-[0.97] hover:scale-[1.02] ${
                   isQuizPassed
-                    ? 'bg-[#10B981] hover:bg-[#10B981]/90 text-white'
-                    : 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white'
+                    ? 'bg-[#10B981]/20 hover:bg-[#10B981] text-[#047857] dark:text-[#10B981] hover:text-white border border-[#10B981]/40 hover:border-[#10B981] shadow-[0_4px_15px_rgba(16,185,129,0.15)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.3)]'
+                    : 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-[0_4px_15px_rgba(255,127,7,0.3)] hover:shadow-[0_6px_20px_rgba(255,127,7,0.45)]'
                 }`}
               >
-                <Sparkles size={13} />
+                <Sparkles size={13} className="transition-transform duration-150 group-hover:rotate-12" />
                 <span>
                   {isQuizPassed
                     ? isEs
                       ? 'Repetir Evaluación'
                       : 'Retake Quiz'
                     : isEs
-                      ? 'Hacer Evaluación →'
-                      : 'Take Quiz →'}
+                      ? 'Presentar Test ➔'
+                      : 'Take Quiz ➔'}
                 </span>
               </button>
             </div>
           )}
 
-          {/* 2. Grid Unificado: Diapositivas + Plantillas y Descargables */}
-          <div className="space-y-3 pt-1">
+          {/* 2. Diapositivas y Plantillas de Trabajo */}
+          <div className="space-y-3">
             <span className="font-mono text-xs text-[#8E8E93] block">
-              // {isEs ? 'DIAPOSITIVAS & PLANTILLAS DE TRABAJO' : 'SLIDES & WORKBOOK TEMPLATES'}
+              // {isEs ? 'DIAPOSITIVAS & PLANTILLAS DE TRABAJO' : 'SLIDES & WORKBOOKS'}
             </span>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {/* Diapositivas 16:9 integradas en la cuadrícula de recursos */}
-              <div
-                className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-3 ${
-                  isUnlocked
-                    ? 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06]'
-                    : 'bg-black/[0.01] dark:bg-white/[0.01] border-black/[0.04] dark:border-white/[0.04] opacity-75'
-                }`}
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] font-bold text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded border border-[#FE385B]/20">
-                      {presentationSlug ? (isEs ? 'Diapositivas 16:9' : 'Slide Deck') : (isEs ? 'En Preparación' : 'Pending')}
-                    </span>
-                    <Layers size={14} className="text-[#FE385B]" />
-                  </div>
-                  <h5 className="font-display font-semibold text-xs text-[#111111] dark:text-white leading-snug">
-                    {isEs ? 'Presentación Visual de la Lección' : 'Visual Lesson Slide Deck'}
-                  </h5>
-                  <p className="text-[11px] text-[#8E8E93] font-sans">
-                    {isEs ? 'Fórmulas, marcos teóricos y comparativas.' : 'Frameworks and key formulas.'}
-                  </p>
-                </div>
-
-                <div>
-                  {presentationSlug ? (
-                    <Link
-                      href={`/${lang}/academy/classroom/${courseSlug}/${moduleSlug}/${lessonSlug}/slides`}
-                      className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#FE385B] hover:bg-[#FE385B]/90 text-white text-xs font-mono font-bold transition-all shadow-sm"
-                    >
-                      <Layers size={12} />
-                      <span>{isEs ? 'Abrir Diapositivas' : 'Open Slides'}</span>
-                      <ExternalLink size={11} />
-                    </Link>
-                  ) : (
-                    <div className="w-full py-2 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.03] text-xs font-mono text-[#8E8E93] text-center opacity-50">
-                      {isEs ? 'Sin Diapositivas' : 'No Slides'}
+              {/* Card 1: Diapositivas */}
+              {presentationSlug && (
+                <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] flex flex-col justify-between space-y-3 hover:border-black/[0.12] dark:hover:border-white/[0.12] transition-colors">
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded uppercase font-bold">
+                        {isEs ? 'Diapositivas 16:9' : 'Slides 16:9'}
+                      </span>
+                      <Layers size={13} className="text-[#FE385B]" />
                     </div>
-                  )}
-                </div>
-              </div>
+                    <h5 className="font-display font-bold text-xs text-[#111111] dark:text-white pt-1">
+                      {isEs ? 'Diapositivas y Material Visual' : 'Interactive Slides'}
+                    </h5>
+                    <p className="text-[11px] text-[#8E8E93] font-sans">
+                      {isEs
+                        ? 'Acceso libre a conceptos y fórmulas clave.'
+                        : 'Key formulas and step-by-step visuals.'}
+                    </p>
+                  </div>
 
-              {/* Recursos Descargables (PDF, Plantillas, Prompts) */}
-              {resources.map(res => {
+                  {/* Botón: Glassmorphism Coral con Hover Ultra-Fluido 120fps */}
+                  <Link
+                    href={`/${lang}/academy/classroom/${courseSlug}/${moduleSlug}/${lessonSlug}/slides`}
+                    target="_blank"
+                    className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#FE385B]/15 hover:bg-[#FE385B] text-[#FE385B] hover:text-white border border-[#FE385B]/30 hover:border-[#FE385B] font-display font-bold text-xs transition-all duration-150 shadow-sm backdrop-blur-md active:scale-[0.98] hover:scale-[1.02]"
+                  >
+                    <span>{isEs ? 'Abrir Diapositivas (16:9)' : 'Open Slides'}</span>
+                    <ExternalLink size={11} />
+                  </Link>
+                </div>
+              )}
+
+              {/* Cards de Recursos / Plantillas */}
+              {resources.map((res, i) => {
                 const meta = getResourceMeta(res.type, isEs);
-                const IconComp = meta.icon;
+                const IconComponent = meta.icon;
 
                 return (
                   <div
-                    key={res.id}
-                    className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-3 ${
+                    key={res.id || i}
+                    className={`p-4 rounded-2xl border flex flex-col justify-between space-y-3 transition-colors ${
                       isUnlocked
-                        ? 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06]'
-                        : 'bg-black/[0.01] dark:bg-white/[0.01] border-black/[0.04] dark:border-white/[0.04] opacity-70'
+                        ? 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06] hover:border-black/[0.12] dark:hover:border-white/[0.12]'
+                        : 'bg-black/[0.01] dark:bg-white/[0.01] border-black/[0.04] dark:border-white/[0.04] opacity-50 select-none'
                     }`}
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] font-bold text-[#8E8E93] bg-black/[0.04] dark:bg-white/[0.06] px-2 py-0.5 rounded border border-black/[0.06] dark:border-white/[0.08]">
+                        <span className="font-mono text-[10px] text-[#8E8E93] bg-black/[0.03] dark:bg-white/[0.04] px-2 py-0.5 rounded uppercase font-bold">
                           {meta.badge}
                         </span>
-                        <IconComp size={14} className="text-[#8E8E93]" />
+                        <IconComponent size={13} className="text-[#8E8E93]" />
                       </div>
-                      <h5 className="font-display font-semibold text-xs text-[#111111] dark:text-white leading-snug line-clamp-2">
+                      <h5 className="font-display font-bold text-xs text-[#111111] dark:text-white pt-1 truncate">
                         {res.title}
                       </h5>
-                    </div>
-
-                    <div>
-                      {isUnlocked ? (
-                        <a
-                          href={res.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white dark:bg-black/[0.4] border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-mono text-[#111111] dark:text-white transition-colors"
-                        >
-                          <span>{meta.cta}</span>
-                          <ExternalLink size={11} className="text-[#8E8E93]" />
-                        </a>
-                      ) : (
-                        <div className="w-full inline-flex items-center justify-center gap-1 py-2 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.03] text-xs font-mono text-[#8E8E93] cursor-not-allowed">
-                          <Lock size={11} className="text-[#FF7F07]" />
-                          <span>{isEs ? 'Bloqueado' : 'Locked'}</span>
-                        </div>
+                      {res.description && (
+                        <p className="text-[11px] text-[#8E8E93] font-sans line-clamp-2">
+                          {res.description}
+                        </p>
                       )}
                     </div>
+
+                    {isUnlocked ? (
+                      <a
+                        href={res.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] text-xs font-mono text-[#111111] dark:text-white transition-colors border border-black/[0.06] dark:border-white/[0.06]"
+                      >
+                        <span>{meta.cta}</span>
+                        <ExternalLink size={11} />
+                      </a>
+                    ) : (
+                      <div className="inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] text-xs font-mono text-[#8E8E93] cursor-not-allowed">
+                        <Lock size={11} />
+                        <span>{isEs ? 'Bloqueada (Aprueba Test)' : 'Locked'}</span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -287,13 +285,16 @@ export default function LessonToolkitHub({
         </div>
       </AuroraSpotlightCard>
 
-      {/* Interactive Typeform Modal */}
+      {/* Quiz Modal */}
       {quiz && (
         <LessonQuizModal
-          quiz={quiz}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onQuizPassed={onQuizPassed}
+          quiz={quiz}
+          onQuizPassed={() => {
+            onQuizPassed();
+            setIsModalOpen(false);
+          }}
           lang={lang}
         />
       )}

@@ -10,6 +10,7 @@ interface VideoPlayerProps {
   title: string;
   poster?: string;
   duration?: string;
+  onPlay?: () => void;
 }
 
 function getEmbedUrl(url: string, provider: VideoProvider = 'youtube'): string | null {
@@ -41,6 +42,7 @@ export default function VideoPlayer({
   title,
   poster,
   duration,
+  onPlay,
 }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +68,10 @@ export default function VideoPlayer({
     <div className="relative w-full aspect-video rounded-3xl bg-[#080808] border border-black/[0.12] dark:border-white/[0.1] shadow-soft-lg overflow-hidden group">
       {!isPlaying ? (
         <div
-          onClick={() => setIsPlaying(true)}
+          onClick={() => {
+            setIsPlaying(true);
+            onPlay?.();
+          }}
           className="absolute inset-0 z-10 flex flex-col items-center justify-center cursor-pointer bg-gradient-to-t from-black/80 via-black/40 to-black/20 hover:from-black/70 transition-all p-6 text-center"
         >
           {poster && (

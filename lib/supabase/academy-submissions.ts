@@ -17,6 +17,7 @@ export interface LessonSubmission {
   submissionType: SubmissionType;
   status: SubmissionStatus;
   feedbackText?: string | null;
+  approvedCriteria?: string[];
   reviewedAt?: string | null;
   submittedAt: string;
   updatedAt: string;

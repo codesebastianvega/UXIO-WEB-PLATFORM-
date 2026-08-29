@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Layers, Lock, ChevronLeft, ChevronRight, PlayCircle } from 'lucide-react';
 import { Lesson, Module } from '@/data/academy/types';
@@ -9,9 +9,8 @@ import { LessonSubmission } from '@/lib/supabase/academy-submissions';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
 import LessonToolkitHub from './LessonToolkitHub';
-import LessonChallenge from './LessonChallenge';
-import ChallengeSubmission from './ChallengeSubmission';
-import LessonCompleteButton from './LessonCompleteButton';
+import LessonChallengeHub from './LessonChallengeHub';
+import LessonCompletionCard from './LessonCompletionCard';
 import LessonDiscussion from './LessonDiscussion';
 
 interface AdjacentLessonInfo {
@@ -44,7 +43,46 @@ export default function LessonViewer({
 }: LessonViewerProps) {
   const isEs = lang === 'es';
   const [selectedMicroclassIndex, setSelectedMicroclassIndex] = useState(0);
-  const [isQuizPassed, setIsQuizPassed] = useState(isLessonCompleted);
+  const [isQuizPassed, setIsQuizPassed] = useState(false);
+  const [watchedMicroclasses, setWatchedMicroclasses] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storageKey = `uxio_quiz_${courseSlug}_${lesson.id}`;
+      const saved = localStorage.getItem(storageKey);
+      if (saved === 'passed') {
+        setIsQuizPassed(true);
+      }
+
+      const watchedKey = `uxio_watched_${courseSlug}_${lesson.id}`;
+      const savedWatched = localStorage.getItem(watchedKey);
+      if (savedWatched) {
+        try {
+          setWatchedMicroclasses(JSON.parse(savedWatched));
+        } catch {
+          // ignore
+        }
+      }
+    }
+  }, [courseSlug, lesson.id]);
+
+  const handleVideoWatched = (microclassId: string) => {
+    setWatchedMicroclasses(prev => {
+      if (prev.includes(microclassId)) return prev;
+      const next = [...prev, microclassId];
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(`uxio_watched_${courseSlug}_${lesson.id}`, JSON.stringify(next));
+      }
+      return next;
+    });
+  };
+
+  const handleQuizPassed = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`uxio_quiz_${courseSlug}_${lesson.id}`, 'passed');
+    }
+    setIsQuizPassed(true);
+  };
 
   const activeMicroclass = lesson.microclasses[selectedMicroclassIndex] || null;
   const currentVideoUrl = activeMicroclass?.videoUrl;
@@ -107,7 +145,11 @@ export default function LessonViewer({
         moduleItem={moduleItem}
         microclasses={lesson.microclasses}
         selectedMicroclassIndex={selectedMicroclassIndex}
-        onSelectMicroclass={setSelectedMicroclassIndex}
+        onSelectMicroclass={index => {
+          setSelectedMicroclassIndex(index);
+          const mc = lesson.microclasses[index];
+          if (mc) handleVideoWatched(mc.id);
+        }}
         lang={lang}
       />
 
@@ -118,6 +160,7 @@ export default function LessonViewer({
           videoUrl={currentVideoUrl}
           title={currentVideoTitle}
           duration={currentVideoDuration}
+          onPlay={() => activeMicroclass && handleVideoWatched(activeMicroclass.id)}
         />
 
         {/* Active Microclass Description + Inline Chevrons */}
@@ -178,24 +221,17 @@ export default function LessonViewer({
         resources={lesson.resources}
         isQuizPassed={isQuizPassed}
         isLessonCompleted={isLessonCompleted}
-        onQuizPassed={() => setIsQuizPassed(true)}
+        onQuizPassed={handleQuizPassed}
         courseSlug={courseSlug}
         moduleSlug={moduleItem.slug}
         lessonSlug={lesson.slug}
         lang={lang}
       />
 
-      {/* 7. Practical Challenge */}
+      {/* 7. Practical Challenge & Submission Unified Hub */}
       {lesson.challenge && (
-        <LessonChallenge
+        <LessonChallengeHub
           challenge={lesson.challenge}
-          lang={lang}
-        />
-      )}
-
-      {/* 8. Challenge Submission Form & Status */}
-      {lesson.challenge && (
-        <ChallengeSubmission
           courseSlug={courseSlug}
           lessonId={lesson.id}
           initialSubmission={initialSubmission}
@@ -204,25 +240,18 @@ export default function LessonViewer({
       )}
 
       {/* 9. Lesson Completion Action Box */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="text-center sm:text-left">
-          <h4 className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white">
-            {isEs ? '¿Terminaste de estudiar esta lección?' : 'Finished studying this lesson?'}
-          </h4>
-          <p className="text-xs text-[#8E8E93] font-sans mt-0.5">
-            {isEs
-              ? 'Guarda tu progreso para actualizar tu porcentaje del curso y desbloquear la siguiente lección.'
-              : 'Save your progress to update your completion status and unlock the next lesson.'}
-          </p>
-        </div>
-
-        <LessonCompleteButton
-          courseSlug={courseSlug}
-          lessonId={lesson.id}
-          initialCompleted={isLessonCompleted}
-          lang={lang}
-        />
-      </div>
+      <LessonCompletionCard
+        courseSlug={courseSlug}
+        lessonId={lesson.id}
+        isLessonCompleted={isLessonCompleted}
+        totalMicroclasses={totalMicroclasses}
+        watchedCount={watchedMicroclasses.length}
+        hasQuiz={Boolean(lesson.quiz)}
+        isQuizPassed={isQuizPassed}
+        hasChallenge={Boolean(lesson.challenge)}
+        hasSubmission={Boolean(initialSubmission)}
+        lang={lang}
+      />
 
       {/* 10. Q&A and Lesson Discussion */}
       <LessonDiscussion

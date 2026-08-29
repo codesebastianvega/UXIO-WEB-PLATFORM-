@@ -78,7 +78,9 @@ export const getLessonM0002 = (lang: Locale = 'es'): Lesson => {
       whatToDo: isEs
         ? 'Prepara tu rincón de grabación cerca de una ventana y toma una foto de prueba con la cuadrícula de tu celular activada.'
         : 'Set up your recording spot near a window and snap a test photo with your camera grid on.',
-      whatToDeliver: isEs ? '1 fotografía de tu espacio de grabación.' : '1 photo of your shooting space.',
+      whatToDeliver: isEs
+        ? 'Enlace público a la foto de tu espacio (Google Drive o Imgur).'
+        : 'Public link to your space photo (Google Drive or Imgur).',
       whereToSubmit: 'Comunidad Privada de Alumnos / Canal #semana-0-induccion',
       evaluationCriteria: [
         isEs ? 'Luz natural orientada de frente' : 'Frontal natural light setup',

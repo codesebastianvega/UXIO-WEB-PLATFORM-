@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Layers,
   MessageSquare,
@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Locale } from '@/types';
 import { InstructorQueueItem, InstructorMetrics } from '@/lib/supabase/instructor';
+import { getStoredSubmissions, reviewLocalSubmission } from '@/lib/academy/submissions-store';
 import InstructorHeader from './InstructorHeader';
 import ReviewQueue from './ReviewQueue';
 import SubmissionReview from './SubmissionReview';
@@ -41,7 +42,74 @@ export default function InstructorDashboard({
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'needs_revision' | 'approved'>('pending');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Sync with local submissions store
+  useEffect(() => {
+    const syncSubmissions = () => {
+      const stored = getStoredSubmissions();
+      const mergedMap = new Map<string, InstructorQueueItem>();
+
+      // Server items first
+      initialItems.forEach(item => mergedMap.set(item.id, item));
+
+      // Local items override / supplement
+      stored.forEach(s => {
+        mergedMap.set(s.id, {
+          id: s.id,
+          userId: s.userId,
+          studentName: s.studentName,
+          studentEmail: s.studentEmail,
+          courseSlug: s.courseSlug,
+          courseTitle: 'Creator Lab',
+          lessonId: s.lessonId,
+          lessonTitle: s.lessonTitle,
+          moduleWeekTag: s.moduleWeekTag,
+          challengePrompt: s.challengePrompt,
+          challengeDeliverable: s.challengeDeliverable,
+          challengeCriteria: s.challengeCriteria,
+          submissionUrl: s.submissionUrl,
+          submissionType: s.submissionType,
+          status: s.status,
+          feedbackText: s.feedbackText,
+          reviewedAt: s.reviewedAt,
+          submittedAt: s.submittedAt,
+          updatedAt: s.updatedAt,
+        });
+      });
+
+      const combined = Array.from(mergedMap.values()).sort(
+        (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
+      );
+
+      setItems(combined);
+
+      const pendingCount = combined.filter(
+        i => i.status === 'submitted' || i.status === 'pending_review'
+      ).length;
+      const needsRevisionCount = combined.filter(
+        i => i.status === 'needs_revision'
+      ).length;
+      const approvedCount = combined.filter(i => i.status === 'approved').length;
+      const uniqueStudents = new Set(combined.map(i => i.userId));
+
+      setMetrics({
+        totalSubmissions: combined.length,
+        pendingCount,
+        needsRevisionCount,
+        approvedCount,
+        studentsCount: Math.max(uniqueStudents.size, 1),
+        cohortsCount: 1,
+      });
+    };
+
+    syncSubmissions();
+    window.addEventListener('uxio-submissions-updated', syncSubmissions);
+    return () => window.removeEventListener('uxio-submissions-updated', syncSubmissions);
+  }, [initialItems]);
+
   const handleReviewed = (updated: InstructorQueueItem) => {
+    // Save to local submissions store as well
+    reviewLocalSubmission(updated.id, updated.status, updated.feedbackText || '');
+
     const nextItems = items.map(item => (item.id === updated.id ? updated : item));
     setItems(nextItems);
     setSelectedItem(null);
@@ -102,7 +170,7 @@ export default function InstructorDashboard({
           }`}
         >
           <MessageSquare size={14} />
-          <span>{isEs ? '2. Dudas & Preguntas' : '2. Q&A Forum'}</span>
+          <span>{isEs ? '2. Dudas & Preguntas' : '2. Student Q&A Feed'}</span>
         </button>
 
         <button
@@ -115,7 +183,7 @@ export default function InstructorDashboard({
           }`}
         >
           <Lock size={14} />
-          <span>{isEs ? '3. Control de Semanas' : '3. Weekly Pacing'}</span>
+          <span>{isEs ? '3. Control de Semanas' : '3. Cohort Pacing'}</span>
         </button>
 
         <button
@@ -132,16 +200,10 @@ export default function InstructorDashboard({
         </button>
       </div>
 
-      {/* 3. Render Selected Desk */}
+      {/* 3. Active Workspace Desk */}
       {activeWorkspaceTab === 'submissions' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div
-            className={
-              selectedItem
-                ? 'lg:col-span-6 space-y-4'
-                : 'lg:col-span-12 space-y-4'
-            }
-          >
+          <div className={`${selectedItem ? 'lg:col-span-6' : 'lg:col-span-12'} transition-all`}>
             <ReviewQueue
               items={items}
               selectedItem={selectedItem}

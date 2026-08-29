@@ -98,9 +98,11 @@ export function getAdjacentLessons(
   const flatLessons: Array<{ moduleSlug: string; lesson: Lesson }> = [];
   course.modules.forEach(m => {
     if (Array.isArray(m.lessons)) {
-      m.lessons.forEach(l => {
-        flatLessons.push({ moduleSlug: m.slug, lesson: l });
-      });
+      m.lessons
+        .filter(l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo'))
+        .forEach(l => {
+          flatLessons.push({ moduleSlug: m.slug, lesson: l });
+        });
     }
   });
 

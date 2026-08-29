@@ -122,8 +122,8 @@ export const getLessonM0001 = (lang: Locale = 'es'): Lesson => {
         ? 'Diligencia la plantilla de diagnóstico con la información de tu producto o servicio actual y fija tu meta de ventas para las 5 semanas.'
         : 'Complete the brand diagnosis worksheet with your current offer and set your 5-week conversion goal.',
       whatToDeliver: isEs
-        ? 'Enlace a tu ficha de diagnóstico o documento PDF en el canal de comunidad.'
-        : 'Link to your completed worksheet or PDF in the community channel.',
+        ? 'Enlace público a tu ficha de diagnóstico (Google Drive o Notion).'
+        : 'Public link to your completed worksheet (Google Drive or Notion).',
       whereToSubmit: 'Comunidad Privada de Alumnos / Canal #semana-0-induccion',
       evaluationCriteria: [
         isEs ? 'Claridad en la definición del cliente ideal' : 'Clear target customer definition',

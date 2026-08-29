@@ -34,13 +34,13 @@ export default function InstructorHeader({
       {/* Top Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00F0FF] to-[#7928CA] text-white flex items-center justify-center font-display font-black text-xl shadow-md shadow-[#00F0FF]/20 shrink-0">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FE385B] to-[#FF7F07] text-white flex items-center justify-center font-display font-black text-xl shadow-md shadow-[#FE385B]/20 shrink-0">
             {instructorName.charAt(0).toUpperCase()}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[10px] text-[#00F0FF] uppercase tracking-widest font-bold bg-[#00F0FF]/10 px-2.5 py-0.5 rounded border border-[#00F0FF]/20">
-                // INSTRUCTOR PANEL · SIE ACADEMY
+              <span className="font-mono text-[10px] text-[#FE385B] uppercase tracking-widest font-bold bg-[#FE385B]/10 px-2.5 py-0.5 rounded border border-[#FE385B]/20">
+                // INSTRUCTOR PANEL · UXIO ACADEMY
               </span>
             </div>
             <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-[#111111] dark:text-white mt-0.5">
@@ -66,8 +66,8 @@ export default function InstructorHeader({
 
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-[#00F0FF]/30 shadow-soft space-y-2">
-          <div className="flex items-center justify-between text-xs font-mono text-[#00F0FF]">
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-[#FE385B]/25 shadow-soft space-y-2">
+          <div className="flex items-center justify-between text-xs font-mono text-[#FE385B]">
             <span>{isEs ? 'PENDIENTES HOY' : 'PENDING REVIEW'}</span>
             <Clock size={16} />
           </div>

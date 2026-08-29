@@ -7,16 +7,14 @@ import {
   ExternalLink,
   Loader2,
   X,
-  MessageSquare,
   Sparkles,
-  ClipboardList,
-  Link as LinkIcon,
-  Clock,
+  TrendingUp,
+  RotateCcw,
 } from 'lucide-react';
 import { Locale } from '@/types';
 import { InstructorQueueItem } from '@/lib/supabase/instructor';
 import { reviewSubmissionAction } from '@/app/[lang]/academy/actions/instructor';
-import { issueStudentCertificateAction } from '@/app/[lang]/academy/actions/certificates';
+import { reviewLocalSubmission } from '@/lib/academy/submissions-store';
 
 interface SubmissionReviewProps {
   item: InstructorQueueItem;
@@ -33,70 +31,67 @@ export default function SubmissionReview({
 }: SubmissionReviewProps) {
   const isEs = lang === 'es';
   const [feedback, setFeedback] = useState(item.feedbackText || '');
-  const [checkedCriteria, setCheckedCriteria] = useState<Record<number, boolean>>({});
+  
+  // Initialize checked criteria from saved approvedCriteria
+  const [checkedCriteria, setCheckedCriteria] = useState<Record<number, boolean>>(() => {
+    const initialMap: Record<number, boolean> = {};
+    if (item.approvedCriteria && item.approvedCriteria.length > 0) {
+      item.challengeCriteria.forEach((crit, idx) => {
+        if (item.approvedCriteria?.includes(crit)) {
+          initialMap[idx] = true;
+        }
+      });
+    }
+    return initialMap;
+  });
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [certIssuedMsg, setCertIssuedMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const toggleCriterion = (idx: number) => {
     setCheckedCriteria(prev => ({ ...prev, [idx]: !prev[idx] }));
   };
 
-  const handleIssueCertificate = () => {
-    setErrorMsg(null);
-    setCertIssuedMsg(null);
-    startTransition(async () => {
-      const res = await issueStudentCertificateAction({
-        studentId: item.userId,
-        courseSlug: item.courseSlug,
-        lang,
-      });
-      if (res.success && res.certificateNumber) {
-        setCertIssuedMsg(
-          isEs
-            ? `✓ ¡Certificado ${res.certificateNumber} emitido con éxito!`
-            : `✓ Certificate ${res.certificateNumber} issued successfully!`
-        );
-      } else {
-        setErrorMsg(res.error || (isEs ? 'Error al emitir certificado.' : 'Failed to issue certificate.'));
-      }
-    });
-  };
+  const totalCriteria = item.challengeCriteria.length;
+  const checkedCount = Object.values(checkedCriteria).filter(Boolean).length;
+  const percentage = totalCriteria > 0 ? Math.round((checkedCount / totalCriteria) * 100) : 100;
+  const calculatedGrade = totalCriteria > 0 ? ((checkedCount / totalCriteria) * 5.0).toFixed(1) : '5.0';
 
   const handleReview = (status: 'approved' | 'needs_revision') => {
     if (status === 'needs_revision' && !feedback.trim()) {
       setErrorMsg(
         isEs
-          ? 'Por favor escribe un feedback para que el alumno sepa qué ajustar.'
-          : 'Please provide feedback so the student knows what to adjust.'
+          ? 'Por favor escribe una retroalimentación explicando qué criterios debe corregir el estudiante.'
+          : 'Please provide feedback explaining which criteria the student must fix.'
       );
       return;
     }
 
     setErrorMsg(null);
-    setCertIssuedMsg(null);
+
+    const approvedList = item.challengeCriteria.filter((_, idx) => Boolean(checkedCriteria[idx]));
+
+    // Update local store immediately with score, criteria checklist and feedback
+    reviewLocalSubmission(item.id, status, feedback, approvedList, percentage);
+
+    const updatedItem: InstructorQueueItem = {
+      ...item,
+      status,
+      feedbackText: feedback.trim() || null,
+      approvedCriteria: approvedList,
+      reviewedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    onReviewed(updatedItem);
 
     startTransition(async () => {
-      const res = await reviewSubmissionAction({
+      await reviewSubmissionAction({
         submissionId: item.id,
         status,
         feedbackText: feedback,
         lang,
       });
-
-      if (res.success) {
-        onReviewed({
-          ...item,
-          status,
-          feedbackText: feedback.trim() || null,
-          reviewedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
-      } else {
-        setErrorMsg(
-          res.error || (isEs ? 'Error al guardar la revisión.' : 'Failed to save review.')
-        );
-      }
     });
   };
 
@@ -105,8 +100,8 @@ export default function SubmissionReview({
       {/* Top Header */}
       <div className="flex items-start justify-between gap-4 border-b border-black/[0.06] dark:border-white/[0.06] pb-4">
         <div className="space-y-1">
-          <span className="font-mono text-[10px] text-[#00F0FF] uppercase tracking-wider font-bold">
-            // REVISIÓN DOCENTE
+          <span className="font-mono text-[10px] text-[#FE385B] uppercase tracking-wider font-bold bg-[#FE385B]/10 px-2 py-0.5 rounded border border-[#FE385B]/20">
+            // REVISIÓN Y EVALUACIÓN DOCENTE
           </span>
           <h3 className="font-display font-extrabold text-xl text-[#111111] dark:text-white">
             {item.studentName}
@@ -129,7 +124,7 @@ export default function SubmissionReview({
       <div className="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2 py-0.5 rounded uppercase font-bold">
+            <span className="font-mono text-[10px] text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded uppercase font-bold border border-[#10B981]/25">
               {item.submissionType}
             </span>
             <span className="font-mono text-xs text-[#8E8E93]">
@@ -141,9 +136,9 @@ export default function SubmissionReview({
             href={item.submissionUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF] hover:bg-[#00F0FF]/25 font-mono text-xs transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#10B981]/15 text-[#10B981] hover:bg-[#10B981] hover:text-white font-mono text-xs border border-[#10B981]/30 transition-all shadow-sm"
           >
-            <span>{isEs ? 'Abrir Entregable' : 'Open Link'}</span>
+            <span>{isEs ? 'Abrir Entregable' : 'Open Deliverable'}</span>
             <ExternalLink size={12} />
           </a>
         </div>
@@ -163,30 +158,77 @@ export default function SubmissionReview({
         )}
       </div>
 
-      {/* Evaluation Criteria Rubric */}
-      {item.challengeCriteria.length > 0 && (
-        <div className="space-y-2">
-          <span className="font-mono text-xs text-[#8E8E93] block">
-            {isEs ? 'Criterios de Evaluación (Rúbrica):' : 'Evaluation Criteria (Rubric):'}
-          </span>
-          <div className="space-y-1.5">
-            {item.challengeCriteria.map((crit, idx) => (
-              <label
-                key={idx}
-                onClick={() => toggleCriterion(idx)}
-                className="flex items-start gap-2.5 p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.04] cursor-pointer hover:bg-black/[0.04] dark:hover:bg-white/[0.04] text-xs font-sans transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  checked={checkedCriteria[idx] || false}
-                  onChange={() => {}}
-                  className="mt-0.5 accent-[#10B981] rounded"
-                />
-                <span className={checkedCriteria[idx] ? 'text-[#10B981] font-medium' : 'text-[#666666] dark:text-[#8E8E93]'}>
-                  {crit}
+      {/* Evaluation Criteria Rubric (Interactive Checkboxes + Live Calculated Score) */}
+      {totalCriteria > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between text-xs font-mono">
+            <span className="text-[#8E8E93] font-bold">
+              // {isEs ? 'RÚBRICA DE EVALUACIÓN' : 'RUBRIC EVALUATION'}
+            </span>
+            <span className="text-[#10B981] font-bold">
+              {checkedCount} / {totalCriteria} {isEs ? 'criterios cumplidos' : 'criteria met'}
+            </span>
+          </div>
+
+          {/* Dynamic Score Calculator Card */}
+          <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between gap-4">
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-mono text-[#8E8E93] uppercase block">
+                {isEs ? 'Nota Calculada según Criterios:' : 'Rubric Calculated Score:'}
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-display font-black text-lg sm:text-xl text-[#111111] dark:text-white">
+                  {calculatedGrade} / 5.0
                 </span>
-              </label>
-            ))}
+                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
+                  percentage === 100
+                    ? 'bg-[#10B981]/15 text-[#10B981]'
+                    : percentage >= 65
+                    ? 'bg-[#FF7F07]/15 text-[#FF7F07]'
+                    : 'bg-[#FE385B]/15 text-[#FE385B]'
+                }`}>
+                  {percentage}% {isEs ? (percentage === 100 ? 'Excelente' : percentage >= 65 ? 'Aceptable' : 'Insuficiente') : ''}
+                </span>
+              </div>
+            </div>
+
+            <div className="text-right">
+              <span className="text-[11px] font-sans text-[#8E8E93] block">
+                {percentage === 100
+                  ? (isEs ? '✓ Listo para Aprobar' : 'Ready to Approve')
+                  : percentage >= 65
+                  ? (isEs ? '✓ Aprobado con observaciones' : 'Passed with notes')
+                  : (isEs ? '⚠️ Requiere corrección' : 'Needs adjustments')}
+              </span>
+            </div>
+          </div>
+
+          {/* Checklist Items */}
+          <div className="space-y-1.5">
+            {item.challengeCriteria.map((crit, idx) => {
+              const isChecked = Boolean(checkedCriteria[idx]);
+              return (
+                <div
+                  key={idx}
+                  onClick={() => toggleCriterion(idx)}
+                  className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer select-none text-xs font-sans transition-all duration-150 ${
+                    isChecked
+                      ? 'bg-[#10B981]/[0.08] border-[#10B981]/40 text-[#111111] dark:text-white shadow-sm'
+                      : 'bg-black/[0.02] dark:bg-white/[0.02] border-black/[0.06] dark:border-white/[0.06] text-[#666666] dark:text-[#8E8E93] hover:border-black/[0.15]'
+                  }`}
+                >
+                  <div className="mt-0.5">
+                    <CheckCircle2
+                      size={15}
+                      className={isChecked ? 'text-[#10B981]' : 'text-[#8E8E93]/40'}
+                    />
+                  </div>
+                  <span className={isChecked ? 'font-semibold text-[#111111] dark:text-white' : ''}>
+                    {crit}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
@@ -194,7 +236,7 @@ export default function SubmissionReview({
       {/* Feedback Textarea */}
       <div className="space-y-1.5">
         <label className="font-mono text-xs text-[#8E8E93] flex items-center justify-between">
-          <span>{isEs ? 'Comentarios / Feedback para el Alumno:' : 'Feedback for Student:'}</span>
+          <span>{isEs ? 'Comentarios / Feedback Personalizado:' : 'Student Feedback:'}</span>
           <span className="text-[10px]">{feedback.length} carácteres</span>
         </label>
         <textarea
@@ -203,20 +245,12 @@ export default function SubmissionReview({
           onChange={e => setFeedback(e.target.value)}
           placeholder={
             isEs
-              ? 'Ej: ¡Excelente gancho inicial! Te recomiendo mejorar la iluminación en el segundo plano.'
-              : 'E.g., Great hook! Suggest improving the lighting in the b-roll.'
+              ? 'Ej: Excelente estructura del guion. Recuerda cuidar la limpieza del lente en la toma frontal para próximas entregas.'
+              : 'E.g., Great video structure. Make sure your camera lens is clean for upcoming shots.'
           }
-          className="w-full p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#00F0FF]/50"
+          className="w-full p-3.5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#FE385B]"
         />
       </div>
-
-      {/* Alerts */}
-      {certIssuedMsg && (
-        <div className="p-3 rounded-xl bg-[#10B981]/15 border border-[#10B981]/30 flex items-center gap-2 text-xs text-[#10B981] font-bold font-mono">
-          <CheckCircle2 size={14} className="shrink-0" />
-          <span>{certIssuedMsg}</span>
-        </div>
-      )}
 
       {errorMsg && (
         <div className="p-3 rounded-xl bg-[#FE385B]/10 border border-[#FE385B]/20 flex items-center gap-2 text-xs text-[#FE385B]">
@@ -225,7 +259,7 @@ export default function SubmissionReview({
         </div>
       )}
 
-      {/* Review Actions */}
+      {/* Review Actions (Approve / Request Revision - NO Certificate issuance on single lesson) */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
         <button
           type="button"
@@ -237,25 +271,13 @@ export default function SubmissionReview({
         </button>
 
         <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-          {item.status === 'approved' && (
-            <button
-              type="button"
-              onClick={handleIssueCertificate}
-              disabled={isPending}
-              className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#00F0FF]/15 text-[#00F0FF] hover:bg-[#00F0FF]/25 font-mono text-xs border border-[#00F0FF]/30 transition-all disabled:opacity-50"
-            >
-              {isPending && <Loader2 size={12} className="animate-spin" />}
-              <span>{isEs ? '🎓 Emitir Certificado' : '🎓 Issue Certificate'}</span>
-            </button>
-          )}
-
           <button
             type="button"
             onClick={() => handleReview('needs_revision')}
             disabled={isPending}
-            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF7F07]/15 text-[#FF7F07] hover:bg-[#FF7F07]/25 font-display font-bold text-xs border border-[#FF7F07]/30 transition-all disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-[#FF7F07]/15 text-[#FF7F07] hover:bg-[#FF7F07] hover:text-white font-display font-bold text-xs border border-[#FF7F07]/30 transition-all duration-150 active:scale-[0.97] disabled:opacity-50"
           >
-            {isPending && <Loader2 size={12} className="animate-spin" />}
+            {isPending ? <Loader2 size={12} className="animate-spin" /> : <RotateCcw size={12} />}
             <span>{isEs ? '↻ Solicitar Ajustes' : 'Request Revision'}</span>
           </button>
 
@@ -263,10 +285,10 @@ export default function SubmissionReview({
             type="button"
             onClick={() => handleReview('approved')}
             disabled={isPending}
-            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-5 rounded-xl bg-[#10B981] text-white hover:bg-[#10B981]/90 font-display font-bold text-xs shadow-md shadow-[#10B981]/20 transition-all disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-1.5 py-2.5 px-5 rounded-xl bg-[#10B981] text-white hover:bg-[#10B981]/90 font-display font-bold text-xs shadow-md shadow-[#10B981]/20 transition-all duration-150 active:scale-[0.97] disabled:opacity-50"
           >
             {isPending && <Loader2 size={12} className="animate-spin" />}
-            <span>{isEs ? '✓ Aprobar Reto' : 'Approve'}</span>
+            <span>{isEs ? `✓ Aprobar Reto (${calculatedGrade})` : `Approve (${calculatedGrade})`}</span>
           </button>
         </div>
       </div>

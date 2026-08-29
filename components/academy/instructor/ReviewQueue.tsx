@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Clock,
@@ -69,7 +71,7 @@ export default function ReviewQueue({
       case 'pending_review':
       case 'submitted':
       default:
-        return { label: isEs ? 'Pendiente' : 'Pending', bg: 'bg-[#00F0FF]/15 text-[#00F0FF] border-[#00F0FF]/30' };
+        return { label: isEs ? 'Pendiente' : 'Pending', bg: 'bg-[#FE385B]/10 text-[#FE385B] border-[#FE385B]/25' };
     }
   };
 
@@ -107,7 +109,7 @@ export default function ReviewQueue({
             value={searchQuery}
             onChange={e => onSearchChange(e.target.value)}
             placeholder={isEs ? 'Buscar por alumno o reto...' : 'Search student or challenge...'}
-            className="w-full sm:w-64 py-2 pl-8 pr-3 rounded-xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#00F0FF]/50"
+            className="w-full sm:w-64 py-2 pl-8 pr-3 rounded-xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white placeholder-[#8E8E93] focus:outline-none focus:border-[#FE385B]"
           />
           <Search size={13} className="absolute left-2.5 top-2.5 text-[#8E8E93]" />
         </div>
@@ -126,12 +128,12 @@ export default function ReviewQueue({
                 onClick={() => onSelect(item)}
                 className={`p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                   isSelected
-                    ? 'bg-[#00F0FF]/[0.04] border-[#00F0FF]/50 shadow-soft'
-                    : 'bg-white dark:bg-[#171719] border-black/[0.08] dark:border-white/[0.08] hover:border-[#00F0FF]/30'
+                    ? 'bg-[#FE385B]/[0.03] border-[#FE385B]/50 shadow-soft'
+                    : 'bg-white dark:bg-[#171719] border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.2] dark:hover:border-white/[0.2]'
                 }`}
               >
                 <div className="flex items-start gap-3.5 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] text-[#00F0FF] flex items-center justify-center font-display font-bold text-sm shrink-0 border border-black/[0.06] dark:border-white/[0.06]">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FE385B]/10 to-[#FF7F07]/10 text-[#FE385B] flex items-center justify-center font-display font-bold text-sm shrink-0 border border-[#FE385B]/20">
                     {item.studentName.charAt(0).toUpperCase()}
                   </div>
 
@@ -153,7 +155,7 @@ export default function ReviewQueue({
                       <span>·</span>
                       <span className="text-[#111111] dark:text-[#E5E5E7] truncate max-w-xs">{item.lessonTitle}</span>
                       <span>·</span>
-                      <span className="uppercase text-[10px] text-[#00F0FF]">{item.submissionType}</span>
+                      <span className="uppercase text-[10px] text-[#8E8E93] bg-black/[0.03] dark:bg-white/[0.04] px-1.5 py-0.2 rounded border border-black/[0.04]">{item.submissionType}</span>
                     </div>
                   </div>
                 </div>
@@ -170,10 +172,10 @@ export default function ReviewQueue({
 
                   <button
                     type="button"
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-colors ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all duration-150 ${
                       isSelected
-                        ? 'bg-[#00F0FF] text-black'
-                        : 'bg-black/[0.04] dark:bg-white/[0.06] text-[#111111] dark:text-white hover:bg-[#00F0FF]/15'
+                        ? 'bg-[#FE385B] text-white shadow-sm'
+                        : 'bg-black/[0.04] dark:bg-white/[0.06] text-[#111111] dark:text-white hover:bg-[#FE385B] hover:text-white'
                     }`}
                   >
                     <span>{isEs ? 'Revisar' : 'Review'}</span>
@@ -185,15 +187,15 @@ export default function ReviewQueue({
           })}
         </div>
       ) : (
-        <div className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-center space-y-3 shadow-soft">
+        <div className="p-12 text-center rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] space-y-2">
           <CheckCircle2 size={32} className="text-[#10B981] mx-auto" />
           <h4 className="font-display font-bold text-base text-[#111111] dark:text-white">
             {isEs ? '¡No hay entregas pendientes en esta vista!' : 'No pending submissions in this view!'}
           </h4>
-          <p className="text-xs text-[#8E8E93] font-sans max-w-sm mx-auto">
+          <p className="text-xs text-[#8E8E93] font-sans">
             {isEs
               ? 'Todas las entregas bajo los filtros actuales han sido calificadas o no se encontraron resultados.'
-              : 'All submissions under current filters are reviewed or no matches found.'}
+              : 'All submissions under current filters have been reviewed.'}
           </p>
         </div>
       )}
