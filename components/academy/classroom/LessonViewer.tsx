@@ -8,11 +8,10 @@ import { Locale } from '@/types';
 import { LessonSubmission } from '@/lib/supabase/academy-submissions';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
-import LessonResources from './LessonResources';
+import LessonToolkitHub from './LessonToolkitHub';
 import LessonChallenge from './LessonChallenge';
 import ChallengeSubmission from './ChallengeSubmission';
 import LessonCompleteButton from './LessonCompleteButton';
-import LessonMaterialsAndQuiz from './LessonMaterialsAndQuiz';
 import LessonDiscussion from './LessonDiscussion';
 
 interface AdjacentLessonInfo {
@@ -172,26 +171,19 @@ export default function LessonViewer({
         </div>
       </div>
 
-      {/* 4. Visual Materials & Interactive Checkpoint Quiz */}
-      <LessonMaterialsAndQuiz
+      {/* 4. Unified Lesson Materials & Toolkit Hub (Slides, Quiz & Downloads) */}
+      <LessonToolkitHub
         presentationSlug={lesson.presentationSlug}
         quiz={lesson.quiz}
+        resources={lesson.resources}
         isQuizPassed={isQuizPassed}
+        isLessonCompleted={isLessonCompleted}
         onQuizPassed={() => setIsQuizPassed(true)}
         courseSlug={courseSlug}
         moduleSlug={moduleItem.slug}
         lessonSlug={lesson.slug}
         lang={lang}
       />
-
-      {/* 6. Resources, Templates & Downloads with Lock */}
-      {lesson.resources && lesson.resources.length > 0 && (
-        <LessonResources
-          resources={lesson.resources}
-          lang={lang}
-          isUnlocked={isLessonCompleted || isQuizPassed}
-        />
-      )}
 
       {/* 7. Practical Challenge */}
       {lesson.challenge && (
