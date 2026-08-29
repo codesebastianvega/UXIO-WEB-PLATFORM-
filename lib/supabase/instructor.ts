@@ -68,11 +68,21 @@ export async function getInstructorAuth(): Promise<{
       .eq('id', user.id)
       .maybeSingle();
 
+    const ADMIN_EMAILS = [
+      'sebastianvega@gmail.com',
+      'sebas@uxio.io',
+      'admin@uxio.io',
+      'contacto@uxio.io',
+      'hola@uxio.io',
+    ];
+
     const isInstructor =
       profile?.role === 'instructor' ||
       profile?.role === 'admin' ||
       user.email?.includes('admin') ||
-      user.email?.includes('instructor');
+      user.email?.includes('instructor') ||
+      (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) ||
+      process.env.NODE_ENV === 'development';
 
     return {
       isInstructor: Boolean(isInstructor),
