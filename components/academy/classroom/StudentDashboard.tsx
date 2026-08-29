@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { User, Sparkles, BookOpen, GraduationCap, AlertCircle } from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
+import { CourseProgressInfo } from '@/lib/supabase/academy-progress';
 import LogoutButton from '@/components/academy/LogoutButton';
 import CourseCard from './CourseCard';
 
@@ -10,6 +11,7 @@ interface StudentDashboardProps {
   user: { email?: string; user_metadata?: Record<string, any> };
   enrolledCourses: Course[];
   cohortMap?: Record<string, string>;
+  progressMap?: Record<string, CourseProgressInfo>;
   lang: Locale;
 }
 
@@ -17,6 +19,7 @@ export default function StudentDashboard({
   user,
   enrolledCourses,
   cohortMap = {},
+  progressMap = {},
   lang,
 }: StudentDashboardProps) {
   const isEs = lang === 'es';
@@ -79,6 +82,7 @@ export default function StudentDashboard({
                 course={course}
                 lang={lang}
                 cohortName={cohortMap[course.slug]}
+                progressInfo={progressMap[course.slug]}
               />
             ))}
           </div>

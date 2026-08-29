@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { Locale } from '@/types';
 import { getUserEnrollments } from '@/lib/supabase/academy';
+import { getCourseProgress, CourseProgressInfo } from '@/lib/supabase/academy-progress';
 import { getCourseBySlug } from '@/data/academy';
 import StudentDashboard from '@/components/academy/classroom/StudentDashboard';
 
@@ -46,12 +47,21 @@ export default async function ClassroomDashboardPage({
     })
     .filter(Boolean);
 
+  // Fetch real course progress in parallel
+  const progressMap: Record<string, CourseProgressInfo> = {};
+  await Promise.all(
+    enrollments.map(async e => {
+      progressMap[e.courseSlug] = await getCourseProgress(e.courseSlug, lang);
+    })
+  );
+
   return (
     <main className="flex-1 min-w-0 max-w-[1240px] w-full mx-auto p-6 md:p-10 transition-colors min-h-[80vh]">
       <StudentDashboard
         user={user}
         enrolledCourses={enrolledCourses as any}
         cohortMap={cohortMap}
+        progressMap={progressMap}
         lang={lang}
       />
     </main>

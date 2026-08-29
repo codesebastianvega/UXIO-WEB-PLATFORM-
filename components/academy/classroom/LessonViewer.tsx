@@ -8,6 +8,7 @@ import { Locale } from '@/types';
 import LessonHeader from './LessonHeader';
 import VideoPlayer from './VideoPlayer';
 import MicroclassList from './MicroclassList';
+import LessonCompleteButton from './LessonCompleteButton';
 
 interface AdjacentLessonInfo {
   moduleSlug: string;
@@ -19,6 +20,7 @@ interface LessonViewerProps {
   moduleItem: Module;
   courseSlug: string;
   lang: Locale;
+  isLessonCompleted?: boolean;
   prevLesson?: AdjacentLessonInfo;
   nextLesson?: AdjacentLessonInfo;
 }
@@ -28,6 +30,7 @@ export default function LessonViewer({
   moduleItem,
   courseSlug,
   lang,
+  isLessonCompleted = false,
   prevLesson,
   nextLesson,
 }: LessonViewerProps) {
@@ -180,7 +183,28 @@ export default function LessonViewer({
         )}
       </div>
 
-      {/* 5. Prev / Next Lesson Navigation Bar */}
+      {/* 5. Completion Action Box */}
+      <div className="p-6 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <h4 className="font-display font-bold text-sm text-[#111111] dark:text-white">
+            {isEs ? '¿Terminaste de estudiar esta lección?' : 'Finished studying this lesson?'}
+          </h4>
+          <p className="text-xs text-[#8E8E93] font-sans mt-0.5">
+            {isEs
+              ? 'Guarda tu progreso para actualizar tu porcentaje del curso.'
+              : 'Save your progress to update your completion percentage.'}
+          </p>
+        </div>
+
+        <LessonCompleteButton
+          courseSlug={courseSlug}
+          lessonId={lesson.id}
+          initialCompleted={isLessonCompleted}
+          lang={lang}
+        />
+      </div>
+
+      {/* 6. Prev / Next Lesson Navigation Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-black/[0.06] dark:border-white/[0.06]">
         {prevLesson ? (
           <Link

@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { Locale } from '@/types';
 import { getUserEnrollments } from '@/lib/supabase/academy';
+import { getCourseProgress } from '@/lib/supabase/academy-progress';
 import {
   getCourseBySlug,
   getModuleBySlug,
@@ -104,6 +105,10 @@ export default async function LessonClassroomPage({
     lang
   );
 
+  // Fetch progress for this course
+  const progressInfo = await getCourseProgress(courseSlug, lang);
+  const isLessonCompleted = progressInfo.completedLessonIds.includes(lesson.id);
+
   return (
     <main className="flex-1 min-w-0 max-w-[1440px] w-full mx-auto p-6 md:p-10 space-y-6 transition-colors min-h-[85vh]">
       {/* Breadcrumbs */}
@@ -122,6 +127,7 @@ export default async function LessonClassroomPage({
           course={course}
           activeModuleSlug={moduleItem.slug}
           activeLessonSlug={lesson.slug}
+          completedLessonIds={progressInfo.completedLessonIds}
           lang={lang}
         />
 
@@ -131,6 +137,7 @@ export default async function LessonClassroomPage({
             moduleItem={moduleItem}
             courseSlug={course.slug}
             lang={lang}
+            isLessonCompleted={isLessonCompleted}
             prevLesson={prevLesson}
             nextLesson={nextLesson}
           />

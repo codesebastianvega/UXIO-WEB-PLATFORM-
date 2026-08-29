@@ -2,7 +2,16 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronRight, PlayCircle, Radio, Menu, X, BookOpen } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronRight,
+  PlayCircle,
+  Radio,
+  Menu,
+  X,
+  BookOpen,
+  CheckCircle2,
+} from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
 
@@ -10,6 +19,7 @@ interface ClassroomSidebarProps {
   course: Course;
   activeModuleSlug?: string;
   activeLessonSlug?: string;
+  completedLessonIds?: string[];
   lang: Locale;
 }
 
@@ -17,6 +27,7 @@ export default function ClassroomSidebar({
   course,
   activeModuleSlug,
   activeLessonSlug,
+  completedLessonIds = [],
   lang,
 }: ClassroomSidebarProps) {
   const isEs = lang === 'es';
@@ -54,6 +65,12 @@ export default function ClassroomSidebar({
         {course.modules.map(moduleItem => {
           const isOpen = openModules[moduleItem.slug] ?? false;
           const isModuleActive = moduleItem.slug === activeModuleSlug;
+          const moduleCompletedCount = moduleItem.lessons.filter(l =>
+            completedLessonIds.includes(l.id)
+          ).length;
+          const isModuleFullyCompleted =
+            moduleItem.lessons.length > 0 &&
+            moduleCompletedCount === moduleItem.lessons.length;
 
           return (
             <div
@@ -71,9 +88,16 @@ export default function ClassroomSidebar({
                 className="w-full p-3.5 flex items-center justify-between text-left gap-2 hover:bg-black/[0.02] dark:hover:bg-white/[0.02] rounded-2xl transition-colors"
               >
                 <div className="min-w-0 flex-1">
-                  <span className="font-mono text-[10px] text-[#8E8E93] block truncate">
-                    {moduleItem.weekTag}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono text-[10px] text-[#8E8E93] block truncate">
+                      {moduleItem.weekTag}
+                    </span>
+                    {isModuleFullyCompleted && (
+                      <span className="inline-flex items-center text-[9px] font-mono text-[#10B981] bg-[#10B981]/10 px-1.5 py-0.2 rounded border border-[#10B981]/20">
+                        ✓ {isEs ? 'COMPLETO' : 'DONE'}
+                      </span>
+                    )}
+                  </div>
                   <span className="font-display font-bold text-xs text-[#111111] dark:text-white block truncate">
                     {moduleItem.title}
                   </span>
@@ -89,6 +113,7 @@ export default function ClassroomSidebar({
                   {moduleItem.lessons.map(lesson => {
                     const isLessonActive =
                       lesson.slug === activeLessonSlug || lesson.id === activeLessonSlug;
+                    const isCompleted = completedLessonIds.includes(lesson.id);
 
                     return (
                       <Link
@@ -102,21 +127,39 @@ export default function ClassroomSidebar({
                         }`}
                       >
                         <div className="mt-0.5 shrink-0">
-                          {lesson.type === 'live_lab' ? (
-                            <Radio size={13} className={isLessonActive ? 'text-white' : 'text-[#FE385B]'} />
+                          {isCompleted ? (
+                            <CheckCircle2
+                              size={13}
+                              className={isLessonActive ? 'text-white' : 'text-[#10B981]'}
+                            />
+                          ) : lesson.type === 'live_lab' ? (
+                            <Radio
+                              size={13}
+                              className={isLessonActive ? 'text-white' : 'text-[#FE385B]'}
+                            />
                           ) : (
-                            <PlayCircle size={13} className={isLessonActive ? 'text-white' : 'text-[#00F0FF]'} />
+                            <PlayCircle
+                              size={13}
+                              className={isLessonActive ? 'text-white' : 'text-[#00F0FF]'}
+                            />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="leading-snug line-clamp-2">{lesson.title}</p>
-                          <span
-                            className={`font-mono text-[10px] ${
-                              isLessonActive ? 'text-white/80' : 'text-[#8E8E93]'
-                            }`}
-                          >
-                            {lesson.duration}
-                          </span>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span
+                              className={`font-mono text-[10px] ${
+                                isLessonActive ? 'text-white/80' : 'text-[#8E8E93]'
+                              }`}
+                            >
+                              {lesson.duration}
+                            </span>
+                            {isCompleted && !isLessonActive && (
+                              <span className="font-mono text-[9px] text-[#10B981]">
+                                {isEs ? 'Completada' : 'Completed'}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </Link>
                     );

@@ -1,18 +1,27 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Calendar, BookOpen, Layers, Sparkles } from 'lucide-react';
+import { ArrowRight, Calendar, BookOpen, Layers, TrendingUp } from 'lucide-react';
 import { Course } from '@/data/academy/types';
 import { Locale } from '@/types';
+import { CourseProgressInfo } from '@/lib/supabase/academy-progress';
 
 interface CourseCardProps {
   course: Course;
   lang: Locale;
   cohortName?: string;
+  progressInfo?: CourseProgressInfo;
 }
 
-export default function CourseCard({ course, lang, cohortName }: CourseCardProps) {
+export default function CourseCard({
+  course,
+  lang,
+  cohortName,
+  progressInfo,
+}: CourseCardProps) {
   const isEs = lang === 'es';
   const totalLessons = course.modules.reduce((acc, m) => acc + m.lessons.length, 0);
+  const percentage = progressInfo?.percentage ?? 0;
+  const completedCount = progressInfo?.completedCount ?? 0;
 
   return (
     <div className="group p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-[#FE385B]/40 transition-all duration-300 shadow-soft-lg flex flex-col justify-between space-y-6">
@@ -38,6 +47,25 @@ export default function CourseCard({ course, lang, cohortName }: CourseCardProps
           <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans mt-2 line-clamp-2 leading-relaxed">
             {course.subtitle}
           </p>
+        </div>
+      </div>
+
+      {/* Progress Bar (if available) */}
+      <div className="p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.04] dark:border-white/[0.04] space-y-1.5">
+        <div className="flex items-center justify-between text-xs font-mono">
+          <span className="text-[#8E8E93] flex items-center gap-1">
+            <TrendingUp size={12} className="text-[#10B981]" />
+            <span>{isEs ? 'Progreso' : 'Progress'}</span>
+          </span>
+          <span className="font-bold text-[#111111] dark:text-white">
+            {completedCount} / {totalLessons} · {percentage}%
+          </span>
+        </div>
+        <div className="w-full h-1.5 rounded-full bg-black/[0.06] dark:bg-white/[0.06] overflow-hidden">
+          <div
+            className="h-full bg-[#10B981] rounded-full transition-all duration-500"
+            style={{ width: `${percentage}%` }}
+          />
         </div>
       </div>
 
