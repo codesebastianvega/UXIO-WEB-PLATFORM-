@@ -20,7 +20,7 @@ export default function AcademyHero({ lang }: { lang: Locale }) {
       {/* Top Dispatch Tag */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
         <span className="font-mono text-xs text-[#FE385B] tracking-tight bg-[#FE385B]/10 px-2.5 py-1 rounded-md border border-[#FE385B]/20">
-          // 05 · UXIO ACADEMY
+          // 04 · UXIO ACADEMY
         </span>
         <span className="font-mono text-xs text-[#8E8E93] tracking-tight">
           {isEs ? 'ECOSISTEMA DE FORMACIÓN & TALENTO DE CONTENIDO' : 'CREATOR TRAINING & TALENT ECOSYSTEM'}

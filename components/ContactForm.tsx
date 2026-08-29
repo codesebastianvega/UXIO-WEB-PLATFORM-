@@ -20,12 +20,12 @@ export default function ContactForm({ lang }: { lang: Locale }) {
           <CheckCircle2 size={24} />
         </div>
         <h3 className="font-display font-bold text-lg text-[#111111] dark:text-white">
-          {isEs ? '¡Solicitud Recibida!' : 'Intake Request Received!'}
+          {isEs ? '¡Mensaje Enviado con Éxito!' : 'Message Sent Successfully!'}
         </h3>
         <p className="text-xs text-[#666666] dark:text-[#8E8E93] font-sans max-w-sm mx-auto">
           {isEs 
-            ? 'Nuestro equipo técnico revisará tu proyecto y se pondrá en contacto en menos de 24 horas.'
-            : 'Our engineering team will review your project brief and follow up within 24 hours.'
+            ? 'Nuestro equipo revisará tu mensaje y se pondrá en contacto contigo en menos de 24 horas.'
+            : 'Our team will review your message and follow up within 24 hours.'
           }
         </p>
       </div>
@@ -60,10 +60,11 @@ export default function ContactForm({ lang }: { lang: Locale }) {
         <select
           className="w-full px-4 py-2.5 rounded-xl bg-[#F7F7F5] dark:bg-[#0D0D0E] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white focus:outline-none focus:border-[#FE385B]"
         >
-          <option>{isEs ? 'Lanzamiento de Producto Completo (Next.js / App)' : 'Full Product Launch (Next.js / App)'}</option>
-          <option>{isEs ? 'Design System & Arquitectura de UI' : 'Design System & UI Architecture'}</option>
-          <option>{isEs ? 'Identidad de Marca & Diseño Web' : 'Brand Identity & Web Experience'}</option>
-          <option>{isEs ? 'Sprint de Crecimiento & Optimización' : 'Growth & Optimization Sprint'}</option>
+          <option>{isEs ? 'Desarrollo Web o App (Next.js / Móvil)' : 'Web or Mobile App Development'}</option>
+          <option>{isEs ? 'Diseño y Experiencia UI/UX' : 'UI/UX Design & Experience'}</option>
+          <option>{isEs ? 'Identidad de Marca & Branding' : 'Brand Identity & Branding'}</option>
+          <option>{isEs ? 'Marketing y Crecimiento' : 'Marketing & Growth'}</option>
+          <option>{isEs ? 'Solución Digital a Medida' : 'Custom Digital Solution'}</option>
         </select>
       </div>
 
@@ -72,7 +73,7 @@ export default function ContactForm({ lang }: { lang: Locale }) {
         <textarea
           rows={4}
           required
-          placeholder={isEs ? 'Cuéntanos sobre el alcance, objetivos y plazos estimados...' : 'Tell us about the scope, goals, and target timeline...'}
+          placeholder={isEs ? 'Cuéntanos sobre los objetivos, alcance y plazos de tu proyecto...' : 'Tell us about your goals, scope, and estimated timeline...'}
           className="w-full px-4 py-2.5 rounded-xl bg-[#F7F7F5] dark:bg-[#0D0D0E] border border-black/[0.08] dark:border-white/[0.08] text-xs font-sans text-[#111111] dark:text-white focus:outline-none focus:border-[#FE385B]"
         ></textarea>
       </div>
@@ -81,7 +82,7 @@ export default function ContactForm({ lang }: { lang: Locale }) {
         type="submit"
         className="w-full py-3 rounded-xl bg-[#FE385B] hover:bg-[#e02d4e] text-white font-display font-semibold text-xs tracking-wider uppercase transition-all shadow-accent-glow hover:shadow-lg active:scale-98 flex items-center justify-center gap-2"
       >
-        <span>{isEs ? 'Enviar Solicitud de Intake' : 'Submit Intake Request'}</span>
+        <span>{isEs ? 'Enviar Mensaje' : 'Send Message'}</span>
         <Send size={13} />
       </button>
     </form>

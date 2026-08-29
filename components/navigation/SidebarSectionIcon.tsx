@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, LayoutGrid, FlaskConical, Boxes, Sparkles } from 'lucide-react';
+import { Cpu, LayoutGrid, FlaskConical, Boxes, GraduationCap, Sparkles } from 'lucide-react';
 
 export function getSectionIcon(id: string) {
   switch (id) {
@@ -9,6 +9,8 @@ export function getSectionIcon(id: string) {
       return <LayoutGrid size={16} className="text-[#FFCC48]" />;
     case 'labs':
       return <FlaskConical size={16} className="text-[#FE385B]" />;
+    case 'academy':
+      return <GraduationCap size={16} className="text-[#FE385B]" />;
     case 'resources':
       return <Boxes size={16} className="text-[#10B981]" />;
     default:

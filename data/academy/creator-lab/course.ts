@@ -26,7 +26,7 @@ export const getCreatorLabCourse = (lang: Locale = 'es'): Course => {
     priceCOP: 99000,
     priceUSD: 25,
     regularPriceCOP: 220000,
-    commercialDuration: isEs ? '5 semanas' : '5 weeks',
+    commercialDuration: isEs ? '4 semanas' : '4 weeks',
     datesOverview: isEs ? '1 de octubre – 1 de noviembre de 2026' : 'October 1 – November 1, 2026',
     inductionNotice: isEs ? 'Semana 0 (Inducción previa): 24–30 de septiembre' : 'Week 0 (Pre-induction): Sept 24–30',
     modality: isEs

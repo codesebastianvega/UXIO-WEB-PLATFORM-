@@ -36,20 +36,20 @@ export default function SidebarNavSection({
   const hasSubGroups = Boolean(section.subGroups && section.subGroups.length > 0);
 
   const renderSubGroupHeader = (title: string) => {
-    const isEco = title.toLowerCase().includes('eco');
+    const isMainProject = title.toLowerCase().includes('proyect') || title.toLowerCase().includes('project') || title.toLowerCase().includes('eco');
     return (
       <div className="px-1.5 pt-1.5 pb-0.5 flex items-center">
         <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] shadow-2xs">
           <span
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{
-              backgroundColor: isEco ? '#FE385B' : '#00F0FF',
-              boxShadow: `0 0 6px ${isEco ? '#FE385B' : '#00F0FF'}`,
+              backgroundColor: isMainProject ? '#FE385B' : '#00F0FF',
+              boxShadow: `0 0 6px ${isMainProject ? '#FE385B' : '#00F0FF'}`,
             }}
           />
           <span
             className={`font-display font-bold text-[10.5px] uppercase tracking-wider ${
-              isEco
+              isMainProject
                 ? 'bg-gradient-to-r from-[#FE385B] to-[#FF7F07] bg-clip-text text-transparent'
                 : 'bg-gradient-to-r from-[#00F0FF] to-[#7928CA] bg-clip-text text-transparent'
             }`}

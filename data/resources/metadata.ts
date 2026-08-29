@@ -20,62 +20,62 @@ export const CATEGORIES_LIST: Array<{
 export const SECTION_METADATA = {
   all: {
     badge: 'UXIO ARTIFACTS',
-    titleEs: 'Biblioteca de Recursos & Artefactos',
-    titleEn: 'Resource Library & Artifacts',
-    descriptionEs: 'Explora todos los componentes, librerías, herramientas de terminal y plantillas creadas por UXIO.',
-    descriptionEn: 'Explore all components, libraries, CLI tools, and web templates crafted by UXIO.',
-    descEs: 'Explora todos los componentes, librerías, herramientas de terminal y plantillas creadas por UXIO.',
-    descEn: 'Explore all components, libraries, CLI tools, and web templates crafted by UXIO.',
-    tag: '// 04 · RECURSOS GLOBALES'
+    titleEs: 'Recursos & Componentes',
+    titleEn: 'Resources & Components',
+    descriptionEs: 'Explora todos los componentes UI, librerías, herramientas y plantillas creadas por UXIO.',
+    descriptionEn: 'Explore all UI components, libraries, tools, and web templates crafted by UXIO.',
+    descEs: 'Explora todos los componentes UI, librerías, herramientas y plantillas creadas por UXIO.',
+    descEn: 'Explore all UI components, libraries, tools, and web templates crafted by UXIO.',
+    tag: '// 05 · RECURSOS'
   },
   components: {
     badge: 'UI COMPONENTS',
-    titleEs: 'Componentes de UI & Interacciones',
-    titleEn: 'UI Components & Interactions',
-    descriptionEs: 'Tarjetas con física fluida, botones magnéticos, micro-interacciones y primitivas listas para copiar y pegar (Free & Pro).',
-    descriptionEn: 'Fluid physics cards, magnetic buttons, micro-interactions, and ready-to-copy UI primitives (Free & Pro).',
-    descEs: 'Tarjetas con física fluida, botones magnéticos, micro-interacciones y primitivas listas para copiar y pegar (Free & Pro).',
-    descEn: 'Fluid physics cards, magnetic buttons, micro-interactions, and ready-to-copy UI primitives (Free & Pro).',
-    tag: '// 04 · COMPONENTES REACT'
+    titleEs: 'Componentes UI',
+    titleEn: 'UI Components',
+    descriptionEs: 'Tarjetas interactivas, botones magnéticos, micro-interacciones y primitivas listas para copiar y pegar.',
+    descriptionEn: 'Fluid physics cards, magnetic buttons, micro-interactions, and ready-to-copy UI primitives.',
+    descEs: 'Tarjetas interactivas, botones magnéticos, micro-interacciones y primitivas listas para copiar y pegar.',
+    descEn: 'Fluid physics cards, magnetic buttons, micro-interactions, and ready-to-copy UI primitives.',
+    tag: '// 05 · COMPONENTES UI'
   },
   libraries: {
     badge: 'REACT PACKAGES',
-    titleEs: 'Librerías & Hooks de React',
+    titleEs: 'Librerías & Hooks',
     titleEn: 'Libraries & React Hooks',
-    descriptionEs: 'Paquetes npm, hooks de física (LERP, resortes), utilidades de animación y helpers semánticos para Next.js.',
-    descriptionEn: 'npm packages, physics hooks (LERP, springs), animation helpers, and semantic utilities for Next.js.',
-    descEs: 'Paquetes npm, hooks de física (LERP, resortes), utilidades de animación y helpers semánticos para Next.js.',
-    descEn: 'npm packages, physics hooks (LERP, springs), animation helpers, and semantic utilities for Next.js.',
-    tag: '// 04 · LIBRERÍAS & KITS'
+    descriptionEs: 'Paquetes npm, hooks de animación, utilidades de física y helpers para Next.js.',
+    descriptionEn: 'npm packages, animation hooks, physics utilities, and helpers for Next.js.',
+    descEs: 'Paquetes npm, hooks de animación, utilidades de física y helpers para Next.js.',
+    descEn: 'npm packages, animation hooks, physics utilities, and helpers for Next.js.',
+    tag: '// 05 · LIBRERÍAS'
   },
   tools: {
-    badge: 'DEVELOPER CLI',
-    titleEs: 'Herramientas de Terminal & CLI',
-    titleEn: 'CLI & Developer Tools',
-    descriptionEs: 'Generadores de sistemas de diseño, linters de tokens y herramientas de línea de comandos para agilizar el desarrollo.',
-    descriptionEn: 'Design system generators, token linters, and command line tools to supercharge product builds.',
-    descEs: 'Generadores de sistemas de diseño, linters de tokens y herramientas de línea de comandos para agilizar el desarrollo.',
-    descEn: 'Design system generators, token linters, and command line tools to supercharge product builds.',
-    tag: '// 04 · HERRAMIENTAS CLI'
+    badge: 'DEVELOPER TOOLS',
+    titleEs: 'Herramientas',
+    titleEn: 'Developer Tools',
+    descriptionEs: 'Generadores de sistemas de diseño, linters de tokens y herramientas para agilizar el desarrollo.',
+    descriptionEn: 'Design system generators, token linters, and tools to supercharge product builds.',
+    descEs: 'Generadores de sistemas de diseño, linters de tokens y herramientas para agilizar el desarrollo.',
+    descEn: 'Design system generators, token linters, and tools to supercharge product builds.',
+    tag: '// 05 · HERRAMIENTAS'
   },
   templates: {
-    badge: 'WEB STARTERS',
-    titleEs: 'Plantillas Web & Starters',
-    titleEn: 'Web Templates & Starters',
-    descriptionEs: 'Landing pages y dashboards base con arquitectura limpia, Tailwind CSS y rendimiento extremo listos para desplegar.',
-    descriptionEn: 'Landing pages, SaaS starters, and dashboard templates with clean architecture and extreme performance.',
-    descEs: 'Landing pages y dashboards base con arquitectura limpia, Tailwind CSS y rendimiento extremo listos para desplegar.',
-    descEn: 'Landing pages, SaaS starters, and dashboard templates with clean architecture and extreme performance.',
-    tag: '// 04 · PLANTILLAS WEB'
+    badge: 'WEB TEMPLATES',
+    titleEs: 'Plantillas Web',
+    titleEn: 'Web Templates',
+    descriptionEs: 'Landing pages y aplicaciones base con arquitectura limpia, Tailwind CSS y rendimiento optimizado.',
+    descriptionEn: 'Landing pages and starter apps with clean architecture, Tailwind CSS, and optimized performance.',
+    descEs: 'Landing pages y aplicaciones base con arquitectura limpia, Tailwind CSS y rendimiento optimizado.',
+    descEn: 'Landing pages and starter apps with clean architecture, Tailwind CSS, and optimized performance.',
+    tag: '// 05 · PLANTILLAS'
   },
   'open-source': {
     badge: 'OPEN SOURCE · MIT',
-    titleEs: 'Ecosistema Open Source & Código Abierto',
-    titleEn: 'Free Open Source Ecosystem',
-    descriptionEs: 'Todos los artefactos, componentes, librerías, plantillas y herramientas 100% gratuitos bajo licencia MIT libre.',
-    descriptionEn: 'All artifacts, components, libraries, templates, and developer tools distributed 100% free under MIT license.',
-    descEs: 'Todos los artefactos, componentes, librerías, plantillas y herramientas 100% gratuitos bajo licencia MIT libre.',
-    descEn: 'All artifacts, components, libraries, templates, and developer tools distributed 100% free under MIT license.',
-    tag: '// 04 · OPEN SOURCE (100% FREE)'
+    titleEs: 'Código Abierto (Open Source)',
+    titleEn: 'Open Source',
+    descriptionEs: 'Todos los recursos, componentes, librerías, plantillas y herramientas 100% gratuitos bajo licencia MIT.',
+    descriptionEn: 'All resources, components, libraries, templates, and tools distributed 100% free under MIT license.',
+    descEs: 'Todos los recursos, componentes, librerías, plantillas y herramientas 100% gratuitos bajo licencia MIT.',
+    descEn: 'All resources, components, libraries, templates, and tools distributed 100% free under MIT license.',
+    tag: '// 05 · OPEN SOURCE'
   }
 };

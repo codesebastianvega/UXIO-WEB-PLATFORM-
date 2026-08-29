@@ -133,7 +133,7 @@ export default function ProjectCard({
           href={targetPath}
           className="inline-flex items-center gap-1.5 font-display font-bold text-xs text-[#111111] dark:text-white group-hover:text-[#FE385B] transition-colors"
         >
-          <span>{isEs ? 'Ver Resumen de la Web' : 'View Web Summary'}</span>
+          <span>{isEs ? 'Ver proyecto' : 'View project'}</span>
           <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </Link>
 

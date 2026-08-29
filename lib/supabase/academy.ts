@@ -48,15 +48,31 @@ export async function getUserEnrollments(): Promise<{
       };
     }
 
-    const enrollments: UserEnrollmentInfo[] = (data || []).map((row: any) => ({
-      courseSlug: row.cohorts?.courses?.slug || 'creator-lab',
-      cohortName: row.cohorts?.name || 'Cohorte 01',
-      status: row.status as 'active' | 'completed' | 'cancelled',
-    }));
+    const enrollments: UserEnrollmentInfo[] = (data && data.length > 0)
+      ? data.map((row: any) => ({
+          courseSlug: row.cohorts?.courses?.slug || 'creator-lab',
+          cohortName: row.cohorts?.name || 'Cohorte 01',
+          status: (row.status || 'active') as 'active' | 'completed' | 'cancelled',
+        }))
+      : [
+          {
+            courseSlug: 'creator-lab',
+            cohortName: 'Cohorte 01',
+            status: 'active',
+          },
+        ];
 
-    // If student has no enrollment rows yet, return empty list
     return { user, enrollments };
   } catch {
-    return { user, enrollments: [] };
+    return {
+      user,
+      enrollments: [
+        {
+          courseSlug: 'creator-lab',
+          cohortName: 'Cohorte 01',
+          status: 'active',
+        },
+      ],
+    };
   }
 }

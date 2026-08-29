@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, MessageCircle, Calendar, Clock, CheckCircle2, Smartphone } from 'lucide-react';
+import { ArrowRight, MessageCircle, Calendar, Clock, CheckCircle2, Smartphone, GraduationCap } from 'lucide-react';
 import { CourseProgram } from '@/data/academy/types';
 import { getCohortStatusInfo } from '@/data/academy';
 import { Locale } from '@/types';
@@ -47,7 +47,7 @@ export default function CourseHero({ course, lang }: CourseHeroProps) {
         {/* Left Column: Commercial Pitch */}
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-3">
-            <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-[#111111] dark:text-white tracking-tight leading-[1.1]">
+            <h1 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[#111111] dark:text-white tracking-tight leading-[1.15]">
               {course.commercialName}
             </h1>
             <p className="text-base sm:text-lg text-[#111111] dark:text-[#E5E5E7] font-medium leading-relaxed">
@@ -62,7 +62,7 @@ export default function CourseHero({ course, lang }: CourseHeroProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
             {[
               isEs ? 'Solo necesitas tu celular' : 'Smartphone only',
-              isEs ? '5 semanas de formación y feedback' : '5 weeks of training & feedback',
+              isEs ? '4 semanas de formación y feedback' : '4 weeks of training & feedback',
               isEs ? 'Sesiones en vivo + comunidad' : 'Live sessions + private community',
               isEs ? 'Proyecto real de 30 días de contenido' : '30-day real content capstone',
             ].map((text, idx) => (
@@ -73,8 +73,8 @@ export default function CourseHero({ course, lang }: CourseHeroProps) {
             ))}
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-4">
+          {/* CTAs Group */}
+          <div className="flex flex-wrap items-center gap-3 pt-4">
             <a
               href="#inscripcion"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#FE385B] hover:bg-[#FE385B]/90 text-white font-display font-bold text-sm transition-all shadow-lg shadow-[#FE385B]/20 active:scale-[0.98]"
@@ -83,14 +83,22 @@ export default function CourseHero({ course, lang }: CourseHeroProps) {
               <ArrowRight size={16} />
             </a>
 
+            <Link
+              href={`/${lang}/academy/classroom`}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-[#FE385B]/10 hover:text-[#FE385B] text-[#111111] dark:text-white border border-black/[0.08] dark:border-white/[0.08] font-display font-semibold text-sm transition-all active:scale-[0.98]"
+            >
+              <GraduationCap size={16} className="text-[#FE385B]" />
+              <span>{isEs ? 'Entrar a mi Aula' : 'Student Classroom'}</span>
+            </Link>
+
             <a
               href={`https://wa.me/573000000000?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white dark:bg-[#171719] hover:bg-black/[0.04] dark:hover:bg-white/[0.04] text-[#111111] dark:text-white border border-black/[0.08] dark:border-white/[0.08] font-display font-semibold text-sm transition-all active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-transparent hover:bg-black/[0.04] dark:hover:bg-white/[0.04] text-[#666666] dark:text-[#8E8E93] hover:text-[#111111] dark:hover:text-white font-display font-semibold text-sm transition-all"
             >
               <MessageCircle size={16} className="text-[#10B981]" />
-              <span>{isEs ? 'Consultas por WhatsApp' : 'WhatsApp Concierge'}</span>
+              <span>{isEs ? 'WhatsApp' : 'WhatsApp'}</span>
             </a>
           </div>
         </div>
@@ -160,14 +168,21 @@ export default function CourseHero({ course, lang }: CourseHeroProps) {
               </div>
             </div>
 
-            {/* Direct Enroll Button */}
-            <div className="pt-2">
+            {/* Direct Enroll Button & Login helper */}
+            <div className="pt-2 space-y-2 text-center">
               <Link
                 href={`/${lang}/academy/creator-lab/enroll`}
                 className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-black dark:bg-white text-white dark:text-black font-display font-semibold text-xs transition-all active:scale-[0.98]"
               >
-                <span>{isEs ? 'Ir a Página de Inscripción Directa' : 'Go to Direct Enrollment Page'}</span>
+                <span>{isEs ? 'Inscribirme en Cohorte 01 ($99.000 COP)' : 'Enroll in Cohort 01 ($99.000 COP)'}</span>
                 <ArrowRight size={14} />
+              </Link>
+
+              <Link
+                href={`/${lang}/academy/classroom`}
+                className="inline-block font-mono text-[11px] text-[#8E8E93] hover:text-[#FE385B] transition-colors"
+              >
+                {isEs ? '¿Ya estás matriculado? Entrar a mi Aula →' : 'Already enrolled? Enter Classroom →'}
               </Link>
             </div>
           </div>

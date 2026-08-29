@@ -184,26 +184,32 @@ export default function StudentDashboard({
           </div>
         ) : (
           <div className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-center space-y-4 shadow-soft">
-            <div className="w-14 h-14 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] text-[#8E8E93] flex items-center justify-center mx-auto border border-black/[0.06] dark:border-white/[0.06]">
-              <AlertCircle size={28} />
+            <div className="w-14 h-14 rounded-2xl bg-black/[0.03] dark:bg-white/[0.04] text-[#FE385B] flex items-center justify-center mx-auto border border-black/[0.06] dark:border-white/[0.06]">
+              <Sparkles size={28} />
             </div>
             <div className="max-w-md mx-auto space-y-1">
-              <h3 className="font-display font-bold text-lg text-[#111111] dark:text-white">
-                {isEs ? 'No tienes matrículas activas todavía' : 'No active enrollments yet'}
+              <h3 className="font-display font-bold text-lg sm:text-xl text-[#111111] dark:text-white">
+                {isEs ? 'Aún no tienes cursos activos' : 'No active courses yet'}
               </h3>
               <p className="text-xs sm:text-sm text-[#8E8E93] font-sans leading-relaxed">
                 {isEs
-                  ? 'Explora los programas formativos disponibles en UXIO Academy para inscribirte en la próxima cohorte activa.'
-                  : 'Explore the available programs in UXIO Academy to enroll in the next active cohort.'}
+                  ? 'Matricúlate en Creator Lab para acceder a las 4 semanas de formación, microclases de 5 min y sesiones en vivo.'
+                  : 'Enroll in Creator Lab to access the 4 weeks of training, 5-min micro-lessons, and live sessions.'}
               </p>
             </div>
-            <div className="pt-2">
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Link
+                href={`/${lang}/academy/creator-lab`}
+                className="inline-flex items-center gap-2 py-3.5 px-6 rounded-2xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 font-display font-bold text-xs sm:text-sm transition-all shadow-md shadow-[#FE385B]/20"
+              >
+                <span>{isEs ? 'Ver Creator Lab ($99.000 COP)' : 'View Creator Lab ($99.000 COP)'}</span>
+                <ArrowRight size={14} />
+              </Link>
               <Link
                 href={`/${lang}/academy`}
-                className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 font-display font-bold text-xs transition-all shadow-md shadow-[#FE385B]/20"
+                className="inline-flex items-center gap-2 py-3.5 px-5 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] text-[#111111] dark:text-white hover:bg-black/[0.08] dark:hover:bg-white/[0.1] font-display font-semibold text-xs transition-colors border border-black/[0.06] dark:border-white/[0.08]"
               >
-                <span>{isEs ? 'Explorar Programas' : 'Explore Programs'}</span>
-                <ArrowRight size={14} />
+                <span>{isEs ? 'Ver Catálogo Completo' : 'View Full Catalog'}</span>
               </Link>
             </div>
           </div>

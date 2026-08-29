@@ -26,23 +26,25 @@ export default async function LabsPage({
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[11px] font-medium text-[#FF7F07] tracking-tight">
-              // 01 · UXIO LABS & I+D
+              // 03 · {isEs ? 'LABS UXIO' : 'UXIO LABS'}
             </span>
             <span className="h-px w-6 bg-[#FF7F07]/40"></span>
-            <span className="font-mono text-[11px] text-[#8E8E93]">IN-HOUSE EXPERIMENTAL PRODUCTS</span>
+            <span className="font-mono text-[11px] text-[#8E8E93]">
+              {isEs ? 'PROYECTOS PROPIOS & EXPERIMENTOS' : 'IN-HOUSE PRODUCTS & EXPERIMENTS'}
+            </span>
           </div>
 
           <h1 className="font-display font-extrabold text-2xl sm:text-3xl lg:text-[34px] leading-tight tracking-tight text-[#111111] dark:text-white max-w-3xl">
             {isEs 
-              ? 'Exploramos el futuro del software y hardware experimental.' 
-              : 'Exploring the future of experimental software and hardware.'
+              ? 'Productos y experimentos que construimos en casa.' 
+              : 'Products and experiments built in-house.'
             }
           </h1>
 
           <p className="text-xs sm:text-sm text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans max-w-2xl">
             {isEs
-              ? 'Proyectos incubados y construidos 100% in-house para probar nuevas tecnologías, interfaces hápticas y modelos de negocio autónomos.'
-              : 'Products conceived, funded, and engineered 100% in-house to validate new interaction paradigms, haptic interfaces, and autonomous business models.'
+              ? 'Proyectos propios que exploramos y desarrollamos en UXIO para validar nuevas ideas, tecnologías e interfaces interactivas.'
+              : 'In-house products and experiments we develop at UXIO to validate new ideas, technologies, and interactive interfaces.'
             }
           </p>
         </section>

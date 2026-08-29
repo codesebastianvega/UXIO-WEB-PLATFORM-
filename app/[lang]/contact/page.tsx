@@ -24,10 +24,10 @@ export default async function ContactPage({
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[11px] font-medium text-[#FE385B] tracking-tight">
-              // 01 · CONTACTO & INTAKE
+              // {isEs ? 'CONTACTO' : 'CONTACT'}
             </span>
             <span className="h-px w-6 bg-[#FE385B]/40"></span>
-            <span className="font-mono text-[11px] text-[#8E8E93]">PROJECT INTAKE</span>
+            <span className="font-mono text-[11px] text-[#8E8E93]">{isEs ? 'CONVERSA CON NOSOTROS' : 'GET IN TOUCH'}</span>
           </div>
 
           <h1 className="font-display font-extrabold text-2xl sm:text-3xl lg:text-[34px] leading-tight tracking-tight text-[#111111] dark:text-white max-w-3xl">
@@ -39,8 +39,8 @@ export default async function ContactPage({
 
           <p className="text-xs sm:text-sm text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans max-w-2xl">
             {isEs
-              ? 'Estamos agendando sprints de producto y design systems para Q3 / Q4. Cuéntanos sobre tu visión y te responderemos en menos de 24 horas.'
-              : 'Booking product launch sprints and design systems for Q3 / Q4. Tell us about your vision and we will reply within 24 hours.'
+              ? 'Estamos agendando nuevos proyectos y sprints de producto. Cuéntanos sobre tu idea y te responderemos en menos de 24 horas.'
+              : 'Booking product launch sprints and design systems. Tell us about your vision and we will reply within 24 hours.'
             }
           </p>
         </section>
@@ -51,7 +51,7 @@ export default async function ContactPage({
           {/* Intake Form Component */}
           <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft-sm space-y-4">
             <h2 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white">
-              {isEs ? 'Formulario de Intake de Proyecto' : 'Project Intake Form'}
+              {isEs ? 'Cuéntanos sobre tu proyecto' : 'Tell us about your project'}
             </h2>
 
             <ContactForm lang={lang} />

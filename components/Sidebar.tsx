@@ -34,13 +34,15 @@ export default function Sidebar({
   const pathSegment = pathname?.split('/')[1];
   const currentLang: Locale = pathSegment === 'en' ? 'en' : (pathSegment === 'es' ? 'es' : (lang || 'es'));
 
-  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>({
-    services: true,
-    works: false,
-    labs: true,
-    resources: true,
-    academy: true,
-    'open-source': false
+  const sitemap = getSitemap(currentLang);
+  const secondaryLinks = getSecondaryLinks(currentLang);
+
+  const [openAccordions, setOpenAccordions] = useState<Record<string, boolean>>(() => {
+    const activeSection = sitemap.find(s => pathname?.startsWith(`/${currentLang}/${s.id}`));
+    if (activeSection) {
+      return { [activeSection.id]: true };
+    }
+    return {};
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
@@ -64,15 +66,11 @@ export default function Sidebar({
     }));
   };
 
-  const sitemap = getSitemap(currentLang);
-  const secondaryLinks = getSecondaryLinks(currentLang);
-
   const dict = dictionary?.sidebar || {
     subtitle: 'STUDIO & LABS',
-    status_live: currentLang === 'es' ? 'DISPATCH EN VIVO' : 'DISPATCH LIVE',
-    status_time: '08:30 UTC',
+    status_live: currentLang === 'es' ? 'AHORA EN UXIO' : 'NOW AT UXIO',
     nav_heading: currentLang === 'es' ? 'NAVEGACIÓN' : 'NAVIGATION',
-    groups_count: currentLang === 'es' ? '04 GRUPOS' : '04 GROUPS',
+    groups_count: currentLang === 'es' ? '05 GRUPOS' : '05 GROUPS',
   };
 
   return (
@@ -139,51 +137,28 @@ export default function Sidebar({
               </button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2.5 w-full pb-2.5 border-b border-white/[0.08]">
+            <div className="flex items-center justify-center w-full pb-2 border-b border-white/[0.08]">
               <Link 
                 href={`/${currentLang}`} 
-                className="group relative flex items-center justify-center p-1 rounded-xl hover:bg-white/[0.06] transition-all" 
+                className="group relative flex items-center justify-center p-1.5 rounded-xl hover:bg-white/[0.06] transition-all" 
                 title="UXIO Studio & Labs"
               >
-                <div className="h-6 w-auto max-w-[46px] overflow-hidden flex items-center justify-center">
+                <div className="h-6 w-auto max-w-[36px] overflow-hidden flex items-center justify-center">
                   <img
-                    src="/uxio-logo.svg"
-                    alt="UXIO"
+                    src="/uxio-logo.svg" 
+                    alt="UXIO" 
                     className="w-full h-full object-contain select-none transition-transform duration-300 group-hover:scale-110"
                     loading="eager"
                   />
                 </div>
               </Link>
-
-              <button
-                type="button"
-                onClick={toggleSidebar}
-                className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.14] text-[#8E8E93] hover:text-white transition-colors cursor-pointer"
-                title={currentLang === 'es' ? 'Expandir barra lateral (Ctrl+B)' : 'Expand sidebar (Ctrl+B)'}
-                aria-label="Expand sidebar"
-              >
-                <PanelLeftOpen size={14} />
-              </button>
             </div>
           )}
 
-          {/* Rotating Live Dispatch */}
-          {!isCollapsed ? (
+          {/* Rotating Live Dispatch (Solo en modo expandido) */}
+          {!isCollapsed && (
             <div className="w-full">
               <SidebarLiveDispatch currentLang={currentLang} dictionary={dictionary} />
-            </div>
-          ) : (
-            <div 
-              className="relative group p-2 rounded-xl bg-[#171719] border border-white/[0.06] hover:border-[#00F0FF]/40 flex items-center justify-center cursor-pointer transition-colors"
-              title={`${dict.status_live} (${dict.status_time})`}
-            >
-              <span className="w-2.5 h-2.5 rounded-full bg-[#00F0FF] shadow-[0_0_8px_#00F0FF] animate-pulse" />
-              
-              {/* Flyout Tooltip */}
-              <div className="absolute left-full ml-3 px-3 py-2 bg-[#171719] border border-white/[0.1] rounded-xl shadow-2xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50 font-mono text-xs text-[#EDEDEE] max-w-xs">
-                <div className="text-[10px] text-[#00F0FF] font-semibold mb-0.5">{dict.status_live} ({dict.status_time})</div>
-                <div className="text-[#8E8E93] text-[11px] font-sans">Diseñando app nativa para smartwatch · SIE Travel</div>
-              </div>
             </div>
           )}
 

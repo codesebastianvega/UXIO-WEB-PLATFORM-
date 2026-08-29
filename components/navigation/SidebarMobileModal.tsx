@@ -59,53 +59,56 @@ export default function SidebarMobileModal({
                 <div className="space-y-1 pl-3.5 border-l border-white/[0.08]">
                   {section.subGroups ? (
                     <div className="space-y-2.5 pt-1">
-                      {section.subGroups.map((group, gIdx) => (
-                        <div key={group.title || gIdx} className="space-y-1">
-                          <div className="pt-1 pb-0.5 flex items-center">
-                            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] shadow-2xs">
-                              <span
-                                className="w-1.5 h-1.5 rounded-full animate-pulse"
-                                style={{
-                                  backgroundColor: group.title.toLowerCase().includes('eco') ? '#FE385B' : '#00F0FF',
-                                  boxShadow: `0 0 6px ${group.title.toLowerCase().includes('eco') ? '#FE385B' : '#00F0FF'}`,
-                                }}
-                              />
-                              <span
-                                className={`font-display font-bold text-[10px] uppercase tracking-wider ${
-                                  group.title.toLowerCase().includes('eco')
-                                    ? 'bg-gradient-to-r from-[#FE385B] to-[#FF7F07] bg-clip-text text-transparent'
-                                    : 'bg-gradient-to-r from-[#00F0FF] to-[#7928CA] bg-clip-text text-transparent'
-                                }`}
-                              >
-                                {group.title}
-                              </span>
+                      {section.subGroups.map((group, gIdx) => {
+                        const isMainProject = group.title.toLowerCase().includes('proyect') || group.title.toLowerCase().includes('project') || group.title.toLowerCase().includes('eco');
+                        return (
+                          <div key={group.title || gIdx} className="space-y-1">
+                            <div className="pt-1 pb-0.5 flex items-center">
+                              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] shadow-2xs">
+                                <span
+                                  className="w-1.5 h-1.5 rounded-full animate-pulse"
+                                  style={{
+                                    backgroundColor: isMainProject ? '#FE385B' : '#00F0FF',
+                                    boxShadow: `0 0 6px ${isMainProject ? '#FE385B' : '#00F0FF'}`,
+                                  }}
+                                />
+                                <span
+                                  className={`font-display font-bold text-[10px] uppercase tracking-wider ${
+                                    isMainProject
+                                      ? 'bg-gradient-to-r from-[#FE385B] to-[#FF7F07] bg-clip-text text-transparent'
+                                      : 'bg-gradient-to-r from-[#00F0FF] to-[#7928CA] bg-clip-text text-transparent'
+                                  }`}
+                                >
+                                  {group.title}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="space-y-0.5 pl-1">
+                              {group.items.map((sub: Subroute) => {
+                                const isCurrent = pathname === sub.path;
+                                return (
+                                  <Link
+                                    key={sub.path}
+                                    href={sub.path}
+                                    onClick={onClose}
+                                    className={`
+                                      flex items-center justify-between py-1 text-xs transition-colors
+                                      ${isCurrent ? 'text-white font-bold' : 'text-[#8E8E93] hover:text-white'}
+                                    `}
+                                  >
+                                    <span className="truncate">{sub.name}</span>
+                                    {sub.badge && (
+                                      <span className="font-mono text-[8px] px-1 py-0.2 rounded bg-white/[0.08] text-[#8E8E93]">
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                );
+                              })}
                             </div>
                           </div>
-                          <div className="space-y-0.5 pl-1">
-                            {group.items.map((sub: Subroute) => {
-                              const isCurrent = pathname === sub.path;
-                              return (
-                                <Link
-                                  key={sub.path}
-                                  href={sub.path}
-                                  onClick={onClose}
-                                  className={`
-                                    flex items-center justify-between py-1 text-xs transition-colors
-                                    ${isCurrent ? 'text-white font-bold' : 'text-[#8E8E93] hover:text-white'}
-                                  `}
-                                >
-                                  <span className="truncate">{sub.name}</span>
-                                  {sub.badge && (
-                                    <span className="font-mono text-[8px] px-1 py-0.2 rounded bg-white/[0.08] text-[#8E8E93]">
-                                      {sub.badge}
-                                    </span>
-                                  )}
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   ) : (
                     section.subroutes.map((sub: Subroute) => {

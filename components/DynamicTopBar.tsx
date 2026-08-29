@@ -58,15 +58,17 @@ export default function DynamicTopBar({
       
       {/* LEFT: Sidebar Quick Toggle + Breadcrumbs + Contextual Tabs */}
       <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar py-1">
-        {/* Quick Sidebar Toggle for Desktop */}
-        <button
-          onClick={toggleSidebar}
-          className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-[#8E8E93] hover:text-[#111111] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08] transition-colors"
-          title={isCollapsed ? (currentLang === 'es' ? 'Expandir barra lateral (Ctrl+B)' : 'Expand sidebar (Ctrl+B)') : (currentLang === 'es' ? 'Colapsar barra lateral (Ctrl+B)' : 'Collapse sidebar (Ctrl+B)')}
-          aria-label="Toggle sidebar"
-        >
-          {isCollapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
-        </button>
+        {/* Quick Sidebar Toggle for Desktop (Only when collapsed to avoid duplicates) */}
+        {isCollapsed && (
+          <button
+            onClick={toggleSidebar}
+            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-lg text-[#8E8E93] hover:text-[#111111] dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08] transition-colors"
+            title={currentLang === 'es' ? 'Expandir barra lateral (Ctrl+B)' : 'Expand sidebar (Ctrl+B)'}
+            aria-label="Expand sidebar"
+          >
+            <PanelLeftOpen size={15} />
+          </button>
+        )}
 
         {/* Breadcrumb Root */}
         <div className="flex items-center gap-1.5 font-mono text-xs text-[#8E8E93] flex-shrink-0">

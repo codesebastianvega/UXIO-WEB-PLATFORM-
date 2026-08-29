@@ -58,20 +58,20 @@ export default function WorksCatalog({
         <section className="space-y-3">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[11px] font-medium text-[#FE385B] tracking-tight">
-              // 02 · VISUAL ARCHIVE
+              // 02 · {isEs ? 'PROYECTOS' : 'WORKS'}
             </span>
             <span className="h-px w-6 bg-[#FE385B]/40"></span>
-            <span className="font-mono text-[11px] text-[#8E8E93]">VENTURE PORTFOLIO</span>
+            <span className="font-mono text-[11px] text-[#8E8E93]">{isEs ? 'PORTAFOLIO' : 'PORTFOLIO'}</span>
           </div>
 
           <h1 className="font-display font-extrabold text-2xl sm:text-3xl lg:text-[34px] leading-tight tracking-tight text-[#111111] dark:text-white max-w-4xl">
-            Selected Works.
+            {isEs ? 'Proyectos Destacados.' : 'Selected Works.'}
           </h1>
 
           <p className="text-xs sm:text-sm text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans max-w-2xl">
             {isEs
-              ? 'Fusionamos ingeniería de software de alta velocidad, geometría suave y dirección de arte contemporánea para construir productos y marcas digitales de escala global.'
-              : 'Merging high-velocity software engineering, soft geometry, and contemporary art direction to craft digital products and brands for global venture scale.'
+              ? 'Diseñamos y construimos productos digitales, sitios web, apps y marcas que ayudan a las empresas a crecer y destacar.'
+              : 'We design and build digital products, websites, apps, and brands that help businesses grow and stand out.'
             }
           </p>
         </section>
