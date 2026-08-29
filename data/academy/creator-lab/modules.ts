@@ -1,6 +1,6 @@
 import { Module } from '../types';
 import { Locale } from '@/types';
-import { getLessonM0001, getLessonM0002 } from './lessons';
+import { getLessonM0001, getLessonM0002, getLessonM0003 } from './lessons';
 
 export const getCreatorLabModules = (lang: Locale = 'es'): Module[] => {
   const isEs = lang === 'es';
@@ -18,6 +18,7 @@ export const getCreatorLabModules = (lang: Locale = 'es'): Module[] => {
       lessons: [
         getLessonM0001(lang),
         getLessonM0002(lang),
+        getLessonM0003(lang),
       ],
       projectDeliverable: {
         title: isEs ? 'Actividad de Arranque' : 'Kickoff Activity',

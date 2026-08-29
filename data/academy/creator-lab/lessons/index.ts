@@ -2,14 +2,17 @@ import { Lesson } from '../../types';
 import { Locale } from '@/types';
 import { getLessonM0001 } from './m00-01-welcome';
 import { getLessonM0002 } from './m00-02-creator-kit';
+import { getLessonM0003 } from './m00-03-live-lab';
 
 export * from './m00-01-welcome';
 export * from './m00-02-creator-kit';
+export * from './m00-03-live-lab';
 
 export function getAllLessons(lang: Locale = 'es'): Lesson[] {
   return [
     getLessonM0001(lang),
     getLessonM0002(lang),
+    getLessonM0003(lang),
   ];
 }
 
