@@ -78,6 +78,40 @@ export function getLessonsByModule(
   return moduleItem ? moduleItem.lessons : [];
 }
 
+export function getAdjacentLessons(
+  courseSlug: string,
+  moduleSlug: string,
+  lessonSlug: string,
+  lang: Locale = 'es'
+): {
+  prevLesson?: { moduleSlug: string; lesson: Lesson };
+  nextLesson?: { moduleSlug: string; lesson: Lesson };
+} {
+  const course = getCourseBySlug(courseSlug, lang);
+  if (!course) return {};
+
+  const flatLessons: Array<{ moduleSlug: string; lesson: Lesson }> = [];
+  course.modules.forEach(m => {
+    m.lessons.forEach(l => {
+      flatLessons.push({ moduleSlug: m.slug, lesson: l });
+    });
+  });
+
+  const currentIndex = flatLessons.findIndex(
+    item =>
+      item.moduleSlug.toLowerCase() === moduleSlug.toLowerCase() &&
+      (item.lesson.slug.toLowerCase() === lessonSlug.toLowerCase() ||
+        item.lesson.id.toLowerCase() === lessonSlug.toLowerCase())
+  );
+
+  if (currentIndex === -1) return {};
+
+  return {
+    prevLesson: currentIndex > 0 ? flatLessons[currentIndex - 1] : undefined,
+    nextLesson: currentIndex < flatLessons.length - 1 ? flatLessons[currentIndex + 1] : undefined,
+  };
+}
+
 export function getCohortStatusInfo(capacity: CohortCapacity, lang: Locale = 'es') {
   const isEs = lang === 'es';
   const remaining = Math.max(0, capacity.capacity - capacity.enrolled);

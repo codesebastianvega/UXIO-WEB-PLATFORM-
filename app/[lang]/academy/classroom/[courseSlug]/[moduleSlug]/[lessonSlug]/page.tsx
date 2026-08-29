@@ -3,10 +3,15 @@ import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import { Locale } from '@/types';
 import { getUserEnrollments } from '@/lib/supabase/academy';
-import { getCourseBySlug, getModuleBySlug, getLessonBySlug } from '@/data/academy';
+import {
+  getCourseBySlug,
+  getModuleBySlug,
+  getLessonBySlug,
+  getAdjacentLessons,
+} from '@/data/academy';
 import ClassroomBreadcrumbs from '@/components/academy/classroom/ClassroomBreadcrumbs';
 import ClassroomSidebar from '@/components/academy/classroom/ClassroomSidebar';
-import LessonPlaceholder from '@/components/academy/classroom/LessonPlaceholder';
+import LessonViewer from '@/components/academy/classroom/LessonViewer';
 
 export async function generateStaticParams() {
   return [
@@ -92,6 +97,13 @@ export default async function LessonClassroomPage({
     notFound();
   }
 
+  const { prevLesson, nextLesson } = getAdjacentLessons(
+    courseSlug,
+    moduleSlug,
+    lessonSlug,
+    lang
+  );
+
   return (
     <main className="flex-1 min-w-0 max-w-[1440px] w-full mx-auto p-6 md:p-10 space-y-6 transition-colors min-h-[85vh]">
       {/* Breadcrumbs */}
@@ -104,7 +116,7 @@ export default async function LessonClassroomPage({
         lang={lang}
       />
 
-      {/* Main Classroom Shell: Sidebar on Left, Lesson Stage on Right */}
+      {/* Main Classroom Shell: Sidebar on Left, Lesson Viewer on Right */}
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         <ClassroomSidebar
           course={course}
@@ -114,11 +126,13 @@ export default async function LessonClassroomPage({
         />
 
         <div className="flex-1 min-w-0 w-full">
-          <LessonPlaceholder
+          <LessonViewer
             lesson={lesson}
             moduleItem={moduleItem}
             courseSlug={course.slug}
             lang={lang}
+            prevLesson={prevLesson}
+            nextLesson={nextLesson}
           />
         </div>
       </div>
