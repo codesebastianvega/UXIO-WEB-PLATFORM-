@@ -12,7 +12,7 @@ import LessonResources from './LessonResources';
 import LessonChallenge from './LessonChallenge';
 import ChallengeSubmission from './ChallengeSubmission';
 import LessonCompleteButton from './LessonCompleteButton';
-import LessonCheckpointQuiz from './LessonCheckpointQuiz';
+import LessonMaterialsAndQuiz from './LessonMaterialsAndQuiz';
 import LessonDiscussion from './LessonDiscussion';
 
 interface AdjacentLessonInfo {
@@ -172,58 +172,17 @@ export default function LessonViewer({
         </div>
       </div>
 
-      {/* 4. Presentation Deck Card */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <Layers size={18} className="text-[#FE385B]" />
-            <div>
-              <h3 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white">
-                {isEs ? 'Diapositivas y Material Visual 16:9' : '16:9 Slide Deck & Visual Materials'}
-              </h3>
-              <p className="text-xs text-[#8E8E93] font-sans">
-                {isEs
-                  ? 'Presentación interactiva para repasar conceptos, fórmulas y comparativas.'
-                  : 'Interactive presentation deck to review concepts, formulas, and frameworks.'}
-              </p>
-            </div>
-          </div>
-
-          <span className="font-mono text-[10px] text-[#FE385B] bg-[#FE385B]/10 px-2.5 py-1 rounded-md border border-[#FE385B]/20 shrink-0">
-            {lesson.presentationSlug ? (isEs ? 'Diapositivas Listas' : 'Slides Ready') : (isEs ? 'En Preparación' : 'Pending')}
-          </span>
-        </div>
-
-        <div>
-          {lesson.presentationSlug ? (
-            <Link
-              href={`/${lang}/academy/classroom/${courseSlug}/${moduleItem.slug}/${lesson.slug}/slides`}
-              className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-[#FE385B] text-white hover:bg-[#FE385B]/90 text-xs font-mono font-bold transition-all shadow-md shadow-[#FE385B]/20"
-            >
-              <Layers size={14} />
-              <span>{isEs ? 'Abrir Presentación Interactiva (16:9)' : 'Open Interactive Deck (16:9)'}</span>
-            </Link>
-          ) : (
-            <button
-              type="button"
-              disabled
-              className="inline-flex items-center gap-2 py-3 px-5 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] border border-black/[0.06] dark:border-white/[0.06] opacity-50"
-            >
-              <Layers size={14} />
-              <span>{isEs ? 'Sin Diapositivas Asignadas' : 'No Slides Assigned'}</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* 5. Checkpoint Quiz (Mini-Evaluación) */}
-      {lesson.quiz && (
-        <LessonCheckpointQuiz
-          quiz={lesson.quiz}
-          lang={lang}
-          onQuizPassed={() => setIsQuizPassed(true)}
-        />
-      )}
+      {/* 4. Visual Materials & Interactive Checkpoint Quiz */}
+      <LessonMaterialsAndQuiz
+        presentationSlug={lesson.presentationSlug}
+        quiz={lesson.quiz}
+        isQuizPassed={isQuizPassed}
+        onQuizPassed={() => setIsQuizPassed(true)}
+        courseSlug={courseSlug}
+        moduleSlug={moduleItem.slug}
+        lessonSlug={lesson.slug}
+        lang={lang}
+      />
 
       {/* 6. Resources, Templates & Downloads with Lock */}
       {lesson.resources && lesson.resources.length > 0 && (
