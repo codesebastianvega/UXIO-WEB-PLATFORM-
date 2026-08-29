@@ -9,10 +9,11 @@ export const getSitemap = (lang: Locale = 'es'): NavSection[] => {
       id: 'academy',
       groupNumber: '01',
       label: 'Academy',
-      count: '03',
+      count: '04',
       subroutes: [
         { name: 'Creator Lab', path: `/${lang}/academy/creator-lab`, badge: 'Cohorte 01', status: isEs ? 'Activo' : 'Active', statusColor: '#FE385B', isVisible: true },
         { name: isEs ? 'Mi Aula' : 'My Classroom', path: `/${lang}/academy/classroom`, badge: 'Aula', isVisible: true },
+        { name: isEs ? 'Mesa Docente' : 'Instructor Desk', path: `/${lang}/academy/instructor`, badge: 'Admin', isVisible: true },
         { name: isEs ? 'Cursos' : 'Courses', path: `/${lang}/academy`, badge: 'Hub', isVisible: true },
       ]
     },

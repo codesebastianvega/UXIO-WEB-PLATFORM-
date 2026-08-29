@@ -214,17 +214,24 @@ export default function ClassroomSidebar({
         </Link>
         <Link
           href={`/${lang}/academy/classroom/profile`}
-          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#00F0FF] transition-colors"
+          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#0284C7] dark:hover:text-[#00F0FF] transition-colors"
         >
-          <User size={14} className="text-[#00F0FF]" />
+          <User size={14} className="text-[#0284C7] dark:text-[#00F0FF]" />
           <span>{isEs ? 'Mi Perfil' : 'My Profile'}</span>
         </Link>
         <Link
           href={`/${lang}/academy/classroom/certificate`}
+          className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#FF7F07] transition-colors"
+        >
+          <Award size={14} className="text-[#FF7F07]" />
+          <span>{isEs ? 'Certificado' : 'Certificate'}</span>
+        </Link>
+        <Link
+          href={`/${lang}/academy/instructor`}
           className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-black/[0.03] dark:hover:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#FE385B] transition-colors"
         >
           <Award size={14} className="text-[#FE385B]" />
-          <span>{isEs ? 'Certificado' : 'Certificate'}</span>
+          <span>{isEs ? 'Mesa Docente (Admin)' : 'Instructor Desk (Admin)'}</span>
         </Link>
       </div>
     </div>
