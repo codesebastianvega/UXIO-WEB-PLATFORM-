@@ -74,13 +74,20 @@ export default function StudentDashboard({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Link
+            href={`/${lang}/academy/classroom/profile`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] text-xs font-mono text-[#00F0FF] hover:bg-[#00F0FF]/10 transition-colors border border-[#00F0FF]/25"
+          >
+            <User size={14} />
+            <span>{isEs ? 'Mi Perfil & Logros' : 'My Profile & Outcomes'}</span>
+          </Link>
           <Link
             href={`/${lang}/academy`}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-colors border border-black/[0.06] dark:border-white/[0.06]"
           >
             <BookOpen size={14} />
-            <span>{isEs ? 'Catálogo de Cursos' : 'Course Catalog'}</span>
+            <span>{isEs ? 'Catálogo' : 'Catalog'}</span>
           </Link>
           <LogoutButton lang={lang} />
         </div>

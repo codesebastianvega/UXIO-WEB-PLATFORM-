@@ -435,15 +435,17 @@ SPRINT 2K: Academy UI Polish & Productization [COMPLETADO - 98c2db6]
     ↓
 SPRINT 3A: Challenge Submissions & Student Delivery Flow [COMPLETADO - 8d20651]
     ↓
-SPRINT 3B: Instructor Review & Feedback [COMPLETADO]
+SPRINT 3B: Instructor Review & Feedback [COMPLETADO - 4f4f68c]
+    ↓
+SPRINT 3C: Student Profile & Outcomes [COMPLETADO]
 ```
 
 ---
 
 ## 13. 📊 Estado del Proyecto (Project Status)
 
-* **DONE (Sprints 2A → 3B):**
-  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), roles (`student`, `instructor`, `admin`), RLS estricto y trigger seguro `handle_new_user()`.
+* **DONE (Sprints 2A → 3C):**
+  - Base de datos Supabase con 6 tablas (`profiles`, `courses`, `cohorts`, `enrollments`, `lesson_progress`, `submissions`), roles (`student`, `instructor`, `admin`), campos de perfil de creador, RLS estricto y trigger seguro `handle_new_user()`.
   - Dominio académico tipado y modular (`@/data/academy`).
   - Classroom protegido con SSR auth, breadcrumbs y sidebar de navegación modular.
   - Lesson Viewer con reproductor de video responsivo y conmutador de microclases.
@@ -452,7 +454,8 @@ SPRINT 3B: Instructor Review & Feedback [COMPLETADO]
   - Grid de recursos descargables (templates, PDFs, prompt packs, enlaces) y fichas de retos prácticos.
   - Formulario de entrega asíncrona de retos (`ChallengeSubmission`) con estados (`submitted`, `pending_review`, `needs_revision`, `approved`) y retroalimentación docente.
   - Panel operativo de revisión docente (`/academy/instructor`) con filtros por estado, búsqueda de estudiantes, checklist de rúbrica de evaluación, emisión de feedback y acciones de aprobación/solicitud de ajustes.
+  - Perfil profesional del creador (`/academy/classroom/profile`) con edición segura, enlaces a redes sociales, matriz de outcomes en tiempo real y vista previa de credencial/diploma.
   - Suite de pruebas E2E con todas las rutas públicas y protegidas validadas y 0 regresiones.
-* **NEXT (Sprint 3C+):**
-  - Certificados dinámicos de graduación de cohorte y analíticas de desempeño.
+* **NEXT (Sprint 3D+):**
+  - Certificados digitales dinámicos y analíticas avanzadas.
 
