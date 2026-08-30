@@ -78,7 +78,7 @@ export default function SlideSteps({
         </div>
       </div>
 
-      {/* Steps 5-Column Grid with Rich Proportions */}
+      {/* Steps 5-Column Grid */}
       {steps.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {steps.map((st, idx) => (
@@ -96,11 +96,11 @@ export default function SlideSteps({
                   actionTip: `Dedica esta semana a completar las 2 microclases y entregar el reto práctico en el aula.`,
                 })
               }
-              className={`group p-5 rounded-3xl border transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3 min-h-[220px] ${
+              className={`group p-5 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3 min-h-[220px] ${
                 isDark
-                  ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#FE385B]/40 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-                  : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#FE385B]/40 text-[#111111] shadow-[0_12px_35px_rgba(0,0,0,0.04)]'
-              } hover:-translate-y-1.5 hover:shadow-2xl`}
+                  ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#FE385B]/40 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:-translate-y-1.5 hover:shadow-2xl'
+                  : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#FE385B]/40 text-[#111111] shadow-[0_12px_35px_rgba(0,0,0,0.04)] hover:-translate-y-1.5 hover:shadow-2xl'
+              }`}
             >
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-bold text-[#FE385B] bg-[#FE385B]/10 px-2.5 py-0.5 rounded-lg">

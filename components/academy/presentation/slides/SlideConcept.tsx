@@ -85,7 +85,7 @@ export default function SlideConcept({
         )}
       </div>
 
-      {/* Points Grid with Balanced Proportions & Gamma-Level Cards */}
+      {/* Points Grid */}
       {slide.points && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {slide.points.map((pt, idx) => (
@@ -102,11 +102,11 @@ export default function SlideConcept({
                   actionTip: conceptTips[idx % conceptTips.length],
                 })
               }
-              className={`group relative p-6 rounded-3xl border transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-4 min-h-[220px] ${
+              className={`group relative p-6 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 min-h-[220px] ${
                 isDark
-                  ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-                  : 'bg-white hover:bg-white/95 border-black/[0.08] text-[#111111] shadow-[0_12px_35px_rgba(0,0,0,0.04)]'
-              } ${tints[idx % tints.length]} hover:-translate-y-1.5 hover:shadow-2xl`}
+                  ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:-translate-y-1.5 hover:shadow-2xl'
+                  : 'bg-white hover:bg-white/95 border-black/[0.08] text-[#111111] shadow-[0_12px_35px_rgba(0,0,0,0.04)] hover:-translate-y-1.5 hover:shadow-2xl'
+              } ${tints[idx % tints.length]}`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">

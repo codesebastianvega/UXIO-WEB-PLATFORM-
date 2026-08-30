@@ -21,6 +21,16 @@ export interface GlossaryTerm {
   image?: string;
 }
 
+export interface InstructorNotes {
+  script: string;
+  duration?: string;
+  keyActions?: string[];
+  studentQA?: Array<{
+    question: string;
+    answer: string;
+  }>;
+}
+
 export interface SlideData {
   id: string;
   type: SlideType;
@@ -45,6 +55,7 @@ export interface SlideData {
   };
   glossaryTerms?: GlossaryTerm[];
   stats?: Array<{ value: string; label: string; sub?: string }>;
+  instructorNotes?: InstructorNotes;
   footerNote?: string;
   quote?: string;
   author?: string;

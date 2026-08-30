@@ -1,33 +1,47 @@
-/* UXIO Academy - High Precision 16:9 Presentation Print & PDF Export */
+/* UXIO Academy - High Precision Presentation Print & PDF Export */
+
+@page {
+  size: landscape;
+  margin: 6mm 8mm;
+}
 
 @media print {
-  @page {
-    size: 297mm 167mm; /* True 16:9 Landscape Aspect Ratio (or 16in 9in) */
-    margin: 0mm !important;
-  }
-
   *,
   *::before,
   *::after {
     box-sizing: border-box !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   html,
   body {
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    background-color: #FAFAFA !important;
-    color: #111111 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    background-color: #FFFFFF !important;
+    color: #09090B !important;
+    overflow: visible !important;
+    font-size: 13px !important;
   }
 
-  /* Hide interactive UI elements during PDF generation */
+  /* Reset layout containers */
+  body > div,
+  main {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    background: transparent !important;
+  }
+
+  /* Hide interactive screen UI elements */
+  .presentation-screen-only,
   .presentation-controls,
   .presentation-progress,
-  .presentation-screen-only,
   nav,
   header,
   footer,
@@ -37,19 +51,20 @@
     display: none !important;
   }
 
-  /* Presentation Print Master Container */
+  /* Print Deck Master Container */
   .presentation-print-all {
     display: block !important;
     width: 100% !important;
+    background: #FFFFFF !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
   /* Each Individual 16:9 Slide Page */
   .presentation-print-slide {
-    width: 297mm !important;
-    height: 167mm !important;
-    max-height: 167mm !important;
+    width: 100% !important;
+    height: calc(100vh - 12mm) !important;
+    max-height: calc(100vh - 12mm) !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: always !important;
@@ -58,42 +73,67 @@
     flex-direction: column !important;
     justify-content: space-between !important;
     align-items: stretch !important;
-    background-color: #FFFFFF !important;
-    color: #111111 !important;
-    padding: 16mm 20mm !important;
+    background: #FFFFFF !important;
+    color: #09090B !important;
+    padding: 4mm 6mm !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     position: relative !important;
   }
 
-  /* Remove blank page artifact after the final slide */
+  /* Prevent blank page after the final slide */
   .presentation-print-slide:last-child {
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
 
-  /* Force high-contrast vector clarity in print mode */
+  /* Slide Body */
+  .print-slide-body {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+  }
+
+  .print-slide-body > div {
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  /* Vector and Typography Contrast in Print Mode */
   .presentation-print-slide h1,
-  .presentation-print-slide h2,
+  .presentation-print-slide h2 {
+    color: #09090B !important;
+    font-size: 26px !important;
+    line-height: 1.2 !important;
+  }
+
   .presentation-print-slide h3 {
     color: #09090B !important;
+    font-size: 15px !important;
   }
 
-  .presentation-print-slide p,
-  .presentation-print-slide span {
+  .presentation-print-slide p {
     color: #3F3F46 !important;
+    font-size: 12px !important;
   }
 
-  .presentation-print-slide .text-\[\#FE385B\] {
-    color: #FE385B !important;
+  .presentation-print-slide .border {
+    border-color: #E4E4E7 !important;
   }
 
-  .presentation-print-slide .text-\[\#10B981\] {
-    color: #10B981 !important;
-  }
-
-  .presentation-print-slide .text-\[\#FF7F07\] {
-    color: #FF7F07 !important;
+  .presentation-print-slide .shadow-2xl,
+  .presentation-print-slide .shadow-xl,
+  .presentation-print-slide .shadow-lg,
+  .presentation-print-slide .shadow-md {
+    box-shadow: none !important;
   }
 }
 

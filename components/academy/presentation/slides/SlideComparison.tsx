@@ -50,11 +50,11 @@ export default function SlideComparison({
                 actionTip: 'Elimina estas fricciones de tu proceso para avanzar como un creador profesional.',
               })
             }
-            className={`group p-6 sm:p-7 rounded-3xl border transition-all duration-200 cursor-pointer space-y-4 min-h-[260px] flex flex-col justify-between ${
+            className={`group p-6 sm:p-7 rounded-3xl border transition-all duration-300 cursor-pointer space-y-4 min-h-[260px] flex flex-col justify-between ${
               isDark
-                ? 'bg-[#FE385B]/[0.03] hover:bg-[#FE385B]/[0.06] border-[#FE385B]/20 hover:border-[#FE385B]/40 shadow-[0_10px_30px_rgba(254,56,91,0.06)]'
-                : 'bg-white hover:bg-white/95 border-[#FE385B]/25 hover:border-[#FE385B]/50 shadow-[0_12px_35px_rgba(254,56,91,0.04)]'
-            } hover:-translate-y-1.5 hover:shadow-xl`}
+                ? 'bg-[#FE385B]/[0.03] hover:bg-[#FE385B]/[0.06] border-[#FE385B]/20 hover:border-[#FE385B]/40 shadow-[0_10px_30px_rgba(254,56,91,0.06)] hover:-translate-y-1.5 hover:shadow-xl'
+                : 'bg-white hover:bg-white/95 border-[#FE385B]/25 hover:border-[#FE385B]/50 shadow-[0_12px_35px_rgba(254,56,91,0.04)] hover:-translate-y-1.5 hover:shadow-xl'
+            }`}
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b pb-3 border-[#FE385B]/15">
@@ -95,11 +95,11 @@ export default function SlideComparison({
                 actionTip: 'Aplica estos 4 principios desde tu primera sesión de grabación.',
               })
             }
-            className={`group p-6 sm:p-7 rounded-3xl border transition-all duration-200 cursor-pointer space-y-4 min-h-[260px] flex flex-col justify-between ${
+            className={`group p-6 sm:p-7 rounded-3xl border transition-all duration-300 cursor-pointer space-y-4 min-h-[260px] flex flex-col justify-between ${
               isDark
-                ? 'bg-[#10B981]/[0.03] hover:bg-[#10B981]/[0.06] border-[#10B981]/25 hover:border-[#10B981]/50 shadow-[0_10px_30px_rgba(16,185,129,0.06)]'
-                : 'bg-white hover:bg-white/95 border-[#10B981]/30 hover:border-[#10B981]/60 shadow-[0_12px_35px_rgba(16,185,129,0.06)]'
-            } hover:-translate-y-1.5 hover:shadow-xl`}
+                ? 'bg-[#10B981]/[0.03] hover:bg-[#10B981]/[0.06] border-[#10B981]/25 hover:border-[#10B981]/50 shadow-[0_10px_30px_rgba(16,185,129,0.06)] hover:-translate-y-1.5 hover:shadow-xl'
+                : 'bg-white hover:bg-white/95 border-[#10B981]/30 hover:border-[#10B981]/60 shadow-[0_12px_35px_rgba(16,185,129,0.06)] hover:-translate-y-1.5 hover:shadow-xl'
+            }`}
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b pb-3 border-[#10B981]/20">

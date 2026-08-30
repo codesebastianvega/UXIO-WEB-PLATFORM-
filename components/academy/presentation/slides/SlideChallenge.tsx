@@ -52,11 +52,11 @@ export default function SlideChallenge({
                 actionTip: 'Dedica 20-30 minutos a ejecutar esta pauta sin buscar perfección en la primera toma.',
               })
             }
-            className={`group p-6 rounded-3xl border transition-all duration-200 cursor-pointer space-y-3 min-h-[160px] flex flex-col justify-between ${
+            className={`group p-6 rounded-3xl border transition-all duration-300 cursor-pointer space-y-3 min-h-[160px] flex flex-col justify-between ${
               isDark
-                ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#10B981]/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-                : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#10B981]/40 shadow-[0_12px_35px_rgba(0,0,0,0.04)]'
-            } hover:-translate-y-1`}
+                ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#10B981]/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+                : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#10B981]/40 shadow-[0_12px_35px_rgba(0,0,0,0.04)] hover:-translate-y-1'
+            }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -90,11 +90,11 @@ export default function SlideChallenge({
                 actionTip: 'Recuerda que la entrega se realiza pegando el enlace público en la plataforma del aula.',
               })
             }
-            className={`group p-6 rounded-3xl border transition-all duration-200 cursor-pointer space-y-3 min-h-[160px] flex flex-col justify-between ${
+            className={`group p-6 rounded-3xl border transition-all duration-300 cursor-pointer space-y-3 min-h-[160px] flex flex-col justify-between ${
               isDark
-                ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#FF7F07]/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)]'
-                : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#FF7F07]/40 shadow-[0_12px_35px_rgba(0,0,0,0.04)]'
-            } hover:-translate-y-1`}
+                ? 'bg-white/[0.03] hover:bg-white/[0.06] border-white/[0.08] hover:border-[#FF7F07]/40 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:-translate-y-1'
+                : 'bg-white hover:bg-white/95 border-black/[0.08] hover:border-[#FF7F07]/40 shadow-[0_12px_35px_rgba(0,0,0,0.04)] hover:-translate-y-1'
+            }`}
           >
             <div className="space-y-2">
               <div className="flex items-center justify-between">
