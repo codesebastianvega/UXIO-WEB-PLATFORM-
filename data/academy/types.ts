@@ -20,6 +20,7 @@ export interface Microclass {
   description: string;
   videoUrl?: string;
   videoProvider?: VideoProvider;
+  presentationSlug?: string;
 }
 
 export interface LessonResource {

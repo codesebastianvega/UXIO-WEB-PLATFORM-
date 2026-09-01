@@ -15,22 +15,59 @@
 
 ---
 
-## 📅 2. Estructura Temporal y Rutina Semanal del Alumno
+## 💎 2. Arquitectura Comercial & Modalidades del Programa
+
+```mermaid
+graph TD
+    A[UXIO Creator Lab] --> B[Modalidad 1: Self-Paced / Auto-Aprendizaje]
+    A --> C[Modalidad 2: Cohorte Pro / Mentorship]
+
+    B --> B1["📚 Microclases grabadas + Presentaciones 16:9"]
+    B --> B2["🤖 Tutor IA Agéntico (Calificación y dudas 24/7)"]
+    B --> B3["💰 $70.000 COP / $19 USD (Ticket accesible, 100% pasivo)"]
+
+    C --> C1["🌟 Todo lo de Self-Paced"]
+    C --> C2["🎙️ 6 Live Labs semanales (Jueves 8:00 PM GMT-5)"]
+    C --> C3["👨‍🏫 Feedback humano 1 a 1 en cada reto"]
+    C --> C4["💬 Grupo VIP de WhatsApp con Sebas Vega"]
+    C --> C5["📈 Preventa Escalonada: $99k ➔ $110k ➔ $120k"]
+```
+
+### 2.1. Embudo de Preventa Escalonada (Urgencia & Conversión)
+
+| Fase de Venta | Precio Oferta | Beneficios & Bonus de Acción Rápida |
+| :--- | :--- | :--- |
+| **Semana 1 (Lanzamiento VIP)** | **$99.000 COP** (~$27 USD) | **+ 1 Mentoría 1 a 1 (30 min)** con Sebas Vega<br>**+ 50% OFF** en el próximo curso (Ventas / Notion / Canva) |
+| **Semana 2 (Early Bird)** | **$99.000 COP** (~$27 USD) | Acceso completo a la cohorte y feedback en vivo |
+| **Semana 3 (General)** | **$110.000 COP** (~$30 USD) | Cupos limitados restantes |
+| **Semana 0 (Cierre de Puertas)** | **$120.000 COP** (~$33 USD) | Precio estándar final antes de iniciar |
+
+---
+
+## 📅 3. Estructura Temporal y Rutina Semanal del Alumno
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            SEMANA DE FORMACIÓN                              │
 ├───────────────────┬───────────────────┬──────────────────┬──────────────────┤
-│   LUNES / MARTES  │     MIÉRCOLES     │      JUEVES      │  VIERNES / DOM   │
+│   LUNES / MARTES  │     MIÉRCOLES     │  JUEVES (8:00PM) │  VIERNES / DOM   │
 │  2 Microclases    │  Ejecución del    │ Sesión en Vivo   │ Entrega del Reto │
-│ (5 min c/u)       │  Reto Práctico    │ (90 min Zoom)    │  (Link Público)  │
+│ (5 min c/u)       │  Reto Práctico    │ (60-90 min Meet) │  (Link Público)  │
 │ + Diapositivas    │  en Borrador      │ Clínica + Taller │  + Calificación  │
 └───────────────────┴───────────────────┴──────────────────┴──────────────────┘
 ```
 
+### 3.1. Calendario Oficial de las 6 Sesiones en Vivo (Jueves · 8:00 PM GMT-5 / Bogotá)
+1. **Semana 0:** *Kickoff Oficial & Acuerdos de la Cohorte*
+2. **Semana 1:** *Live Lab: Estrategia de Nicho & Clínica de Ideas de Contenido*
+3. **Semana 2:** *Live Lab: Clínica de Grabación con Smartphone & Análisis de Setup*
+4. **Semana 3:** *Live Lab: Taller de Guiones en Directo & Hooks de Alto Impacto*
+5. **Semana 4:** *Live Lab: Maratón de Edición Ágil en CapCut & Uso de IA*
+6. **Semana 5:** *Live Lab: Cierre de Ventas por WhatsApp & Graduación*
+
 ---
 
-## 📚 3. Desglose Módulo por Módulo (Semana 0 a Semana 5)
+## 📚 4. Desglose Módulo por Módulo (Semana 0 a Semana 5)
 
 ---
 

@@ -15,6 +15,7 @@ import { Locale } from '@/types';
 import { InstructorQueueItem } from '@/lib/supabase/instructor';
 import { reviewSubmissionAction } from '@/app/[lang]/academy/actions/instructor';
 import { reviewLocalSubmission } from '@/lib/academy/submissions-store';
+import SubmissionFormDataView from './SubmissionFormDataView';
 
 interface SubmissionReviewProps {
   item: InstructorQueueItem;
@@ -157,6 +158,20 @@ export default function SubmissionReview({
           </p>
         )}
       </div>
+
+      {/* Structured Document / Form Data Viewer */}
+      {(item.formData || (typeof window !== 'undefined' && localStorage.getItem(`uxio_diagnosis_${item.courseSlug}_${item.lessonId}`))) && (
+        <SubmissionFormDataView
+          formData={
+            item.formData ||
+            (typeof window !== 'undefined'
+              ? JSON.parse(localStorage.getItem(`uxio_diagnosis_${item.courseSlug}_${item.lessonId}`) || '{}')
+              : null)
+          }
+          studentName={item.studentName}
+          isEs={isEs}
+        />
+      )}
 
       {/* Evaluation Criteria Rubric (Interactive Checkboxes + Live Calculated Score) */}
       {totalCriteria > 0 && (

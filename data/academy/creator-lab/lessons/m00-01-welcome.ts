@@ -8,128 +8,173 @@ export const getLessonM0001 = (lang: Locale = 'es'): Lesson => {
     id: 'm00-01',
     slug: 'bienvenida-a-creator-lab',
     moduleSlug: 'semana-0-induccion',
-    title: isEs ? 'Clase 0 — Bienvenida a UXIO Creator Lab' : 'Lesson 0 — Welcome to Creator Lab',
+    title: isEs ? 'Clase 0.1 — Bienvenida a UXIO Creator Lab' : 'Lesson 0.1 — Welcome to Creator Lab',
     type: 'microclass',
     duration: '8 min',
     objective: isEs
-      ? 'Entender la dinámica del programa, el ritmo de entregables y las reglas de la comunidad.'
-      : 'Understand program mechanics, weekly pace, and community rules.',
+      ? 'Aprender la metodología exacta para convertir tu teléfono en un canal de adquisición y ventas predecible. Descubrirás por qué la atención vertical es el activo comercial más rentable del mercado actual, cómo derribar el perfeccionismo paralizante que frena al 90% de los negocios y cómo ejecutar el mapa de ruta de 5 semanas para publicar piezas que atraigan clientes reales hacia tu WhatsApp sin gastar en equipos costosos.'
+      : 'Learn the exact framework to turn your smartphone into a predictable client acquisition engine. Discover why vertical attention is the highest-ROI asset today, how to overcome perfectionism paralysis holding back 90% of business owners, and how to execute the 5-week milestone roadmap to generate sales inquiries directly to WhatsApp.',
     topics: isEs
       ? [
-          'Cómo funciona el programa y la plataforma',
-          'Calendario y ritmo de entregables',
-          'Reglas de la comunidad',
-          'Qué necesitas para arrancar',
+          'El Manifiesto Creator Lab: La atención vertical como activo de ventas directas',
+          'Los 3 pilares del creador comercial: Producción de bolsillo, historias reales y foco en conversión',
+          'La regla del 80/20: Por qué un video imperfecto publicado vale más que 10 borradores guardados',
+          'Roadmap de 5 semanas: De la estrategia inicial al embudo de cierre de ventas',
         ]
       : [
-          'Program roadmap & platform mechanics',
-          'Calendar and weekly deliverable pace',
-          'Community guidelines',
-          'Prerequisites',
+          'Creator Lab Manifesto: Vertical attention as a direct sales asset',
+          '3 pillars of commercial creation: Lean mobile filming, real stories, and conversion focus',
+          'The 80/20 rule: Why 1 imperfect published clip beats 10 draft videos in your gallery',
+          '5-week roadmap: From strategic positioning to WhatsApp closing funnels',
         ],
     presentationSlug: 'm00-01-welcome',
     microclasses: [
       {
         id: 'mc-00-01-01',
-        title: isEs ? '1. Manifiesto y Visión de Creator Lab' : '1. Creator Lab Manifesto & Vision',
-        duration: '3 min',
+        title: isEs ? '1. El Manifiesto Creator Lab: Tu Celular como Canal de Ventas' : '1. Creator Lab Manifesto: Mobile as a Sales Engine',
+        duration: '3:30 min',
         description: isEs
-          ? 'Por qué aprender a crear contenido con tu celular es la habilidad más rentable para tu negocio.'
-          : 'Why mobile content creation is the highest ROI skill for modern business.',
+          ? 'En esta cápsula analizamos por qué el 90% de los negocios se desgastan persiguiendo likes vacíos sin generar ingresos. Aprenderás los 3 pilares del creador comercial: cómo capturar la atención en 3 segundos, cómo estructurar historias auténticas que conecten con las necesidades de tus clientes y cómo dirigir a cada espectador cualificado directamente hacia tu canal de ventas.'
+          : 'In this capsule, we break down why 90% of businesses waste time chasing vanity likes with zero revenue. Learn the 3 commercial creation pillars: stopping the scroll in 3 seconds, telling authentic problem-solving stories, and guiding qualified viewers straight into your sales pipeline.',
         videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         videoProvider: 'youtube',
+        presentationSlug: 'm00-01-01-manifesto',
       },
       {
         id: 'mc-00-01-02',
-        title: isEs ? '2. La Regla de Oro: Progresar antes de Perfeccionar' : '2. Action over Perfection Rule',
-        duration: '5 min',
+        title: isEs ? '2. La Regla de Oro: Progreso sobre Perfección' : '2. The Golden Rule: Progress over Perfection',
+        duration: '4:30 min',
         description: isEs
-          ? 'Cómo vencer el perfeccionismo inicial y aprovechar los entregables semanales.'
-          : 'Overcoming perfectionism to complete the weekly milestones.',
+          ? 'En esta cápsula derribamos el mayor freno mental al crear contenido: la parálisis por perfeccionismo. Te explicamos por qué esperar el momento "perfecto" cuesta millones en ventas perdidas, cómo el mercado te da feedback en tiempo real al publicar y cómo avanzar paso a paso por los 5 módulos del programa para terminar con un sistema de captación 100% operativo.'
+          : 'In this capsule, we dismantle the #1 mental barrier in content creation: perfectionism paralysis. Discover why waiting for "ideal conditions" costs thousands in lost sales, how publishing unlocks real market validation, and how to execute the 5-week progression to build an active acquisition engine.',
         videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         videoProvider: 'youtube',
+        presentationSlug: 'm00-01-02-golden-rule',
       },
     ],
     quiz: {
-      title: isEs ? 'Mini-Evaluación: Mentalidad & Metodología' : 'Checkpoint Quiz: Mindset & Methodology',
+      title: isEs ? 'Checkpoint Quiz: Mentalidad & Metodología Comercial' : 'Checkpoint Quiz: Mindset & Commercial System',
       description: isEs
-        ? 'Valida los conceptos clave de la clase de bienvenida antes de desbloquear tus plantillas.'
-        : 'Validate key takeaways from the welcome lesson before downloading your templates.',
+        ? 'Valida los conceptos clave de las 2 microclases antes de descargar tus plantillas de trabajo.'
+        : 'Validate key takeaways from the 2 microclasses before accessing your worksheets.',
       questions: [
         {
           id: 'q-00-01-01',
           question: isEs
-            ? '¿Cuál es el objetivo principal de crear contenido en Creator Lab?'
-            : 'What is the primary goal of creating content in Creator Lab?',
+            ? '¿Cuál es el fin principal del contenido comercial en Creator Lab?'
+            : 'What is the primary objective of commercial content in Creator Lab?',
           options: isEs
             ? [
-                'Hacerse viral y conseguir millones de seguidores sin importar las ventas',
-                'Crear un sistema de contenido comercial que genere clientes y ventas reales',
-                'Comprar cámaras costosas para grabar en alta definición',
+                'Perseguir likes y visualizaciones masivas sin importar la cualificación del espectador',
+                'Crear un sistema de contenido que genere conversaciones y ventas reales para tu negocio',
+                'Comprar equipos de iluminación de estudio antes de publicar el primer video',
               ]
             : [
-                'Go viral and gain followers without focusing on revenue',
-                'Build a commercial content system that drives real customers and sales',
-                'Buy expensive studio cameras for high-end production',
+                'Chase vanity likes and broad views without audience qualification',
+                'Build a structured content engine that drives qualified conversations and revenue',
+                'Purchase expensive studio lighting before publishing your first clip',
               ],
           correctOptionIndex: 1,
           explanation: isEs
-            ? 'Creator Lab está enfocado en generar resultados comerciales para tu negocio con tu celular.'
-            : 'Creator Lab focuses on driving revenue and real business outcomes with your smartphone.',
+            ? 'En Creator Lab priorizamos métricas de negocio (leads y ventas) por encima de métricas de vanidad.'
+            : 'Creator Lab prioritizes direct business outcomes (qualified leads and sales) over vanity metrics.',
         },
         {
           id: 'q-00-01-02',
           question: isEs
-            ? '¿Qué regla de oro rige el ritmo de entregables en el programa?'
-            : 'What golden rule drives the weekly milestone pace?',
+            ? '¿Por qué la metodología establece que "un video imperfecto publicado vale más que 10 guardados en borradores"?'
+            : 'Why does the methodology state that "an imperfect published video beats 10 saved in drafts"?',
           options: isEs
             ? [
-                'Esperar a tener el video perfecto antes de publicar',
-                'Acción y progreso sobre perfeccionismo inicial',
-                'Grabar solo cuando tengas un equipo de producción profesional',
+                'Porque publicar te da retroalimentación real del mercado y acelera tu curva de aprendizaje',
+                'Porque a los algoritmos no les importa la calidad del contenido',
+                'Porque nunca debemos editar ni revisar los videos antes de subirlos',
               ]
             : [
-                'Wait for absolute perfection before posting anything',
-                'Action and progress over initial perfectionism',
-                'Film only when you hire a production crew',
+                'Because publishing gives real market feedback and accelerates your learning curve',
+                'Because algorithms do not care about video quality',
+                'Because you should never edit or review clips before uploading',
+              ],
+          correctOptionIndex: 0,
+          explanation: isEs
+            ? 'La retroalimentación real de tus clientes es el único mecanismo para calibrar tu mensaje.'
+            : 'Real feedback from your target audience is the only way to refine your commercial hook.',
+        },
+        {
+          id: 'q-00-01-03',
+          question: isEs
+            ? '¿Qué rol cumple el B-Roll en una pieza de contenido vertical de 45 segundos?'
+            : 'What role does B-Roll play in a 45-second vertical video?',
+          options: isEs
+            ? [
+                'Reemplazar por completo la voz del creador',
+                'Dinamizar el ritmo visual mostrando el producto, proceso o contexto para elevar la retención',
+                'Servir como efecto de relleno cuando no hay nada que decir',
+              ]
+            : [
+                'Completely replace the creator voiceover',
+                'Add visual rhythm by showing product details, backstage workflow, or context to boost retention',
+                'Act as visual filler when there is no clear message',
               ],
           correctOptionIndex: 1,
           explanation: isEs
-            ? 'Publicar y recibir feedback real es la única forma de acelerar tu aprendizaje.'
-            : 'Publishing and getting real feedback is the only way to accelerate growth.',
+            ? 'El B-roll evita que el video sea un busto parlante estático, aumentando el tiempo de visualización.'
+            : 'B-roll breaks visual monotony and elevates retention by demonstrating claims in action.',
+        },
+        {
+          id: 'q-00-01-04',
+          question: isEs
+            ? '¿Cuál es la diferencia central entre un creador amateur y un creador del ecosistema UXIO?'
+            : 'What is the key difference between an amateur creator and a UXIO creator?',
+          options: isEs
+            ? [
+                'El creador amateur tiene un llamado a la acción (CTA) claro hacia WhatsApp en cada pieza',
+                'El creador UXIO cuenta con un sistema de dolores, guiones probados y ruta directa a ventas',
+                'El creador UXIO solo publica cuando siente inspiración artística',
+              ]
+            : [
+                'Amateur creators always have a direct CTA to WhatsApp in every single piece',
+                'UXIO creators operate with a clear system of customer pain points, tested scripts, and conversion routes',
+                'UXIO creators only post when feeling artistic inspiration',
+              ],
+          correctOptionIndex: 1,
+          explanation: isEs
+            ? 'El creador UXIO opera con predictibilidad y estrategia de conversión comercial.'
+            : 'UXIO creators build content with predictable conversion systems rather than relying on luck.',
         },
       ],
     },
     resources: [
       {
         id: 'res-00-01-01',
-        title: isEs ? 'Guía de Inicio Rápido Creator Lab (PDF)' : 'Creator Lab Quickstart Guide (PDF)',
+        title: isEs ? 'Guía Rápida de Inicio (Visor Interactivo + PDF A4)' : 'Quickstart Guide (Interactive + A4 PDF)',
         type: 'pdf',
-        url: '/resources/creator-lab-quickstart.pdf',
-        description: isEs ? 'Resumen visual de las 5 semanas y fechas clave.' : 'Visual overview of the 5 weeks and milestones.',
-      },
-      {
-        id: 'res-00-01-02',
-        title: isEs ? 'Plantilla de Diagnóstico de Marca' : 'Brand Diagnosis Template',
-        type: 'template',
-        url: 'https://notion.so/uxio/brand-diagnosis',
-        description: isEs ? 'Documento editable para definir el objetivo comercial de tu negocio.' : 'Editable worksheet for business goals.',
+        url: '#quickstart-guide',
+        description: isEs
+          ? 'Consulta las fechas clave, acuerdos de la cohorte y descarga la guía oficial en A4.'
+          : 'Interactive visual overview with downloadable luxury A4 document.',
       },
     ],
     challenge: {
       title: isEs ? 'Reto 0: Ficha de Diagnóstico de Marca' : 'Challenge 0: Brand Diagnosis Sheet',
       whatToDo: isEs
-        ? 'Diligencia la plantilla de diagnóstico con la información de tu producto o servicio actual y fija tu meta de ventas para las 5 semanas.'
-        : 'Complete the brand diagnosis worksheet with your current offer and set your 5-week conversion goal.',
+        ? 'Completa los 3 bloques de tu diagnóstico de marca en el modal interactivo (oferta, dolores del cliente y meta comercial a 5 semanas).'
+        : 'Complete your brand diagnosis in the interactive modal (offer, pain points, and 5-week sales goal).',
       whatToDeliver: isEs
-        ? 'Enlace público a tu ficha de diagnóstico (Google Drive o Notion).'
-        : 'Public link to your completed worksheet (Google Drive or Notion).',
-      whereToSubmit: 'Comunidad Privada de Alumnos / Canal #semana-0-induccion',
-      evaluationCriteria: [
-        isEs ? 'Claridad en la definición del cliente ideal' : 'Clear target customer definition',
-        isEs ? 'Objetivo cuantitativo para las 5 semanas' : 'Quantitative 5-week goal',
-        isEs ? 'Identificación de al menos 3 dolores reales' : 'At least 3 defined pain points',
-      ],
+        ? 'Haz clic en "Enviar Tarea para Revisión 🚀" o descarga tu Ficha en PDF A4 para tu archivo personal.'
+        : 'Click "Submit Challenge for Review 🚀" or download your personalized A4 PDF.',
+      whereToSubmit: isEs ? 'Ficha de Diagnóstico Interactiva del Aula' : 'Classroom Interactive Modal Form',
+      evaluationCriteria: isEs
+        ? [
+            'Oferta principal y precio o ticket promedio definido.',
+            'Cliente ideal claramente identificado con 3 dolores concretos.',
+            'Objetivo comercial medible a 5 semanas (ventas o prospectos en WhatsApp).',
+          ]
+        : [
+            'Hero offer and average price point declared.',
+            'Target audience defined with 3 concrete pain points.',
+            'Measurable 5-week commercial target (sales or WhatsApp leads).',
+          ],
     },
   };
 };

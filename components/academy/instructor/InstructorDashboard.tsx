@@ -70,6 +70,7 @@ export default function InstructorDashboard({
           submissionType: s.submissionType,
           status: s.status,
           feedbackText: s.feedbackText,
+          formData: s.formData,
           reviewedAt: s.reviewedAt,
           submittedAt: s.submittedAt,
           updatedAt: s.updatedAt,

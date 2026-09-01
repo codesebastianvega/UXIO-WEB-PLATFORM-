@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Link as LinkIcon,
   ExternalLink,
@@ -11,6 +11,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Clock,
+  Plus,
+  Trash2,
 } from 'lucide-react';
 import { Locale } from '@/types';
 import { LessonSubmission } from '@/lib/supabase/academy-submissions';
@@ -44,6 +46,38 @@ export default function ChallengeSubmissionBlock({
 }: ChallengeSubmissionBlockProps) {
   const isEs = lang === 'es';
 
+  const [linkList, setLinkList] = useState<string[]>(['']);
+
+  useEffect(() => {
+    if (urlInput) {
+      const parts = urlInput
+        .split(/[\n,]+/)
+        .map(u => u.trim())
+        .filter(Boolean);
+      setLinkList(parts.length > 0 ? parts : ['']);
+    } else {
+      setLinkList(['']);
+    }
+  }, [urlInput]);
+
+  const handleLinkChange = (index: number, val: string) => {
+    const updated = [...linkList];
+    updated[index] = val;
+    setLinkList(updated);
+    setUrlInput(updated.filter(Boolean).join('\n'));
+  };
+
+  const handleAddLink = () => {
+    setLinkList([...linkList, '']);
+  };
+
+  const handleRemoveLink = (index: number) => {
+    const updated = linkList.filter((_, i) => i !== index);
+    const finalLinks = updated.length > 0 ? updated : [''];
+    setLinkList(finalLinks);
+    setUrlInput(finalLinks.filter(Boolean).join('\n'));
+  };
+
   const status = submission?.status;
   const approvedCriteria = submission?.approvedCriteria || [];
   const criteriaCount = evaluationCriteria.length;
@@ -58,13 +92,25 @@ export default function ChallengeSubmissionBlock({
       ? ((approvedCount / (criteriaCount || 1)) * 5.0).toFixed(1)
       : null;
 
+  const submittedUrls = submission
+    ? submission.submissionUrl
+        .split(/[\n,]+/)
+        .map(u => u.trim())
+        .filter(
+          u =>
+            (u.startsWith('http://') || u.startsWith('https://')) &&
+            !u.includes('uxio.agency/classroom/diagnosis-form') &&
+            !u.includes('#diagnosis-sheet')
+        )
+    : [];
+
   return (
     <div className="p-5 sm:p-6 rounded-3xl bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.06] space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] text-[#FE385B] uppercase font-bold tracking-wider">
-            // {isEs ? 'TU ENTREGA (ENLACE PÚBLICO)' : 'YOUR SUBMISSION LINK'}
+            // {isEs ? 'TU ENTREGA (ENLACES PÚBLICOS)' : 'YOUR SUBMISSION LINKS'}
           </span>
           {score5 !== null && (
             <span
@@ -83,43 +129,64 @@ export default function ChallengeSubmissionBlock({
           <button
             type="button"
             onClick={() => {
-              setUrlInput(submission.submissionUrl);
+              setUrlInput(submittedUrls.join('\n'));
               setIsEditing(true);
             }}
             className="inline-flex items-center gap-1 text-[11px] font-mono text-[#8E8E93] hover:text-[#FE385B] transition-colors"
           >
             <Edit3 size={11} />
-            <span>{isEs ? 'Cambiar enlace' : 'Change link'}</span>
+            <span>{isEs ? 'Editar enlaces' : 'Edit links'}</span>
           </button>
         )}
       </div>
 
       {submission && !isEditing ? (
         <div className="space-y-3.5">
-          {/* Link Row */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.06] dark:border-white/[0.06] shadow-2xs">
-            <div className="flex items-center gap-2 min-w-0">
-              <LinkIcon size={14} className="text-[#10B981] shrink-0" />
-              <a
-                href={submission.submissionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-mono text-[#111111] dark:text-white hover:text-[#10B981] underline truncate"
-              >
-                {submission.submissionUrl}
-              </a>
-            </div>
+          {/* Submitted Links List or Document Status */}
+          {submittedUrls.length > 0 ? (
+            <div className="space-y-2">
+              {submittedUrls.map((url, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.06] dark:border-white/[0.06] shadow-2xs"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <LinkIcon size={14} className="text-[#10B981] shrink-0" />
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-mono text-[#111111] dark:text-white hover:text-[#10B981] underline truncate"
+                    >
+                      {url}
+                    </a>
+                  </div>
 
-            <a
-              href={submission.submissionUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-[#10B981] text-xs font-mono font-bold text-[#111111] dark:text-white hover:text-white transition-all duration-150 shrink-0 self-start sm:self-auto"
-            >
-              <span>{isEs ? 'Abrir Tarea' : 'Open Work'}</span>
-              <ExternalLink size={11} />
-            </a>
-          </div>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] hover:bg-[#10B981] text-xs font-mono font-bold text-[#111111] dark:text-white hover:text-white transition-all duration-150 shrink-0 self-start sm:self-auto"
+                  >
+                    <span>{isEs ? 'Abrir Tarea' : 'Open Work'}</span>
+                    <ExternalLink size={11} />
+                  </a>
+                </div>
+              ))}
+            </div>
+          ) : submission.submissionType === 'document' ? (
+            <div className="p-3.5 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 size={15} className="text-[#10B981]" />
+                <span className="text-xs font-medium text-[#111111] dark:text-white">
+                  {isEs ? 'Ficha de Diagnóstico entregada en plataforma ✓' : 'Brand Diagnosis Sheet submitted in platform ✓'}
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-[#8E8E93]">
+                {isEs ? 'Sin enlaces externos adicionales' : 'No external links'}
+              </span>
+            </div>
+          ) : null}
 
           {/* Minimalist Rubric Chips */}
           {criteriaCount > 0 && (
@@ -181,24 +248,55 @@ export default function ChallengeSubmissionBlock({
         </div>
       ) : (
         <form onSubmit={onSubmit} className="space-y-3">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <div className="relative flex-1">
-              <input
-                type="url"
-                value={urlInput}
-                onChange={e => setUrlInput(e.target.value)}
-                placeholder="https://drive.google.com/... o https://notion.so/... o https://tiktok.com/..."
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono text-[#111111] dark:text-white focus:outline-none focus:border-[#10B981] transition-all"
-              />
-              <LinkIcon size={14} className="absolute left-3 top-3 text-[#8E8E93]" />
-            </div>
+          {/* Multiple Links Inputs */}
+          <div className="space-y-2">
+            {linkList.map((link, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="url"
+                    value={link}
+                    onChange={e => handleLinkChange(idx, e.target.value)}
+                    placeholder={
+                      idx === 0
+                        ? 'https://drive.google.com/... o https://notion.so/... o https://tiktok.com/...'
+                        : isEs
+                        ? 'Enlace adicional (Drive, Loom, etc.)'
+                        : 'Additional link'
+                    }
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] text-xs font-mono text-[#111111] dark:text-white focus:outline-none focus:border-[#10B981] transition-all"
+                  />
+                  <LinkIcon size={14} className="absolute left-3 top-3 text-[#8E8E93]" />
+                </div>
+                {linkList.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveLink(idx)}
+                    className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <button
+              type="button"
+              onClick={handleAddLink}
+              className="inline-flex items-center gap-1 font-mono text-xs text-[#10B981] hover:underline"
+            >
+              <Plus size={13} />
+              <span>{isEs ? '+ Agregar otro enlace' : '+ Add another link'}</span>
+            </button>
 
             <div className="flex items-center gap-2">
               {isEditing && (
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-3.5 py-2.5 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-all"
+                  className="px-3.5 py-2 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] text-xs font-mono text-[#8E8E93] hover:text-[#111111] dark:hover:text-white transition-all"
                 >
                   {isEs ? 'Cancelar' : 'Cancel'}
                 </button>
@@ -209,26 +307,22 @@ export default function ChallengeSubmissionBlock({
                 disabled={isPending}
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#10B981] hover:bg-[#10B981]/90 text-white font-display font-bold text-xs transition-all shadow-sm active:scale-[0.98] disabled:opacity-50"
               >
-                {isPending ? (
-                  <Loader2 size={13} className="animate-spin" />
-                ) : (
-                  <Send size={13} />
-                )}
-                <span>{isPending ? (isEs ? 'Guardando...' : 'Saving...') : (isEs ? 'Enviar Reto ➔' : 'Submit ➔')}</span>
+                {isPending ? <Loader2 size={13} className="animate-spin" /> : <Send size={13} />}
+                <span>{isPending ? (isEs ? 'Guardando...' : 'Saving...') : isEs ? 'Enviar Reto ➔' : 'Submit ➔'}</span>
               </button>
             </div>
           </div>
 
-          {errorMsg && (
-            <p className="text-[11px] font-mono text-[#FE385B]">{errorMsg}</p>
-          )}
+          {errorMsg && <p className="text-[11px] font-mono text-[#FE385B]">{errorMsg}</p>}
         </form>
       )}
 
-      {/* WhatsApp Support Dedicated Button Row */}
+      {/* WhatsApp Support Row */}
       <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-black/[0.06] dark:border-white/[0.06]">
         <span className="text-xs text-[#8E8E93] font-sans">
-          {isEs ? '¿Tienes dudas sobre cómo estructurar tu entrega o los formatos?' : 'Questions regarding your deliverable or formats?'}
+          {isEs
+            ? '¿Tienes dudas sobre cómo estructurar tu entrega o los formatos?'
+            : 'Questions regarding your deliverable or formats?'}
         </span>
         <a
           href={whatsappUrl}

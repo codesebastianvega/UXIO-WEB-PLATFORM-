@@ -40,18 +40,13 @@ export default function CourseModuleCard({
     setLiveLinks(getStoredLiveLinks());
   }, []);
 
-  const videoLessons = moduleItem.lessons.filter(
-    l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo')
-  );
+  const moduleLessons = moduleItem.lessons;
+  const allLessonsList = allLessons;
 
-  const allVideoLessons = allLessons.filter(
-    l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo')
-  );
-
-  const moduleCompletedCount = videoLessons.filter(l =>
+  const moduleCompletedCount = moduleLessons.filter(l =>
     completedLessonIds.includes(l.id)
   ).length;
-  const moduleTotalCount = videoLessons.length;
+  const moduleTotalCount = moduleLessons.length;
   const modulePercent = Math.round(
     (moduleCompletedCount / (moduleTotalCount || 1)) * 100
   );
@@ -109,14 +104,14 @@ export default function CourseModuleCard({
           </div>
         </div>
 
-        {/* Video Lessons Grid */}
+        {/* Video & Live Lessons Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {videoLessons.map(lesson => {
+          {moduleLessons.map(lesson => {
             const isCompleted = completedLessonIds.includes(lesson.id);
-            const lessonIndex = allVideoLessons.findIndex(l => l.id === lesson.id);
+            const lessonIndex = allLessonsList.findIndex(l => l.id === lesson.id);
             const isUnlocked =
               lessonIndex === 0 ||
-              completedLessonIds.includes(allVideoLessons[lessonIndex - 1]?.id);
+              completedLessonIds.includes(allLessonsList[lessonIndex - 1]?.id);
 
             if (!isUnlocked) {
               return (
@@ -162,6 +157,8 @@ export default function CourseModuleCard({
                     <div className="mt-0.5 shrink-0">
                       {isCompleted ? (
                         <CheckCircle2 size={16} className="text-[#10B981]" />
+                      ) : lesson.type === 'live_lab' ? (
+                        <Radio size={16} className="text-[#FE385B] animate-pulse" />
                       ) : (
                         <PlayCircle size={16} className="text-[#FE385B]" />
                       )}
@@ -171,6 +168,11 @@ export default function CourseModuleCard({
                         <span className="font-mono text-[10px] text-[#8E8E93] block">
                           {lesson.id.toUpperCase()} · {lesson.duration}
                         </span>
+                        {lesson.type === 'live_lab' && (
+                          <span className="font-mono text-[9px] text-[#FE385B] bg-[#FE385B]/10 px-1.5 py-0.2 rounded border border-[#FE385B]/20 font-bold">
+                            LIVE LAB
+                          </span>
+                        )}
                         {isCompleted && (
                           <span className="font-mono text-[9px] text-[#10B981] font-bold">
                             ✓ {isEs ? 'Completada' : 'Completed'}

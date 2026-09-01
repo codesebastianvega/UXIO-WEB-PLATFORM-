@@ -21,6 +21,7 @@ export interface LocalSubmissionItem {
   status: SubmissionStatus;
   feedbackText?: string | null;
   reviewedAt?: string | null;
+  formData?: any;
   submittedAt: string;
   updatedAt: string;
 }
@@ -39,7 +40,6 @@ export function getStoredSubmissions(): LocalSubmissionItem[] {
       return [];
     }
     const parsed: LocalSubmissionItem[] = JSON.parse(raw);
-    // Sanitize any legacy fake data
     return parsed.filter(s => !s.id.startsWith('sub-seed') && s.userId !== 'user-carlos-1');
   } catch {
     return [];
@@ -65,7 +65,7 @@ export function saveLocalSubmission(item: Omit<LocalSubmissionItem, 'id' | 'subm
   } else {
     newItem = {
       ...item,
-      id: `sub-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      id: `sub-loc-${Date.now()}`,
       submittedAt: now,
       updatedAt: now,
     };
@@ -74,37 +74,38 @@ export function saveLocalSubmission(item: Omit<LocalSubmissionItem, 'id' | 'subm
 
   if (typeof window !== 'undefined') {
     localStorage.setItem(SUBMISSIONS_STORAGE_KEY, JSON.stringify(current));
-    window.dispatchEvent(new CustomEvent('uxio-submissions-updated', { detail: newItem }));
+    window.dispatchEvent(new Event('uxio-submissions-updated'));
   }
 
   return newItem;
 }
 
 export function reviewLocalSubmission(
-  id: string,
+  submissionId: string,
   status: SubmissionStatus,
   feedbackText: string,
   approvedCriteria: string[] = [],
   score?: number
-): boolean {
+): LocalSubmissionItem | null {
   const current = getStoredSubmissions();
-  const idx = current.findIndex(s => s.id === id);
-  if (idx < 0) return false;
+  const idx = current.findIndex(s => s.id === submissionId);
+  if (idx === -1) return null;
 
+  const now = new Date().toISOString();
   current[idx] = {
     ...current[idx],
     status,
-    feedbackText: feedbackText.trim() || null,
+    feedbackText,
     approvedCriteria,
-    score: score !== undefined ? score : approvedCriteria.length,
-    reviewedAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    score,
+    reviewedAt: now,
+    updatedAt: now,
   };
 
   if (typeof window !== 'undefined') {
     localStorage.setItem(SUBMISSIONS_STORAGE_KEY, JSON.stringify(current));
-    window.dispatchEvent(new CustomEvent('uxio-submissions-updated', { detail: current[idx] }));
+    window.dispatchEvent(new Event('uxio-submissions-updated'));
   }
 
-  return true;
+  return current[idx];
 }

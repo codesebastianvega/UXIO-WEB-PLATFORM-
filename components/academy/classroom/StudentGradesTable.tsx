@@ -7,10 +7,9 @@ import {
   CheckCircle2,
   Clock,
   AlertCircle,
-  ExternalLink,
   ArrowRight,
   Eye,
-  SlidersHorizontal,
+  Sparkles,
 } from 'lucide-react';
 import { Locale } from '@/types';
 import { Course, Lesson, Module } from '@/data/academy/types';
@@ -37,7 +36,6 @@ export default function StudentGradesTable({
     submission: LessonSubmission | null;
   } | null>(null);
 
-  // Sync with local submissions store
   useEffect(() => {
     const sync = () => {
       const stored = getStoredSubmissions();
@@ -55,7 +53,6 @@ export default function StudentGradesTable({
             : s;
         });
 
-        // Also add any new submissions stored locally
         stored.forEach(l => {
           if (!merged.some(m => m.lessonId === l.lessonId)) {
             merged.push({
@@ -84,7 +81,6 @@ export default function StudentGradesTable({
     return () => window.removeEventListener('uxio-submissions-updated', sync);
   }, [initialSubmissions]);
 
-  // Extract all lessons with challenges across the course modules
   const challengeLessons = course.modules.flatMap(moduleItem =>
     moduleItem.lessons
       .filter(l => Boolean(l.challenge))
@@ -99,10 +95,28 @@ export default function StudentGradesTable({
     item => item.submission?.status === 'approved'
   ).length;
 
+  const gradedLessons = challengeLessons.filter(
+    item => item.submission?.status === 'approved' || item.submission?.status === 'needs_revision'
+  );
+
+  const totalScores = gradedLessons.map(item => {
+    const critList = item.lesson.challenge?.evaluationCriteria || [];
+    const approvedList = item.submission?.approvedCriteria || [];
+    const cCount = critList.length || 1;
+    const aCount = item.submission?.status === 'approved' && approvedList.length === 0
+      ? cCount
+      : approvedList.length;
+    return (aCount / cCount) * 5.0;
+  });
+
+  const globalAverage = totalScores.length > 0
+    ? (totalScores.reduce((acc, v) => acc + v, 0) / totalScores.length).toFixed(1)
+    : '5.0';
+
   return (
     <div className="space-y-6">
-      {/* Overview Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {/* Overview 4 Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-1">
           <span className="font-mono text-[10px] text-[#8E8E93] uppercase font-bold">
             {isEs ? 'TOTAL RETOS EVALUADOS' : 'TOTAL CHALLENGES'}
@@ -127,17 +141,30 @@ export default function StudentGradesTable({
           </p>
         </div>
 
+        <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-[#FE385B]/25 shadow-soft space-y-1">
+          <span className="font-mono text-[10px] text-[#FE385B] uppercase font-bold flex items-center gap-1">
+            <Sparkles size={11} className="text-[#FE385B]" />
+            <span>{isEs ? 'PROMEDIO GLOBAL' : 'GLOBAL GPA'}</span>
+          </span>
+          <div className="font-display font-extrabold text-2xl text-[#FE385B]">
+            {globalAverage} <span className="text-sm font-normal text-[#8E8E93]">/ 5.0</span>
+          </div>
+          <p className="text-[11px] text-[#FE385B] font-mono">
+            {gradedLessons.length > 0 ? (isEs ? `${gradedLessons.length} nota(s) registradas` : `${gradedLessons.length} recorded`) : (isEs ? 'Calificación acumulada' : 'Cumulative GPA')}
+          </p>
+        </div>
+
         <div className="p-5 rounded-2xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] shadow-soft space-y-1">
-          <span className="font-mono text-[10px] text-[#FE385B] uppercase font-bold">
+          <span className="font-mono text-[10px] text-[#00F0FF] uppercase font-bold">
             {isEs ? 'ESTADO CERTIFICACIÓN' : 'CERTIFICATE STATUS'}
           </span>
           <div className="font-display font-bold text-sm text-[#111111] dark:text-white mt-1">
             {approvedCount === challengeLessons.length && challengeLessons.length > 0
-              ? (isEs ? '✓ Todos los Retos Aprobados' : '✓ All Challenges Passed')
+              ? (isEs ? '✓ Listo para Certificado' : '✓ Ready for Certificate')
               : (isEs ? `${challengeLessons.length - approvedCount} pendiente(s)` : `${challengeLessons.length - approvedCount} pending`)}
           </div>
           <p className="text-[10px] text-[#8E8E93] font-sans">
-            {isEs ? 'El certificado se emite al completar el 100% de los retos.' : 'Certificate unlocks after completing 100% of challenges.'}
+            {isEs ? 'Emisión al 100% de aprobación.' : 'Unlocks after 100% approval.'}
           </p>
         </div>
       </div>
@@ -222,7 +249,6 @@ export default function StudentGradesTable({
                     onClick={() => setSelectedItem(item)}
                     className="hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors cursor-pointer group"
                   >
-                    {/* Reto & Lección */}
                     <td className="py-4 px-5">
                       <div className="space-y-0.5 min-w-[200px] max-w-[280px]">
                         <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#FE385B]">
@@ -238,7 +264,6 @@ export default function StudentGradesTable({
                       </div>
                     </td>
 
-                    {/* Estado */}
                     <td className="py-4 px-4 whitespace-nowrap">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono border font-semibold ${statusBadge.bg}`}>
                         <StatusIcon size={12} />
@@ -246,7 +271,6 @@ export default function StudentGradesTable({
                       </span>
                     </td>
 
-                    {/* Nota */}
                     <td className="py-4 px-4 whitespace-nowrap font-mono font-bold">
                       {score5 !== null ? (
                         <span className={status === 'approved' ? 'text-[#10B981]' : 'text-[#FF7F07]'}>
@@ -257,7 +281,6 @@ export default function StudentGradesTable({
                       )}
                     </td>
 
-                    {/* Rúbrica */}
                     <td className="py-4 px-4 whitespace-nowrap font-mono text-xs text-[#8E8E93]">
                       {submission ? (
                         <span className={status === 'approved' ? 'text-[#10B981] font-bold' : 'text-[#111111] dark:text-white'}>
@@ -268,7 +291,6 @@ export default function StudentGradesTable({
                       )}
                     </td>
 
-                    {/* Feedback Docente */}
                     <td className="py-4 px-4 hidden md:table-cell max-w-[220px]">
                       {submission?.feedbackText ? (
                         <p className="text-xs text-[#666666] dark:text-[#8E8E93] italic truncate font-sans">
@@ -279,7 +301,6 @@ export default function StudentGradesTable({
                       )}
                     </td>
 
-                    {/* Acciones */}
                     <td className="py-4 px-5 text-right whitespace-nowrap">
                       <div className="inline-flex items-center gap-2" onClick={e => e.stopPropagation()}>
                         <button

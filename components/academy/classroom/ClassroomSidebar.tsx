@@ -114,15 +114,13 @@ export default function ClassroomSidebar({
               {/* Lessons Sub-list */}
               {isOpen && (
                 <div className="px-2 pb-3 space-y-1 border-t border-black/[0.04] dark:border-white/[0.04] pt-2">
-                  {moduleItem.lessons
-                    .filter(l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo'))
-                    .map(lesson => {
+                  {moduleItem.lessons.map(lesson => {
                     const isLessonActive =
                       lesson.slug === activeLessonSlug || lesson.id === activeLessonSlug;
                     const isCompleted = completedLessonIds.includes(lesson.id);
-                    const allVideoLessons = course.modules.flatMap(m => m.lessons).filter(l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo'));
-                    const lessonIndex = allVideoLessons.findIndex(l => l.id === lesson.id);
-                    const isUnlocked = lessonIndex === 0 || completedLessonIds.includes(allVideoLessons[lessonIndex - 1]?.id);
+                    const allLessonsList = course.modules.flatMap(m => m.lessons);
+                    const lessonIndex = allLessonsList.findIndex(l => l.id === lesson.id);
+                    const isUnlocked = lessonIndex === 0 || completedLessonIds.includes(allLessonsList[lessonIndex - 1]?.id);
 
                     if (!isUnlocked) {
                       return (

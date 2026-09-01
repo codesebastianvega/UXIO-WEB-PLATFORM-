@@ -22,6 +22,7 @@ export interface InstructorQueueItem {
   feedbackText?: string | null;
   approvedCriteria?: string[];
   reviewedAt?: string | null;
+  formData?: any;
   submittedAt: string;
   updatedAt: string;
 }

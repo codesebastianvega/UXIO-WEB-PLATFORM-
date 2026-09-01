@@ -45,6 +45,7 @@ export async function generateMetadata({
 
 export default async function ClassroomLessonSlidesPage({
   params,
+  searchParams,
 }: {
   params: Promise<{
     lang: string;
@@ -52,8 +53,10 @@ export default async function ClassroomLessonSlidesPage({
     moduleSlug: string;
     lessonSlug: string;
   }>;
+  searchParams?: Promise<{ deck?: string }>;
 }) {
   const { lang: rawLang, courseSlug, moduleSlug, lessonSlug } = await params;
+  const { deck: deckSlug } = (await searchParams) || {};
   const lang: Locale = rawLang === 'en' ? 'en' : 'es';
 
   const { user, enrollments } = await getUserEnrollments();
@@ -78,7 +81,9 @@ export default async function ClassroomLessonSlidesPage({
     redirect(`/${lang}/academy/classroom/${courseSlug}/${moduleSlug}/${lessonSlug}`);
   }
 
-  const presentation = getPresentationBySlug(lesson.presentationSlug, lang);
+  const presentation =
+    (deckSlug ? getPresentationBySlug(deckSlug, lang) : undefined) ||
+    getPresentationBySlug(lesson.presentationSlug, lang);
 
   if (!presentation) {
     notFound();
