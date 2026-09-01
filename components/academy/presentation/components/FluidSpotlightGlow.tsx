@@ -6,10 +6,35 @@ interface FluidSpotlightGlowProps {
   x: number;
   y: number;
   theme: 'light' | 'dark';
+  accentColor?: string;
 }
 
-export default function FluidSpotlightGlow({ x, y, theme }: FluidSpotlightGlowProps) {
+function hexToRgba(hex: string, alpha: number): string {
+  const cleanHex = hex.replace('#', '');
+  if (cleanHex.length === 6) {
+    const r = parseInt(cleanHex.substring(0, 2), 16);
+    const g = parseInt(cleanHex.substring(2, 4), 16);
+    const b = parseInt(cleanHex.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return `rgba(254, 56, 91, ${alpha})`;
+}
+
+export default function FluidSpotlightGlow({
+  x,
+  y,
+  theme,
+  accentColor = '#FE385B',
+}: FluidSpotlightGlowProps) {
   const isDark = theme === 'dark';
+  const primaryRgba = (a: number) => hexToRgba(accentColor, a);
+  const secondaryRgba = (a: number) => {
+    if (accentColor === '#FE385B') return `rgba(255, 127, 7, ${a})`;
+    if (accentColor === '#FF7F07') return `rgba(255, 204, 72, ${a})`;
+    if (accentColor === '#10B981') return `rgba(52, 211, 153, ${a})`;
+    if (accentColor === '#7928CA') return `rgba(168, 85, 247, ${a})`;
+    return `rgba(255, 255, 255, ${a * 0.4})`;
+  };
 
   // Physical state for gelatinous fluid LERP simulation
   const [pos, setPos] = useState({ x: x || 200, y: y || 200 });
@@ -67,54 +92,54 @@ export default function FluidSpotlightGlow({ x, y, theme }: FluidSpotlightGlowPr
 
   return (
     <div className="pointer-events-none absolute inset-0 transition-opacity duration-300 z-0 overflow-hidden select-none">
-      {/* 1. Ambient Background Viscous Field (Pure UXIO Coral & Sunset Warmth) */}
+      {/* 1. Ambient Background Viscous Field */}
       <div
-        className="absolute inset-0 transition-all duration-100 ease-out"
+        className="absolute inset-0 transition-all duration-300 ease-out"
         style={{
           background: isDark
-            ? `radial-gradient(320px circle at ${pos.x}px ${pos.y}px, rgba(254, 56, 91, 0.2) 0%, rgba(255, 127, 7, 0.12) 40%, rgba(255, 204, 72, 0.04) 70%, transparent 85%)`
-            : `radial-gradient(320px circle at ${pos.x}px ${pos.y}px, rgba(254, 56, 91, 0.16) 0%, rgba(255, 127, 7, 0.1) 40%, rgba(255, 204, 72, 0.04) 70%, transparent 85%)`,
+            ? `radial-gradient(340px circle at ${pos.x}px ${pos.y}px, ${primaryRgba(0.24)} 0%, ${secondaryRgba(0.14)} 40%, transparent 80%)`
+            : `radial-gradient(340px circle at ${pos.x}px ${pos.y}px, ${primaryRgba(0.18)} 0%, ${secondaryRgba(0.1)} 40%, transparent 80%)`,
         }}
       />
 
-      {/* 2. Trailing Jelly Droplet (Lagging Warm Amber Bubble) */}
+      {/* 2. Trailing Jelly Droplet */}
       <div
-        className="absolute w-28 h-28 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
+        className="absolute w-28 h-28 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-colors duration-300"
         style={{
           left: `${trailPos.x}px`,
           top: `${trailPos.y}px`,
           background: isDark
-            ? 'radial-gradient(circle, rgba(255, 127, 7, 0.38) 0%, rgba(255, 204, 72, 0.2) 50%, transparent 100%)'
-            : 'radial-gradient(circle, rgba(255, 127, 7, 0.26) 0%, rgba(255, 204, 72, 0.14) 50%, transparent 100%)',
+            ? `radial-gradient(circle, ${secondaryRgba(0.4)} 0%, transparent 75%)`
+            : `radial-gradient(circle, ${secondaryRgba(0.28)} 0%, transparent 75%)`,
           filter: 'blur(22px)',
           opacity: 0.8,
         }}
       />
 
-      {/* 3. Main Concentrated Gelatin Core (Pure UXIO Coral #FE385B Stretches with Motion) */}
+      {/* 3. Main Concentrated Gelatin Core */}
       <div
-        className="absolute w-36 h-36 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
+        className="absolute w-36 h-36 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-colors duration-300"
         style={{
           left: `${pos.x}px`,
           top: `${pos.y}px`,
           transform: `translate(-50%, -50%) rotate(${deformation.angle}deg) scale(${deformation.scaleX}, ${deformation.scaleY})`,
           background: isDark
-            ? 'radial-gradient(circle, rgba(254, 56, 91, 0.5) 0%, rgba(255, 127, 7, 0.32) 45%, rgba(255, 204, 72, 0.15) 75%, transparent 100%)'
-            : 'radial-gradient(circle, rgba(254, 56, 91, 0.38) 0%, rgba(255, 127, 7, 0.24) 45%, rgba(255, 204, 72, 0.1) 75%, transparent 100%)',
+            ? `radial-gradient(circle, ${primaryRgba(0.55)} 0%, ${secondaryRgba(0.35)} 50%, transparent 80%)`
+            : `radial-gradient(circle, ${primaryRgba(0.4)} 0%, ${secondaryRgba(0.25)} 50%, transparent 80%)`,
           filter: 'blur(20px)',
           mixBlendMode: isDark ? 'screen' : 'normal',
         }}
       />
 
-      {/* 4. Magnetic Center Density Pulse (Coral Spotlight) */}
+      {/* 4. Magnetic Center Density Pulse */}
       <div
-        className="absolute w-14 h-14 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2"
+        className="absolute w-14 h-14 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-colors duration-300"
         style={{
           left: `${pos.x}px`,
           top: `${pos.y}px`,
           background: isDark
-            ? 'radial-gradient(circle, rgba(254, 56, 91, 0.7) 0%, rgba(255, 127, 7, 0.4) 60%, transparent 100%)'
-            : 'radial-gradient(circle, rgba(254, 56, 91, 0.55) 0%, rgba(255, 127, 7, 0.3) 60%, transparent 100%)',
+            ? `radial-gradient(circle, ${primaryRgba(0.75)} 0%, ${secondaryRgba(0.4)} 60%, transparent 100%)`
+            : `radial-gradient(circle, ${primaryRgba(0.6)} 0%, ${secondaryRgba(0.3)} 60%, transparent 100%)`,
           filter: 'blur(10px)',
         }}
       />

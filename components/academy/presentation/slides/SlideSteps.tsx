@@ -2,74 +2,54 @@ import React from 'react';
 import { SlideData } from '@/data/academy/creator-lab/presentations/types';
 import { Maximize2, Award } from 'lucide-react';
 import { CardDetailData } from '../SlideDetailModal';
+import { useElementReveal } from '../hooks/useElementReveal';
+import MagicDustHeading from '@/components/ui/MagicDustHeading';
 
 interface SlideStepsProps {
   slide: SlideData;
   theme?: 'light' | 'dark';
   onOpenDetail?: (data: CardDetailData) => void;
+  revealedStep?: number;
 }
 
 export default function SlideSteps({
   slide,
   theme = 'light',
   onOpenDetail,
+  revealedStep,
 }: SlideStepsProps) {
   const isDark = theme === 'dark';
   const steps = slide.steps || [];
 
-  const roadmapImages = [
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1200&auto=format&fit=crop&q=80',
-  ];
-
-  const roadmapHighlights = [
-    [
-      'Auditoría profunda de propuesta de valor y dolores del cliente.',
-      'Definición de 5 pilares de contenido innegociables.',
-      'Estructuración del calendario editorial de 30 días.',
-    ],
-    [
-      'Setup de iluminación natural y encuadres con cuadrícula activada.',
-      'Grabación de 30 clips B-roll sin hablar a cámara.',
-      'Configuración del audio y eliminación de reverberación acústica.',
-    ],
-    [
-      'Estructura de hooks magnéticos en los primeros 3 segundos.',
-      'Guiones probados de 45 segundos con ritmo rápido.',
-      'Adaptación para TikTok, Instagram Reels y YouTube Shorts.',
-    ],
-    [
-      'Cortes de ritmo y subtitulado dinámico en CapCut.',
-      'Generación de ideas y multiplicación de scripts con IA.',
-      'Efectos sonoros y transiciones sin saturar el video.',
-    ],
-    [
-      'Embudos de mensajería directa a WhatsApp Business.',
-      'Guiones de cierre de ventas y preguntas de cualificación.',
-      'Métricas de costo por conversación y retorno de inversión.',
-    ],
-  ];
+  const { getElementStyle } = useElementReveal({
+    slideId: slide.id,
+    totalElements: steps.length,
+    initialRevealed: 1,
+    autoRevealMs: slide.autoRevealMs || 6500,
+    externalRevealedCount: revealedStep,
+  });
 
   return (
     <div className="w-full h-full flex flex-col justify-center p-8 sm:p-12 lg:p-14 select-none space-y-6 overflow-hidden">
       {/* Top Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-element-in">
         <div className="space-y-2 max-w-3xl">
           {slide.tag && (
             <span className="font-mono text-xs text-[#FE385B] uppercase tracking-widest font-bold bg-[#FE385B]/10 px-3.5 py-1.5 rounded-xl border border-[#FE385B]/20 inline-block shadow-2xs">
               {slide.tag}
             </span>
           )}
-          <h2
+          <MagicDustHeading
+            text={slide.title}
+            as="h2"
+            keyTrigger={slide.id}
+            staggerMs={12}
+            initialDelayMs={60}
+            glowColor={isDark ? 'rgba(254, 56, 91, 0.9)' : 'rgba(254, 56, 91, 0.4)'}
             className={`font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight ${
               isDark ? 'text-white' : 'text-[#09090B]'
             }`}
-          >
-            {slide.title}
-          </h2>
+          />
         </div>
 
         <div className="hidden sm:flex items-center gap-2 font-mono text-xs text-[#10B981] bg-[#10B981]/10 px-3.5 py-2 rounded-2xl border border-[#10B981]/20">
@@ -84,17 +64,19 @@ export default function SlideSteps({
           {steps.map((st, idx) => (
             <div
               key={idx}
+              style={getElementStyle(idx)}
               onClick={() =>
-                onOpenDetail?.({
-                  tag: `SEMANA ${st.number || `0${idx + 1}`} // ${st.title.toUpperCase()}`,
-                  title: st.title,
-                  subtitle: `Fase ${idx + 1} de la metodología Creator Lab`,
-                  description: st.desc,
-                  image: roadmapImages[idx % roadmapImages.length],
-                  imageCaption: `Módulo Práctico · Semana 0${idx + 1}`,
-                  highlights: roadmapHighlights[idx % roadmapHighlights.length],
-                  actionTip: `Dedica esta semana a completar las 2 microclases y entregar el reto práctico en el aula.`,
-                })
+                onOpenDetail?.(
+                  st.detailData || {
+                    tag: `PASO ${st.number || `0${idx + 1}`} // ${st.title.toUpperCase()}`,
+                    title: st.title,
+                    subtitle: `Fase ${idx + 1} del proceso`,
+                    description: st.desc,
+                    imageCaption: `Módulo Práctico · Paso 0${idx + 1}`,
+                    highlights: [st.desc],
+                    actionTip: `Completa este paso para avanzar con la ejecución.`,
+                  }
+                )
               }
               className={`group p-5 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-3 min-h-[220px] ${
                 isDark

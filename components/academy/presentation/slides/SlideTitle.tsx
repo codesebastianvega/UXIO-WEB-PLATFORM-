@@ -2,6 +2,8 @@ import React from 'react';
 import { SlideData } from '@/data/academy/creator-lab/presentations/types';
 import { Sparkles, Video, Users, TrendingUp } from 'lucide-react';
 
+import MagicDustHeading from '@/components/ui/MagicDustHeading';
+
 interface SlideTitleProps {
   slide: SlideData;
   theme?: 'light' | 'dark';
@@ -13,7 +15,7 @@ export default function SlideTitle({ slide, theme = 'light' }: SlideTitleProps) 
   return (
     <div className="w-full h-full flex items-center justify-between p-8 sm:p-12 lg:p-16 select-none relative gap-8">
       {/* Left Column: Hero Narrative */}
-      <div className="flex-1 max-w-2xl space-y-6 relative z-10">
+      <div className="flex-1 max-w-2xl space-y-6 relative z-10 animate-element-in">
         <div className="flex items-center gap-2.5">
           {slide.tag && (
             <span className="font-mono text-xs text-[#FE385B] uppercase tracking-widest font-bold bg-[#FE385B]/10 px-3.5 py-1.5 rounded-xl border border-[#FE385B]/20 inline-block shadow-2xs">
@@ -26,13 +28,17 @@ export default function SlideTitle({ slide, theme = 'light' }: SlideTitleProps) 
         </div>
 
         <div className="space-y-3">
-          <h1
+          <MagicDustHeading
+            text={slide.title}
+            as="h1"
+            keyTrigger={slide.id}
+            staggerMs={14}
+            initialDelayMs={80}
+            glowColor={isDark ? 'rgba(254, 56, 91, 0.9)' : 'rgba(254, 56, 91, 0.5)'}
             className={`font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.05] ${
               isDark ? 'text-white' : 'text-[#09090B]'
             }`}
-          >
-            {slide.title}
-          </h1>
+          />
 
           {slide.subtitle && (
             <p
@@ -60,7 +66,10 @@ export default function SlideTitle({ slide, theme = 'light' }: SlideTitleProps) 
       </div>
 
       {/* Right Column: Hero Visual Glass Card */}
-      <div className="hidden md:flex flex-col gap-3.5 w-80 shrink-0 relative z-10">
+      <div
+        className="hidden md:flex flex-col gap-3.5 w-80 shrink-0 relative z-10 animate-element-in"
+        style={{ animationDelay: '140ms' }}
+      >
         <div
           className={`p-6 rounded-3xl border space-y-4 shadow-xl backdrop-blur-2xl ${
             isDark

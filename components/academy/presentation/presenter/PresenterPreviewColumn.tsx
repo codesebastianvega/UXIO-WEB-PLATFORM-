@@ -11,6 +11,7 @@ import { CardDetailData } from '../SlideDetailModal';
 import SlideRenderer from '../SlideRenderer';
 import TelestratorCanvas from '../telestrator/TelestratorCanvas';
 import TelestratorToolbar from '../telestrator/TelestratorToolbar';
+import PresentationAuroraBackground from '../components/PresentationAuroraBackground';
 import { Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PresenterPreviewColumnProps {
@@ -19,6 +20,7 @@ interface PresenterPreviewColumnProps {
   currentIndex: number;
   totalSlides: number;
   theme: 'light' | 'dark';
+  revealedStep?: number;
   activeTool: TelestratorTool;
   currentSlideStrokes: TelestratorStroke[];
   currentStroke: TelestratorStroke | null;
@@ -39,6 +41,7 @@ export default function PresenterPreviewColumn({
   currentIndex,
   totalSlides,
   theme,
+  revealedStep = 1,
   activeTool,
   currentSlideStrokes,
   currentStroke,
@@ -60,8 +63,8 @@ export default function PresenterPreviewColumn({
     if (!previewContainerRef.current) return;
     const rect = previewContainerRef.current.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) return;
-    const scaleX = (rect.width - 8) / 1280;
-    const scaleY = (rect.height - 8) / 720;
+    const scaleX = rect.width / 1280;
+    const scaleY = rect.height / 720;
     setPreviewScale(Math.min(scaleX, scaleY));
   }, []);
 
@@ -91,6 +94,8 @@ export default function PresenterPreviewColumn({
     }
   };
 
+  const isStatement = currentSlide.type === 'statement';
+
   return (
     <section className="col-span-12 lg:col-span-5 flex flex-col justify-between h-full min-h-0 gap-2.5 overflow-hidden">
       {/* 1. Current Slide Live Preview & Telestrator Overlay */}
@@ -114,11 +119,24 @@ export default function PresenterPreviewColumn({
           </div>
         </div>
 
-        {/* Dynamic Light Background Slide Canvas with Telestrator */}
+        {/* Dynamic Canvas with Statement Full-Bleed Support */}
         <div
           ref={previewContainerRef}
-          className="w-full flex-1 min-h-0 rounded-xl overflow-hidden border border-black/[0.08] bg-gradient-to-br from-[#FAFAFA] via-[#F4F4F6] to-[#EFF6FF] relative flex items-center justify-center shadow-inner"
+          className={`w-full flex-1 min-h-0 rounded-xl overflow-hidden border relative flex items-center justify-center shadow-inner transition-colors duration-300 ${
+            isStatement
+              ? 'border-white/20'
+              : theme === 'dark'
+              ? 'bg-[#09090B] border-white/[0.08]'
+              : 'bg-gradient-to-br from-[#FAFAFA] via-[#F4F4F6] to-[#EFF6FF] border-black/[0.08]'
+          }`}
         >
+          {isStatement && (
+            <PresentationAuroraBackground
+              bgColor={currentSlide.bgColor}
+              auroraColors={currentSlide.auroraColors}
+            />
+          )}
+
           <div
             ref={slideStageRef}
             onMouseMove={handleStageMouseMove}
@@ -128,12 +146,13 @@ export default function PresenterPreviewColumn({
               transform: `scale(${previewScale})`,
               transformOrigin: 'center center',
             }}
-            className="select-none flex items-center justify-center shrink-0 relative pointer-events-auto"
+            className="select-none flex items-center justify-center shrink-0 relative pointer-events-auto z-10"
           >
             <SlideRenderer
               slide={currentSlide}
-              theme="light"
+              theme={theme}
               onOpenDetail={data => onOpenDetail(data)}
+              revealedStep={revealedStep}
             />
 
             {/* Telestrator Drawing Layer */}

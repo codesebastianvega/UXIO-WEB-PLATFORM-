@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { PresentationContent } from '@/data/academy/creator-lab/presentations/types';
 import { Locale } from '@/types';
 import { usePresentationSync } from '@/lib/academy/presentation-channel';
@@ -20,6 +20,7 @@ export default function InstructorPresenterConsole({
   lang,
 }: InstructorPresenterConsoleProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [fontSize, setFontSize] = useState<'sm' | 'base' | 'lg'>('base');
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -30,6 +31,14 @@ export default function InstructorPresenterConsole({
   const totalSlides = slides.length;
   const currentSlide = slides[currentIndex] || slides[0];
   const nextSlide = slides[currentIndex + 1] || null;
+
+  const currentSlideSteps = useMemo(() => {
+    if (currentSlide.points?.length) return currentSlide.points.length;
+    if (currentSlide.steps?.length) return currentSlide.steps.length;
+    if (currentSlide.type === 'comparison') return 2;
+    if (currentSlide.stats?.length) return currentSlide.stats.length;
+    return 1;
+  }, [currentSlide]);
 
   // Telestrator state & broadcast bridge
   const telestrator = useTelestrator({
@@ -44,6 +53,7 @@ export default function InstructorPresenterConsole({
   const {
     broadcastSlideChange,
     broadcastThemeChange,
+    broadcastStepChange,
     broadcastStrokeStart,
     broadcastStrokeUpdate,
     broadcastStrokeEnd,
@@ -55,7 +65,14 @@ export default function InstructorPresenterConsole({
     channelId: presentation.id,
     currentIndex,
     theme,
-    onSlideChange: idx => setCurrentIndex(idx),
+    currentStep,
+    onSlideChange: idx => {
+      setCurrentIndex(idx);
+      setCurrentStep(1);
+    },
+    onStepChange: st => {
+      setCurrentStep(st);
+    },
     onThemeChange: th => setTheme(th),
     onRemoteStrokeStart: stroke => telestrator.handleRemoteStrokeStart(stroke),
     onRemoteStrokeUpdate: (sId, pt, endPt) => telestrator.handleRemoteStrokeUpdate(sId, pt, endPt),
@@ -68,19 +85,51 @@ export default function InstructorPresenterConsole({
   const handleSlideSelect = useCallback(
     (index: number) => {
       const nextIdx = Math.max(0, Math.min(totalSlides - 1, index));
+      const targetSlide = slides[nextIdx];
+      const targetSteps = targetSlide?.points?.length || targetSlide?.steps?.length || (targetSlide?.type === 'comparison' ? 2 : 1);
       setCurrentIndex(nextIdx);
+      setCurrentStep(1);
       broadcastSlideChange(nextIdx);
+      broadcastStepChange(1, targetSteps);
     },
-    [totalSlides, broadcastSlideChange]
+    [totalSlides, slides, broadcastSlideChange, broadcastStepChange]
   );
 
   const handlePrev = useCallback(() => {
-    handleSlideSelect(currentIndex - 1);
-  }, [currentIndex, handleSlideSelect]);
+    if (currentStep > 1) {
+      const prevStep = currentStep - 1;
+      setCurrentStep(prevStep);
+      broadcastStepChange(prevStep, currentSlideSteps);
+      return;
+    }
+    if (currentIndex > 0) {
+      const prevIdx = currentIndex - 1;
+      const prevSlide = slides[prevIdx];
+      const prevSteps = prevSlide?.points?.length || prevSlide?.steps?.length || (prevSlide?.type === 'comparison' ? 2 : 1);
+      setCurrentIndex(prevIdx);
+      setCurrentStep(1);
+      broadcastSlideChange(prevIdx);
+      broadcastStepChange(1, prevSteps);
+    }
+  }, [currentStep, currentSlideSteps, currentIndex, slides, broadcastStepChange, broadcastSlideChange]);
 
   const handleNext = useCallback(() => {
-    handleSlideSelect(currentIndex + 1);
-  }, [currentIndex, handleSlideSelect]);
+    if (currentStep < currentSlideSteps) {
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      broadcastStepChange(nextStep, currentSlideSteps);
+      return;
+    }
+    if (currentIndex < totalSlides - 1) {
+      const nextIdx = currentIndex + 1;
+      const nextSlide = slides[nextIdx];
+      const nextSteps = nextSlide?.points?.length || nextSlide?.steps?.length || (nextSlide?.type === 'comparison' ? 2 : 1);
+      setCurrentIndex(nextIdx);
+      setCurrentStep(1);
+      broadcastSlideChange(nextIdx);
+      broadcastStepChange(1, nextSteps);
+    }
+  }, [currentStep, currentSlideSteps, currentIndex, totalSlides, slides, broadcastStepChange, broadcastSlideChange]);
 
   const handleToggleTheme = useCallback(() => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -163,15 +212,17 @@ export default function InstructorPresenterConsole({
           totalSlides={totalSlides}
           notes={currentSlide.instructorNotes}
           fontSize={fontSize}
+          currentStep={currentStep}
+          totalSteps={currentSlideSteps}
+          autoRevealMs={currentSlide.autoRevealMs}
         />
 
-        {/* Right Column: Live Mini-Stage with Telestrator, Clickable Cards & Navigation */}
+        {/* Right Column: Stage Preview, Telestrator Controls & Next Slide */}
         <PresenterPreviewColumn
           currentSlide={currentSlide}
           nextSlide={nextSlide}
-          currentIndex={currentIndex}
-          totalSlides={totalSlides}
           theme={theme}
+          revealedStep={currentStep}
           activeTool={telestrator.activeTool}
           currentSlideStrokes={telestrator.currentSlideStrokes}
           currentStroke={telestrator.currentStroke}
@@ -181,20 +232,16 @@ export default function InstructorPresenterConsole({
           onUpdateDrawing={telestrator.updateDrawing}
           onEndDrawing={telestrator.endDrawing}
           onOpenDetail={handleOpenDetail}
-          onCursorMove={pt => broadcastCursorMove(pt)}
+          onCursorMove={broadcastCursorMove}
           onPrev={handlePrev}
           onNext={handleNext}
+          currentIndex={currentIndex}
+          totalSlides={totalSlides}
         />
       </main>
 
-      {/* Interactive Modal Mirror in Presenter View */}
       {modalDetail && (
-        <SlideDetailModal
-          data={modalDetail}
-          onClose={handleCloseDetail}
-          lang={lang}
-          theme={theme}
-        />
+        <SlideDetailModal data={modalDetail} onClose={handleCloseDetail} lang={lang} theme={theme} />
       )}
     </div>
   );

@@ -4,8 +4,8 @@ import { useEffect, useRef, useCallback } from 'react';
 import { CardDetailData } from '@/components/academy/presentation/SlideDetailModal';
 
 export interface TelestratorPoint {
-  x: number; // 0..1 normalized to 1280x720 stage
-  y: number; // 0..1 normalized
+  x: number;
+  y: number;
 }
 
 export type TelestratorTool = 'none' | 'laser' | 'highlighter' | 'circle';
@@ -23,11 +23,12 @@ export interface TelestratorStroke {
   opacity?: number;
 }
 
-export type PresentationSyncMessage =
+export type SyncPayload =
   | { type: 'SLIDE_CHANGE'; index: number }
   | { type: 'THEME_CHANGE'; theme: 'light' | 'dark' }
+  | { type: 'STEP_CHANGE'; step: number; totalSteps: number }
   | { type: 'REQUEST_SYNC' }
-  | { type: 'SYNC_RESPONSE'; index: number; theme: 'light' | 'dark' }
+  | { type: 'SYNC_RESPONSE'; index: number; theme: 'light' | 'dark'; step?: number; totalSteps?: number }
   | { type: 'DRAW_STROKE_START'; stroke: TelestratorStroke }
   | { type: 'DRAW_STROKE_UPDATE'; strokeId: string; point: TelestratorPoint; endPoint?: TelestratorPoint }
   | { type: 'DRAW_STROKE_END'; stroke: TelestratorStroke }
@@ -36,12 +37,18 @@ export type PresentationSyncMessage =
   | { type: 'CLOSE_MODAL_DETAIL' }
   | { type: 'CURSOR_MOVE'; point: TelestratorPoint };
 
+export type PresentationSyncMessage = {
+  senderId: string;
+} & SyncPayload;
+
 interface UsePresentationSyncProps {
   channelId: string;
   currentIndex: number;
   theme: 'light' | 'dark';
+  currentStep?: number;
   onSlideChange: (index: number) => void;
   onThemeChange?: (theme: 'light' | 'dark') => void;
+  onStepChange?: (step: number, totalSteps: number) => void;
   onRemoteStrokeStart?: (stroke: TelestratorStroke) => void;
   onRemoteStrokeUpdate?: (strokeId: string, point: TelestratorPoint, endPoint?: TelestratorPoint) => void;
   onRemoteStrokeEnd?: (stroke: TelestratorStroke) => void;
@@ -55,8 +62,10 @@ export function usePresentationSync({
   channelId,
   currentIndex,
   theme,
+  currentStep = 1,
   onSlideChange,
   onThemeChange,
+  onStepChange,
   onRemoteStrokeStart,
   onRemoteStrokeUpdate,
   onRemoteStrokeEnd,
@@ -66,6 +75,58 @@ export function usePresentationSync({
   onRemoteCursorMove,
 }: UsePresentationSyncProps) {
   const channelRef = useRef<BroadcastChannel | null>(null);
+  const senderIdRef = useRef<string>('');
+
+  if (!senderIdRef.current) {
+    senderIdRef.current = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
+
+  // Keep latest state in refs so the BroadcastChannel listener does not need to reconnect on state change
+  const stateRef = useRef({ currentIndex, theme, currentStep });
+  useEffect(() => {
+    stateRef.current = { currentIndex, theme, currentStep };
+  }, [currentIndex, theme, currentStep]);
+
+  // Keep latest callbacks in refs to avoid reconnection loops
+  const callbacksRef = useRef({
+    onSlideChange,
+    onThemeChange,
+    onStepChange,
+    onRemoteStrokeStart,
+    onRemoteStrokeUpdate,
+    onRemoteStrokeEnd,
+    onRemoteClearDrawings,
+    onRemoteOpenModal,
+    onRemoteCloseModal,
+    onRemoteCursorMove,
+  });
+
+  useEffect(() => {
+    callbacksRef.current = {
+      onSlideChange,
+      onThemeChange,
+      onStepChange,
+      onRemoteStrokeStart,
+      onRemoteStrokeUpdate,
+      onRemoteStrokeEnd,
+      onRemoteClearDrawings,
+      onRemoteOpenModal,
+      onRemoteCloseModal,
+      onRemoteCursorMove,
+    };
+  });
+
+  const postMsg = useCallback((payload: SyncPayload) => {
+    if (!channelRef.current) return;
+    try {
+      channelRef.current.postMessage({
+        senderId: senderIdRef.current,
+        ...payload,
+      });
+    } catch {
+      // Ignore broadcast errors in unmounted or private environments
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('BroadcastChannel' in window)) {
@@ -78,143 +139,87 @@ export function usePresentationSync({
 
     const handleMessage = (event: MessageEvent<PresentationSyncMessage>) => {
       const data = event.data;
-      if (!data) return;
+      if (!data || data.senderId === senderIdRef.current) return;
 
+      const cbs = callbacksRef.current;
       switch (data.type) {
         case 'SLIDE_CHANGE':
-          onSlideChange(data.index);
+          cbs.onSlideChange?.(data.index);
           break;
         case 'THEME_CHANGE':
-          onThemeChange?.(data.theme);
+          cbs.onThemeChange?.(data.theme);
+          break;
+        case 'STEP_CHANGE':
+          cbs.onStepChange?.(data.step, data.totalSteps);
           break;
         case 'REQUEST_SYNC':
           channel.postMessage({
+            senderId: senderIdRef.current,
             type: 'SYNC_RESPONSE',
-            index: currentIndex,
-            theme,
+            index: stateRef.current.currentIndex,
+            theme: stateRef.current.theme,
+            step: stateRef.current.currentStep,
           });
           break;
         case 'SYNC_RESPONSE':
-          onSlideChange(data.index);
-          onThemeChange?.(data.theme);
+          cbs.onSlideChange?.(data.index);
+          cbs.onThemeChange?.(data.theme);
+          if (typeof data.step === 'number') {
+            cbs.onStepChange?.(data.step, data.totalSteps || 1);
+          }
           break;
         case 'DRAW_STROKE_START':
-          onRemoteStrokeStart?.(data.stroke);
+          cbs.onRemoteStrokeStart?.(data.stroke);
           break;
         case 'DRAW_STROKE_UPDATE':
-          onRemoteStrokeUpdate?.(data.strokeId, data.point, data.endPoint);
+          cbs.onRemoteStrokeUpdate?.(data.strokeId, data.point, data.endPoint);
           break;
         case 'DRAW_STROKE_END':
-          onRemoteStrokeEnd?.(data.stroke);
+          cbs.onRemoteStrokeEnd?.(data.stroke);
           break;
         case 'CLEAR_SLIDE_DRAWINGS':
-          onRemoteClearDrawings?.(data.slideId);
+          cbs.onRemoteClearDrawings?.(data.slideId);
           break;
         case 'OPEN_MODAL_DETAIL':
-          onRemoteOpenModal?.(data.detail);
+          cbs.onRemoteOpenModal?.(data.detail);
           break;
         case 'CLOSE_MODAL_DETAIL':
-          onRemoteCloseModal?.();
+          cbs.onRemoteCloseModal?.();
           break;
         case 'CURSOR_MOVE':
-          onRemoteCursorMove?.(data.point);
+          cbs.onRemoteCursorMove?.(data.point);
           break;
       }
     };
 
     channel.addEventListener('message', handleMessage);
-    channel.postMessage({ type: 'REQUEST_SYNC' });
+    channel.postMessage({
+      senderId: senderIdRef.current,
+      type: 'REQUEST_SYNC',
+    });
 
     return () => {
       channel.removeEventListener('message', handleMessage);
       channel.close();
       channelRef.current = null;
     };
-  }, [
-    channelId,
-    currentIndex,
-    theme,
-    onSlideChange,
-    onThemeChange,
-    onRemoteStrokeStart,
-    onRemoteStrokeUpdate,
-    onRemoteStrokeEnd,
-    onRemoteClearDrawings,
-    onRemoteOpenModal,
-    onRemoteCloseModal,
-    onRemoteCursorMove,
-  ]);
+  }, [channelId]);
 
-  const broadcastSlideChange = useCallback((index: number) => {
-    channelRef.current?.postMessage({
-      type: 'SLIDE_CHANGE',
-      index,
-    });
-  }, []);
-
-  const broadcastThemeChange = useCallback((newTheme: 'light' | 'dark') => {
-    channelRef.current?.postMessage({
-      type: 'THEME_CHANGE',
-      theme: newTheme,
-    });
-  }, []);
-
-  const broadcastStrokeStart = useCallback((stroke: TelestratorStroke) => {
-    channelRef.current?.postMessage({
-      type: 'DRAW_STROKE_START',
-      stroke,
-    });
-  }, []);
-
-  const broadcastStrokeUpdate = useCallback(
-    (strokeId: string, point: TelestratorPoint, endPoint?: TelestratorPoint) => {
-      channelRef.current?.postMessage({
-        type: 'DRAW_STROKE_UPDATE',
-        strokeId,
-        point,
-        endPoint,
-      });
-    },
-    []
-  );
-
-  const broadcastStrokeEnd = useCallback((stroke: TelestratorStroke) => {
-    channelRef.current?.postMessage({
-      type: 'DRAW_STROKE_END',
-      stroke,
-    });
-  }, []);
-
-  const broadcastClearDrawings = useCallback((slideId: string) => {
-    channelRef.current?.postMessage({
-      type: 'CLEAR_SLIDE_DRAWINGS',
-      slideId,
-    });
-  }, []);
-
-  const broadcastOpenModal = useCallback((detail: CardDetailData) => {
-    channelRef.current?.postMessage({
-      type: 'OPEN_MODAL_DETAIL',
-      detail,
-    });
-  }, []);
-
-  const broadcastCloseModal = useCallback(() => {
-    channelRef.current?.postMessage({
-      type: 'CLOSE_MODAL_DETAIL',
-    });
-  }, []);
-
-  const broadcastCursorMove = useCallback((point: TelestratorPoint) => {
-    channelRef.current?.postMessage({
-      type: 'CURSOR_MOVE',
-      point,
-    });
-  }, []);
+  const broadcastSlideChange = useCallback((index: number) => postMsg({ type: 'SLIDE_CHANGE', index }), [postMsg]);
+  const broadcastThemeChange = useCallback((newTheme: 'light' | 'dark') => postMsg({ type: 'THEME_CHANGE', theme: newTheme }), [postMsg]);
+  const broadcastStepChange = useCallback((step: number, totalSteps: number) => postMsg({ type: 'STEP_CHANGE', step, totalSteps }), [postMsg]);
+  const broadcastStrokeStart = useCallback((stroke: TelestratorStroke) => postMsg({ type: 'DRAW_STROKE_START', stroke }), [postMsg]);
+  const broadcastStrokeUpdate = useCallback((strokeId: string, point: TelestratorPoint, endPoint?: TelestratorPoint) => postMsg({ type: 'DRAW_STROKE_UPDATE', strokeId, point, endPoint }), [postMsg]);
+  const broadcastStrokeEnd = useCallback((stroke: TelestratorStroke) => postMsg({ type: 'DRAW_STROKE_END', stroke }), [postMsg]);
+  const broadcastClearDrawings = useCallback((slideId: string) => postMsg({ type: 'CLEAR_SLIDE_DRAWINGS', slideId }), [postMsg]);
+  const broadcastOpenModal = useCallback((detail: CardDetailData) => postMsg({ type: 'OPEN_MODAL_DETAIL', detail }), [postMsg]);
+  const broadcastCloseModal = useCallback(() => postMsg({ type: 'CLOSE_MODAL_DETAIL' }), [postMsg]);
+  const broadcastCursorMove = useCallback((point: TelestratorPoint) => postMsg({ type: 'CURSOR_MOVE', point }), [postMsg]);
 
   return {
     broadcastSlideChange,
     broadcastThemeChange,
+    broadcastStepChange,
     broadcastStrokeStart,
     broadcastStrokeUpdate,
     broadcastStrokeEnd,

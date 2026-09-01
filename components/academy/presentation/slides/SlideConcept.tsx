@@ -2,49 +2,33 @@ import React from 'react';
 import { SlideData } from '@/data/academy/creator-lab/presentations/types';
 import { Sparkles, Maximize2, Smartphone, Radio, ArrowUpRight } from 'lucide-react';
 import { CardDetailData } from '../SlideDetailModal';
+import { useElementReveal } from '../hooks/useElementReveal';
+import MagicDustHeading from '@/components/ui/MagicDustHeading';
 
 interface SlideConceptProps {
   slide: SlideData;
   theme?: 'light' | 'dark';
   onOpenDetail?: (data: CardDetailData) => void;
+  revealedStep?: number;
 }
 
 export default function SlideConcept({
   slide,
   theme = 'light',
   onOpenDetail,
+  revealedStep,
 }: SlideConceptProps) {
   const isDark = theme === 'dark';
+  const totalPoints = slide.points?.length || 0;
 
-  const conceptImages = [
-    'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=1200&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=1200&auto=format&fit=crop&q=80',
-  ];
+  const { getElementStyle } = useElementReveal({
+    slideId: slide.id,
+    totalElements: totalPoints,
+    initialRevealed: 1,
+    autoRevealMs: slide.autoRevealMs || 6500,
+    externalRevealedCount: revealedStep,
+  });
 
-  const conceptHighlights = [
-    [
-      'Cámara 4K en el bolsillo lista para grabar 24/7.',
-      'Luz natural de ventana + micrófono solapero accesible.',
-      'Elimina la fricción de armar equipos pesados.',
-    ],
-    [
-      'La audiencia salta los anuncios pero ama descubrir historias reales.',
-      'Formato storytelling en primera persona genera 4.2x más retención.',
-      'Resuelve 1 dolor concreto por cada video de 45 segundos.',
-    ],
-    [
-      'Llamado a la acción (CTA) directo al final de cada pieza.',
-      'Ruta directa hacia WhatsApp Business o catálogo web.',
-      'Métricas de conversión y leads en vez de vanidad o likes.',
-    ],
-  ];
-
-  const conceptTips = [
-    'Comienza hoy grabando 3 tomas de 10 segundos en vertical mostrando lo que haces en tu día a día.',
-    'No anuncies características técnicas; cuenta la transformación y el resultado que obtiene tu cliente.',
-    'Agrega siempre una palabra clave de activación (ej: "Comenta PROTOCOLO para enviarte los detalles").',
-  ];
 
   const icons = [
     <Smartphone key="1" size={18} className="text-[#FE385B]" />,
@@ -61,19 +45,23 @@ export default function SlideConcept({
   return (
     <div className="w-full h-full flex flex-col justify-center p-8 sm:p-12 lg:p-14 select-none space-y-6 overflow-hidden">
       {/* Top Header Group */}
-      <div className="space-y-2 max-w-3xl">
+      <div className="space-y-2 max-w-3xl animate-element-in">
         {slide.tag && (
           <span className="font-mono text-xs text-[#FE385B] uppercase tracking-widest font-bold bg-[#FE385B]/10 px-3.5 py-1.5 rounded-xl border border-[#FE385B]/20 inline-block shadow-2xs">
             {slide.tag}
           </span>
         )}
-        <h2
+        <MagicDustHeading
+          text={slide.title}
+          as="h2"
+          keyTrigger={slide.id}
+          staggerMs={12}
+          initialDelayMs={60}
+          glowColor={isDark ? 'rgba(254, 56, 91, 0.9)' : 'rgba(254, 56, 91, 0.4)'}
           className={`font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight ${
             isDark ? 'text-white' : 'text-[#09090B]'
           }`}
-        >
-          {slide.title}
-        </h2>
+        />
         {slide.subtitle && (
           <p
             className={`font-sans text-sm sm:text-base leading-relaxed ${
@@ -85,22 +73,24 @@ export default function SlideConcept({
         )}
       </div>
 
-      {/* Points Grid */}
+      {/* Points Grid with Reveal */}
       {slide.points && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {slide.points.map((pt, idx) => (
             <div
               key={idx}
+              style={getElementStyle(idx)}
               onClick={() =>
-                onOpenDetail?.({
-                  tag: `0${idx + 1} // ${slide.tag || 'PRINCIPIO'}`,
-                  title: pt.label,
-                  description: pt.text,
-                  image: conceptImages[idx % conceptImages.length],
-                  imageCaption: `Estrategia Visual · Principio 0${idx + 1}`,
-                  highlights: conceptHighlights[idx % conceptHighlights.length],
-                  actionTip: conceptTips[idx % conceptTips.length],
-                })
+                onOpenDetail?.(
+                  pt.detailData || {
+                    tag: `0${idx + 1} // ${slide.tag || 'CONCEPTO'}`,
+                    title: pt.label,
+                    description: pt.text,
+                    imageCaption: `Principio Clave · 0${idx + 1}`,
+                    highlights: [pt.text],
+                    actionTip: `Aplica ${pt.label} en tu contenido de inmediato.`,
+                  }
+                )
               }
               className={`group relative p-6 rounded-3xl border transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-4 min-h-[220px] ${
                 isDark

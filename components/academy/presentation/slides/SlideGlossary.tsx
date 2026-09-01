@@ -2,6 +2,7 @@ import React from 'react';
 import { SlideData } from '@/data/academy/creator-lab/presentations/types';
 import { BookOpen, Maximize2, Sparkles } from 'lucide-react';
 import { CardDetailData } from '../SlideDetailModal';
+import MagicDustHeading from '@/components/ui/MagicDustHeading';
 
 interface SlideGlossaryProps {
   slide: SlideData;
@@ -27,13 +28,17 @@ export default function SlideGlossary({
               {slide.tag}
             </span>
           )}
-          <h2
+          <MagicDustHeading
+            text={slide.title}
+            as="h2"
+            keyTrigger={slide.id}
+            staggerMs={12}
+            initialDelayMs={60}
+            glowColor={isDark ? 'rgba(254, 56, 91, 0.9)' : 'rgba(254, 56, 91, 0.4)'}
             className={`font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight ${
               isDark ? 'text-white' : 'text-[#09090B]'
             }`}
-          >
-            {slide.title}
-          </h2>
+          />
           {slide.subtitle && (
             <p
               className={`font-sans text-xs sm:text-sm leading-relaxed ${

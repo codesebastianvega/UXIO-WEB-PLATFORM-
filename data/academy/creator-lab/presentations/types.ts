@@ -1,6 +1,7 @@
 export type SlideType =
   | 'title'
   | 'section'
+  | 'statement'
   | 'concept'
   | 'comparison'
   | 'steps'
@@ -31,6 +32,50 @@ export interface InstructorNotes {
   }>;
 }
 
+export interface CardDetailData {
+  tag?: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  highlights?: string[];
+  actionTip?: string;
+  image?: string;
+  imageCaption?: string;
+  iconType?: 'sparkles' | 'check' | 'step';
+}
+
+export interface SlidePoint {
+  label: string;
+  text: string;
+  icon?: string;
+  tag?: string;
+  detailData?: CardDetailData;
+}
+
+export interface SlideStep {
+  number: string;
+  title: string;
+  desc: string;
+  tag?: string;
+  detailData?: CardDetailData;
+}
+
+export interface SlideComparisonData {
+  beforeLabel?: string;
+  before: string[];
+  afterLabel?: string;
+  after: string[];
+  detailData?: CardDetailData;
+}
+
+export interface SlideChallengeData {
+  whatToDo: string;
+  whatToDeliver: string;
+  whereToSubmit: string;
+  criteria: string[];
+  detailData?: CardDetailData;
+}
+
 export interface SlideData {
   id: string;
   type: SlideType;
@@ -39,20 +84,10 @@ export interface SlideData {
   subtitle?: string;
   highlight?: string;
   content?: string[];
-  points?: Array<{ label: string; text: string; icon?: string; tag?: string }>;
-  comparison?: {
-    beforeLabel?: string;
-    before: string[];
-    afterLabel?: string;
-    after: string[];
-  };
-  steps?: Array<{ number: string; title: string; desc: string; tag?: string }>;
-  challengeData?: {
-    whatToDo: string;
-    whatToDeliver: string;
-    whereToSubmit: string;
-    criteria: string[];
-  };
+  points?: SlidePoint[];
+  comparison?: SlideComparisonData;
+  steps?: SlideStep[];
+  challengeData?: SlideChallengeData;
   glossaryTerms?: GlossaryTerm[];
   stats?: Array<{ value: string; label: string; sub?: string }>;
   instructorNotes?: InstructorNotes;
@@ -60,6 +95,10 @@ export interface SlideData {
   quote?: string;
   author?: string;
   imageUrl?: string;
+  bgColor?: string;
+  blockColor?: string;
+  auroraColors?: string[];
+  autoRevealMs?: number;
 }
 
 export interface PresentationContent {
@@ -71,3 +110,4 @@ export interface PresentationContent {
   estimatedMinutes: number;
   slides: SlideData[];
 }
+

@@ -2,38 +2,54 @@ import React from 'react';
 import { SlideData } from '@/data/academy/creator-lab/presentations/types';
 import { Award, CheckCircle, Maximize2, FileText, Send } from 'lucide-react';
 import { CardDetailData } from '../SlideDetailModal';
+import { useElementReveal } from '../hooks/useElementReveal';
+import MagicDustHeading from '@/components/ui/MagicDustHeading';
 
 interface SlideChallengeProps {
   slide: SlideData;
   theme?: 'light' | 'dark';
   onOpenDetail?: (data: CardDetailData) => void;
+  revealedStep?: number;
 }
 
 export default function SlideChallenge({
   slide,
   theme = 'light',
   onOpenDetail,
+  revealedStep,
 }: SlideChallengeProps) {
   const challenge = slide.challengeData;
   const isDark = theme === 'dark';
 
+  const { getElementStyle } = useElementReveal({
+    slideId: slide.id,
+    totalElements: challenge ? (challenge.criteria?.length ? 3 : 2) : 0,
+    initialRevealed: 1,
+    autoRevealMs: slide.autoRevealMs || 5000,
+    externalRevealedCount: revealedStep,
+  });
+
   return (
     <div className="w-full h-full flex flex-col justify-center p-8 sm:p-12 lg:p-14 select-none space-y-6 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-element-in">
         <div className="space-y-2 max-w-3xl">
           {slide.tag && (
             <span className="font-mono text-xs text-[#10B981] uppercase tracking-widest font-bold bg-[#10B981]/10 px-3.5 py-1.5 rounded-xl border border-[#10B981]/25 inline-block shadow-2xs">
               {slide.tag}
             </span>
           )}
-          <h2
+          <MagicDustHeading
+            text={slide.title}
+            as="h2"
+            keyTrigger={slide.id}
+            staggerMs={12}
+            initialDelayMs={60}
+            glowColor={isDark ? 'rgba(16, 185, 129, 0.9)' : 'rgba(16, 185, 129, 0.4)'}
             className={`font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight ${
               isDark ? 'text-white' : 'text-[#09090B]'
             }`}
-          >
-            {slide.title}
-          </h2>
+          />
         </div>
         <div className="w-12 h-12 rounded-2xl bg-[#10B981]/10 text-[#10B981] flex items-center justify-center border border-[#10B981]/25 shadow-xs">
           <Award size={24} />
@@ -44,6 +60,7 @@ export default function SlideChallenge({
       {challenge && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div
+            style={getElementStyle(0)}
             onClick={() =>
               onOpenDetail?.({
                 tag: 'PASO 1 // INSTRUCCIÓN',
@@ -82,6 +99,7 @@ export default function SlideChallenge({
           </div>
 
           <div
+            style={getElementStyle(1)}
             onClick={() =>
               onOpenDetail?.({
                 tag: 'PASO 2 // ENTREGABLE',
@@ -121,6 +139,7 @@ export default function SlideChallenge({
 
           {challenge.criteria && challenge.criteria.length > 0 && (
             <div
+              style={getElementStyle(2)}
               className={`sm:col-span-2 p-5 rounded-3xl border space-y-2.5 ${
                 isDark
                   ? 'bg-[#10B981]/[0.05] border-[#10B981]/25'

@@ -1,14 +1,17 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { InstructorNotes } from '@/data/academy/creator-lab/presentations/types';
-import { HelpCircle, CheckSquare } from 'lucide-react';
+import { HelpCircle, CheckSquare, Sparkles, Clock } from 'lucide-react';
 
 interface PresenterScriptColumnProps {
   currentIndex: number;
   totalSlides: number;
   notes?: InstructorNotes;
   fontSize: 'sm' | 'base' | 'lg';
+  currentStep?: number;
+  totalSteps?: number;
+  autoRevealMs?: number;
 }
 
 export default function PresenterScriptColumn({
@@ -16,7 +19,24 @@ export default function PresenterScriptColumn({
   totalSlides,
   notes,
   fontSize,
+  currentStep = 1,
+  totalSteps = 1,
+  autoRevealMs = 6500,
 }: PresenterScriptColumnProps) {
+  const [countdown, setCountdown] = useState(Math.round(autoRevealMs / 1000));
+
+  // Reset & tick countdown for step pacing
+  useEffect(() => {
+    setCountdown(Math.round(autoRevealMs / 1000));
+    if (totalSteps <= 1 || currentStep >= totalSteps) return;
+
+    const interval = setInterval(() => {
+      setCountdown(prev => (prev > 1 ? prev - 1 : Math.round(autoRevealMs / 1000)));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, currentStep, totalSteps, autoRevealMs]);
+
   const scriptTextSize =
     fontSize === 'sm'
       ? 'text-sm leading-relaxed'
@@ -27,12 +47,29 @@ export default function PresenterScriptColumn({
   return (
     <section className="col-span-12 lg:col-span-7 flex flex-col h-full bg-[#0D0D11] rounded-3xl border border-white/[0.08] p-5 lg:p-6 overflow-hidden shadow-2xl">
       <div className="flex items-center justify-between border-b border-white/[0.06] pb-3 shrink-0">
-        <span className="font-mono text-xs font-bold text-[#FE385B] uppercase tracking-wider">
-          // GUION PALABRA POR PALABRA · SLIDE {currentIndex + 1} DE {totalSlides}
-        </span>
-        <span className="font-mono text-xs text-[#10B981] bg-[#10B981]/15 px-2.5 py-0.5 rounded-xl border border-[#10B981]/25 font-bold">
-          ⏱️ {notes?.duration || '0:00 - 0:45 min'}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs font-bold text-[#FE385B] uppercase tracking-wider">
+            // GUION PALABRA POR PALABRA · SLIDE {currentIndex + 1} DE {totalSlides}
+          </span>
+          {totalSteps > 1 && (
+            <span className="font-mono text-[11px] font-bold text-white/90 bg-[#FE385B]/20 border border-[#FE385B]/30 px-2 py-0.5 rounded-lg flex items-center gap-1">
+              <Sparkles size={11} className="text-[#FE385B]" />
+              Card {currentStep}/{totalSteps}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          {totalSteps > 1 && currentStep < totalSteps && (
+            <span className="font-mono text-xs text-[#FF7F07] bg-[#FF7F07]/15 px-2.5 py-0.5 rounded-xl border border-[#FF7F07]/25 font-bold flex items-center gap-1">
+              <Clock size={12} />
+              Siguiente en {countdown}s
+            </span>
+          )}
+          <span className="font-mono text-xs text-[#10B981] bg-[#10B981]/15 px-2.5 py-0.5 rounded-xl border border-[#10B981]/25 font-bold">
+            ⏱️ {notes?.duration || '0:45 min'}
+          </span>
+        </div>
       </div>
 
       {/* Scrollable Script Body */}
