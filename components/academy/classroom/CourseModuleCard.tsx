@@ -108,39 +108,8 @@ export default function CourseModuleCard({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {moduleLessons.map(lesson => {
             const isCompleted = completedLessonIds.includes(lesson.id);
-            const lessonIndex = allLessonsList.findIndex(l => l.id === lesson.id);
-            const isUnlocked =
-              lessonIndex === 0 ||
-              completedLessonIds.includes(allLessonsList[lessonIndex - 1]?.id);
-
-            if (!isUnlocked) {
-              return (
-                <div
-                  key={lesson.id}
-                  className="p-4 rounded-2xl bg-black/[0.01] dark:bg-white/[0.01] border border-black/[0.04] dark:border-white/[0.04] flex items-center justify-between gap-3 opacity-60 cursor-not-allowed select-none"
-                  title={isEs ? 'Completa la clase anterior para desbloquear' : 'Complete previous lesson to unlock'}
-                >
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className="mt-0.5 shrink-0">
-                      <Lock size={15} className="text-[#8E8E93]" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-[#8E8E93] block">
-                          {lesson.id.toUpperCase()} · {lesson.duration}
-                        </span>
-                        <span className="font-mono text-[9px] text-[#FF7F07]">
-                          🔒 {isEs ? 'Bloqueada' : 'Locked'}
-                        </span>
-                      </div>
-                      <h4 className="font-display text-xs text-[#8E8E93] truncate">
-                        {lesson.title}
-                      </h4>
-                    </div>
-                  </div>
-                </div>
-              );
-            }
+            // DEV MODE: All lessons unlocked for smooth testing
+            const isUnlocked = true;
 
             return (
               <Link

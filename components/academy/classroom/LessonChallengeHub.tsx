@@ -1,16 +1,10 @@
 'use client';
 
 import React, { useState, useTransition, useEffect } from 'react';
-import {
-  Award,
-  CheckCircle2,
-  AlertCircle,
-  Clock,
-} from 'lucide-react';
+import { Award, CheckCircle2, AlertCircle, Clock } from 'lucide-react';
 import { LessonChallenge as LessonChallengeType } from '@/data/academy/types';
 import { Locale } from '@/types';
 import { LessonSubmission } from '@/lib/supabase/academy-submissions';
-import { upsertLessonSubmissionAction } from '@/app/[lang]/academy/actions/submissions';
 import { getStoredLiveLinks } from '@/lib/academy/live-links-store';
 import { getStoredSubmissions, saveLocalSubmission } from '@/lib/academy/submissions-store';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
@@ -18,6 +12,12 @@ import ChallengeSubmissionBlock from './ChallengeSubmissionBlock';
 import ChallengeCriteriaCards from './ChallengeCriteriaCards';
 import BrandDiagnosisCard from './resources/BrandDiagnosisCard';
 import BrandDiagnosisModal from './resources/BrandDiagnosisModal';
+import CommercialVsNativeCard from './resources/CommercialVsNativeCard';
+import CommercialVsNativeModal from './resources/CommercialVsNativeModal';
+import ObjectionMiningCard from './resources/ObjectionMiningCard';
+import ObjectionMiningModal from './resources/ObjectionMiningModal';
+import ContentMatrixCard from './resources/ContentMatrixCard';
+import ContentMatrixModal from './resources/ContentMatrixModal';
 
 interface LessonChallengeHubProps {
   challenge: LessonChallengeType;
@@ -41,16 +41,20 @@ export default function LessonChallengeHub({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [whatsappUrl, setWhatsappUrl] = useState('https://chat.whatsapp.com/CreatorLabCohorte01');
+
   const [isDiagnosisModalOpen, setIsDiagnosisModalOpen] = useState(false);
+  const [isCommercialModalOpen, setIsCommercialModalOpen] = useState(false);
+  const [isObjectionModalOpen, setIsObjectionModalOpen] = useState(false);
+  const [isMatrixModalOpen, setIsMatrixModalOpen] = useState(false);
 
   const isDiagnosisLesson = lessonId === 'm00-01';
+  const isCommercialLesson = lessonId === 'm01-01';
+  const isObjectionLesson = lessonId === 'm01-02';
+  const isMatrixLesson = lessonId === 'm01-03';
+  const hasInteractiveForm =
+    isDiagnosisLesson || isCommercialLesson || isObjectionLesson || isMatrixLesson;
 
-  useEffect(() => {
-    const liveLinks = getStoredLiveLinks();
-    if (liveLinks.whatsappGroupUrl) {
-      setWhatsappUrl(liveLinks.whatsappGroupUrl);
-    }
-
+  const refreshSubmission = () => {
     const stored = getStoredSubmissions();
     const match = stored.find(s => s.courseSlug === courseSlug && s.lessonId === lessonId);
     if (match) {
@@ -70,43 +74,29 @@ export default function LessonChallengeHub({
       });
       setUrlInput(match.submissionUrl);
     }
+  };
 
-    const handleUpdate = () => {
-      const updatedList = getStoredSubmissions();
-      const updatedMatch = updatedList.find(s => s.courseSlug === courseSlug && s.lessonId === lessonId);
-      if (updatedMatch) {
-        setSubmission({
-          id: updatedMatch.id,
-          userId: updatedMatch.userId,
-          courseId: courseSlug,
-          lessonId: updatedMatch.lessonId,
-          submissionUrl: updatedMatch.submissionUrl,
-          submissionType: updatedMatch.submissionType,
-          status: updatedMatch.status,
-          feedbackText: updatedMatch.feedbackText,
-          approvedCriteria: updatedMatch.approvedCriteria,
-          reviewedAt: updatedMatch.reviewedAt,
-          submittedAt: updatedMatch.submittedAt,
-          updatedAt: updatedMatch.updatedAt,
-        });
-      }
-    };
+  useEffect(() => {
+    const liveLinks = getStoredLiveLinks();
+    if (liveLinks.whatsappGroupUrl) {
+      setWhatsappUrl(liveLinks.whatsappGroupUrl);
+    }
+    refreshSubmission();
 
+    const handleUpdate = () => refreshSubmission();
     window.addEventListener('uxio-submissions-updated', handleUpdate);
     return () => window.removeEventListener('uxio-submissions-updated', handleUpdate);
   }, [courseSlug, lessonId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const lines = urlInput.split('\n').map(l => l.trim()).filter(Boolean);
-    if (lines.length === 0 || lines.some(l => !l.startsWith('http://') && !l.startsWith('https://'))) {
-      setErrorMsg(isEs ? 'Ingresa URLs válidas que empiecen con https://' : 'Enter valid URLs starting with https://');
+    const cleanText = urlInput.trim();
+    if (!cleanText) {
+      setErrorMsg(isEs ? 'Ingresa el contenido de tu entrega o enlace válido.' : 'Enter your submission text or URL.');
       return;
     }
 
-    const cleanUrl = lines.join('\n');
     setErrorMsg(null);
-
     const saved = saveLocalSubmission({
       userId: 'current_user',
       studentName: 'Estudiante UXIO',
@@ -114,12 +104,12 @@ export default function LessonChallengeHub({
       courseSlug,
       lessonId,
       lessonTitle: challenge.title,
-      moduleWeekTag: 'SEMANA 0',
+      moduleWeekTag: lessonId.startsWith('m01') ? 'SEMANA 1' : 'SEMANA 0',
       challengePrompt: challenge.whatToDo,
       challengeDeliverable: challenge.whatToDeliver,
       challengeCriteria: challenge.evaluationCriteria || [],
-      submissionUrl: cleanUrl,
-      submissionType: 'link',
+      submissionUrl: cleanText,
+      submissionType: cleanText.startsWith('http') ? 'link' : 'text',
       status: 'submitted',
       feedbackText: null,
     });
@@ -138,20 +128,6 @@ export default function LessonChallengeHub({
       updatedAt: saved.updatedAt,
     });
     setIsEditing(false);
-
-    startTransition(async () => {
-      const res = await upsertLessonSubmissionAction({
-        courseSlug,
-        lessonId,
-        submissionUrl: cleanUrl,
-        submissionType: 'link',
-        lang,
-      });
-
-      if (!res.success) {
-        setErrorMsg(res.error || 'Error al guardar entrega');
-      }
-    });
   };
 
   const status = submission?.status;
@@ -160,7 +136,7 @@ export default function LessonChallengeHub({
   const isSubmitted = status === 'submitted' || status === 'pending_review';
 
   const approvedCriteria = submission?.approvedCriteria || [];
-  const criteriaCount = challenge.evaluationCriteria?.length || 1;
+  const criteriaCount = challenge.evaluationCriteria?.length || 0;
   const approvedCount = approvedCriteria.length;
   const score5 =
     status === 'approved'
@@ -172,7 +148,7 @@ export default function LessonChallengeHub({
       : null;
 
   return (
-    <div id="challenge-stage" className="scroll-mt-24">
+    <div className="space-y-4">
       <AuroraSpotlightCard
         primaryColor={isApproved ? '#10B981' : isNeedsRevision ? '#FF7F07' : '#FE385B'}
         spotlightRadius={300}
@@ -221,7 +197,7 @@ export default function LessonChallengeHub({
           {/* Row 1: What to do & Deliverables */}
           <ChallengeCriteriaCards challenge={challenge} isEs={isEs} />
 
-          {/* Row 2: Card para Ficha de Diagnóstico (Si es clase 0.1) */}
+          {/* Row 2: Interactive In-App Forms */}
           {isDiagnosisLesson && (
             <BrandDiagnosisCard
               submission={submission}
@@ -232,23 +208,56 @@ export default function LessonChallengeHub({
             />
           )}
 
-          {/* Row 3: Entrega de Enlaces / Archivos del Reto */}
-          <ChallengeSubmissionBlock
-            submission={submission}
-            evaluationCriteria={challenge.evaluationCriteria}
-            isEditing={isEditing}
-            setIsEditing={setIsEditing}
-            urlInput={urlInput}
-            setUrlInput={setUrlInput}
-            onSubmit={handleSubmit}
-            isPending={isPending}
-            errorMsg={errorMsg}
-            whatsappUrl={whatsappUrl}
-            lang={lang}
-          />
+          {isCommercialLesson && (
+            <CommercialVsNativeCard
+              submission={submission}
+              score5={score5}
+              courseSlug={courseSlug}
+              lang={lang}
+              onOpenModal={() => setIsCommercialModalOpen(true)}
+            />
+          )}
+
+          {isObjectionLesson && (
+            <ObjectionMiningCard
+              submission={submission}
+              score5={score5}
+              courseSlug={courseSlug}
+              lang={lang}
+              onOpenModal={() => setIsObjectionModalOpen(true)}
+            />
+          )}
+
+          {isMatrixLesson && (
+            <ContentMatrixCard
+              submission={submission}
+              score5={score5}
+              courseSlug={courseSlug}
+              lang={lang}
+              onOpenModal={() => setIsMatrixModalOpen(true)}
+            />
+          )}
+
+          {/* Row 3: Link/Text Submission Block (For non-form lessons or optional links) */}
+          {!hasInteractiveForm && (
+            <ChallengeSubmissionBlock
+              submission={submission}
+              evaluationCriteria={challenge.evaluationCriteria}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              urlInput={urlInput}
+              setUrlInput={setUrlInput}
+              onSubmit={handleSubmit}
+              isPending={isPending}
+              errorMsg={errorMsg}
+              whatsappUrl={whatsappUrl}
+              lang={lang}
+            />
+          )}
         </div>
       </AuroraSpotlightCard>
 
+      {/* Modales Interactivos de Entrega de Retos */}
       {isDiagnosisLesson && (
         <BrandDiagnosisModal
           isOpen={isDiagnosisModalOpen}
@@ -256,26 +265,40 @@ export default function LessonChallengeHub({
           courseSlug={courseSlug}
           lessonId={lessonId}
           lang={lang}
-          onSubmitted={() => {
-            const stored = getStoredSubmissions();
-            const match = stored.find(s => s.courseSlug === courseSlug && s.lessonId === lessonId);
-            if (match) {
-              setSubmission({
-                id: match.id,
-                userId: match.userId,
-                courseId: courseSlug,
-                lessonId: match.lessonId,
-                submissionUrl: match.submissionUrl,
-                submissionType: match.submissionType,
-                status: match.status,
-                feedbackText: match.feedbackText,
-                approvedCriteria: match.approvedCriteria,
-                reviewedAt: match.reviewedAt,
-                submittedAt: match.submittedAt,
-                updatedAt: match.updatedAt,
-              });
-            }
-          }}
+          onSubmitted={refreshSubmission}
+        />
+      )}
+
+      {isCommercialLesson && (
+        <CommercialVsNativeModal
+          isOpen={isCommercialModalOpen}
+          onClose={() => setIsCommercialModalOpen(false)}
+          courseSlug={courseSlug}
+          lessonId={lessonId}
+          lang={lang}
+          onSubmitted={refreshSubmission}
+        />
+      )}
+
+      {isObjectionLesson && (
+        <ObjectionMiningModal
+          isOpen={isObjectionModalOpen}
+          onClose={() => setIsObjectionModalOpen(false)}
+          courseSlug={courseSlug}
+          lessonId={lessonId}
+          lang={lang}
+          onSubmitted={refreshSubmission}
+        />
+      )}
+
+      {isMatrixLesson && (
+        <ContentMatrixModal
+          isOpen={isMatrixModalOpen}
+          onClose={() => setIsMatrixModalOpen(false)}
+          courseSlug={courseSlug}
+          lessonId={lessonId}
+          lang={lang}
+          onSubmitted={refreshSubmission}
         />
       )}
     </div>

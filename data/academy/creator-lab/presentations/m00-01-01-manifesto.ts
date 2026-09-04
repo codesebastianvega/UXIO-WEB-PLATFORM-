@@ -22,8 +22,27 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
     },
     {
       id: 's02',
+      type: 'statement',
+      tag: 'PRINCIPIO CENTRAL',
+      title: isEs
+        ? 'El video vertical no es un pasatiempo: es la infraestructura comercial del negocio moderno.'
+        : 'Vertical video is not a hobby: it is the modern commercial infrastructure.',
+      subtitle: isEs
+        ? 'Quien domina el arte de explicar su valor en 45 segundos tiene clientes perpetuos sin depender de agencias ni presupuestos millonarios de pauta.'
+        : 'Whoever masters explaining value in 45s creates evergreen client flow with zero ad agency dependency.',
+      highlight: isEs ? 'Claridad > Complejidad' : 'Clarity > Complexity',
+      bgColor: '#FE385B',
+      instructorNotes: {
+        duration: '0:45 - 1:45 min',
+        script: isEs
+          ? 'Expliquen este principio con contundencia: la cámara es un multiplicador de confianza.'
+          : 'Deliver this principle with energy: camera presence multiplies commercial trust.',
+      },
+    },
+    {
+      id: 's03',
       type: 'concept',
-      tag: isEs ? 'EL PRINCIPIO' : 'THE PRINCIPLE',
+      tag: isEs ? 'LOS 3 PILARES DEL MANIFIESTO' : 'THE 3 MANIFESTO PILLARS',
       title: isEs ? 'La Atención Vertical es el Nuevo Activo' : 'Vertical Attention is the New Asset',
       subtitle: isEs
         ? 'Tu negocio no necesita cámaras de cine; necesita claridad y conversión.'
@@ -45,9 +64,9 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
                   'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&auto=format&fit=crop&q=80',
                 imageCaption: 'Setup móvil ligero: luz natural lateral + cuadrícula en pantalla',
                 highlights: [
-                  'Limpia siempre el lente de tu cámara con microfibra antes de grabar (el 80% de videos borrosos se deben a grasa de dedos).',
+                  'Limpia siempre el lente de tu cámara con microfibra antes de grabar.',
                   'Activa la cuadrícula 3x3 en Ajustes de Cámara para mantener tus ojos en el tercio superior.',
-                  'Graba en 4K a 30fps o 1080p a 60fps con bloqueo de exposición/enfoque (AE/AF Lock).',
+                  'Graba en 4K a 30fps o 1080p a 60fps con bloqueo de exposición/enfoque.',
                 ],
                 actionTip:
                   'Saca tu celular ahora mismo, limpia el lente y graba una toma de prueba de 10 segundos mirando directo al lente.',
@@ -69,11 +88,11 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
                 imageCaption: 'Narrativa cercana en primera persona conectando directamente con la audiencia',
                 highlights: [
                   'Estructura Hook → Contexto → Solución → CTA en 45 segundos.',
-                  'Habla en segunda persona ("Tú") en lugar de hablar de "Nosotros" o "Mi empresa".',
-                  'Muestra el detrás de cámaras y los desafíos reales de tu sector para generar confianza inmediata.',
+                  'Habla en segunda persona ("Tú") en lugar de hablar de "Nosotros".',
+                  'Muestra el detrás de cámaras y los desafíos reales de tu sector.',
                 ],
                 actionTip:
-                  'Revisa tu último post: si parece un volante publicitario tradicional, transfórmalo en una anécdota de un cliente real.',
+                  'Revisa tu último post: si parece un volante tradicional, transfórmalo en una anécdota de un cliente real.',
               },
             },
             {
@@ -91,12 +110,12 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
                   'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=1200&auto=format&fit=crop&q=80',
                 imageCaption: 'Embudo directo de video vertical a canal comercial WhatsApp Business',
                 highlights: [
-                  'Usa palabras clave de activación en tus CTAs: "Comenta SISTEMA y te paso el acceso directo".',
-                  'Enlace directo y optimizado a WhatsApp Business con mensaje predefinido en la biografía.',
-                  'Mide el Costo por Conversación Iniciada y la Tasa de Cierre en lugar del alcance bruto.',
+                  'Usa palabras clave de activación en tus CTAs: "Comenta SISTEMA".',
+                  'Enlace directo a WhatsApp Business con mensaje predefinido en la bio.',
+                  'Mide el Costo por Conversación Iniciada y la Tasa de Cierre.',
                 ],
                 actionTip:
-                  'Configura un link de WhatsApp con mensaje personalizado (ej. "Hola Sebas, vi tu video sobre el kit y quiero cotizar").',
+                  'Configura un link de WhatsApp con mensaje personalizado en tu biografía.',
               },
             },
           ]
@@ -106,60 +125,24 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
               text: 'Shoot when the idea is fresh with zero technical friction.',
               tag: 'Zero Friction',
               icon: 'Smartphone',
-              detailData: {
-                tag: 'PRINCIPLE 01 // ZERO FRICTION',
-                title: 'Pocket Production: Speed Beats Perfection',
-                subtitle: 'Your smartphone is a 4K broadcast studio when you master light and framing.',
-                description: 'Eliminate heavy camera friction. Shoot, edit, and publish directly with your phone.',
-                highlights: [
-                  'Always wipe your camera lens clean before recording.',
-                  'Use 3x3 grid to keep eye level in the upper third.',
-                  'Lock exposure & focus before every take.',
-                ],
-                actionTip: 'Record a quick 10s practice clip right now to verify audio clarity.',
-              },
             },
             {
               label: '2. Stories Over Ads',
               text: 'Audiences skip traditional ads but connect with real humans solving problems.',
               tag: 'Authenticity',
               icon: 'Sparkles',
-              detailData: {
-                tag: 'PRINCIPLE 02 // STORYTELLING',
-                title: 'Stories That Convert Organically',
-                subtitle: 'Build human connection before presenting the solution.',
-                description: 'Speak directly to one specific pain point per 45-second vertical clip.',
-                highlights: [
-                  'Use Hook → Story → Solution → CTA structure.',
-                  'Focus on customer outcomes, not technical features.',
-                  'Show real behind-the-scenes transformations.',
-                ],
-                actionTip: 'Turn your best customer FAQ into a short story script.',
-              },
             },
             {
               label: '3. Conversion Focus',
               text: 'Every video has a direct CTA to WhatsApp or your product catalog.',
               tag: 'Real Revenue',
               icon: 'TrendingUp',
-              detailData: {
-                tag: 'PRINCIPLE 03 // REVENUE FOCUS',
-                title: 'Turning Views into Qualified Sales Chats',
-                subtitle: 'Vanity metrics do not pay salaries; inbound conversations do.',
-                description: 'Design every single clip with a clear commercial next step.',
-                highlights: [
-                  'Use activation trigger words for direct engagement.',
-                  'Route leads directly to WhatsApp Business.',
-                  'Track conversations generated per video.',
-                ],
-                actionTip: 'Add a pre-filled WhatsApp link to your profile bio.',
-              },
             },
           ],
       instructorNotes: notes.s02,
     },
     {
-      id: 's03',
+      id: 's04',
       type: 'comparison',
       tag: isEs ? 'CAMBIO DE PARADIGMA' : 'PARADIGM SHIFT',
       title: isEs ? 'Creador Amateur vs. Sistema UXIO' : 'Amateur Creator vs. UXIO System',
@@ -198,6 +181,39 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
       },
       instructorNotes: notes.s03,
     },
+    {
+      id: 's05',
+      type: 'challenge',
+      tag: isEs ? 'COMPROMISO DE LA COHORTE' : 'COHORT COMMITMENT',
+      title: isEs ? 'Firma tu Compromiso de Creador' : 'Sign Your Creator Commitment',
+      challengeData: isEs
+        ? {
+            whatToDo: 'Abre la Ficha de Diagnóstico de Marca en el aula virtual y completa los 3 campos iniciales.',
+            whatToDeliver: 'Tu Ficha de Diagnóstico completada.',
+            whereToSubmit: 'Sección Reto 0 en el Aula Virtual.',
+            criteria: [
+              'Oferta principal definida con precio o ticket promedio',
+              '3 Dolores concretos de tu cliente ideal',
+              'Meta comercial de prospectos para las 5 semanas',
+            ],
+          }
+        : {
+            whatToDo: 'Open the Brand Diagnosis Sheet and complete the 3 onboarding fields.',
+            whatToDeliver: 'Your completed Brand Diagnosis Sheet.',
+            whereToSubmit: 'Challenge 0 section in Classroom.',
+            criteria: [
+              'Main offer defined with price point',
+              '3 concrete buyer pain points',
+              '5-week commercial inbound goal',
+            ],
+          },
+      instructorNotes: {
+        duration: '3:30 - 4:15 min',
+        script: isEs
+          ? 'Cierren felicitando a los alumnos por dar el primer paso y anímenlos a ver la Microclase 2 sobre la Regla de Oro.'
+          : 'Congratulate students on taking step one and guide them to Microclass 2.',
+      },
+    },
   ];
 
   return {
@@ -206,7 +222,7 @@ export const getPresentationM000101 = (lang: Locale = 'es'): PresentationContent
     lessonId: 'm00-01',
     title: isEs ? 'Microclase 1: El Manifiesto Creator Lab' : 'Microclass 1: Creator Lab Manifesto',
     moduleTag: isEs ? 'SEMANA 0 · MICROCLASE 1' : 'WEEK 0 · MICROCLASS 1',
-    estimatedMinutes: 4,
+    estimatedMinutes: 5,
     slides,
   };
 };

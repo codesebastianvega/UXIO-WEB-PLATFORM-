@@ -113,13 +113,8 @@ export default async function LessonClassroomPage({
   ]);
 
   const isLessonCompleted = progressInfo.completedLessonIds.includes(lesson.id);
-
-  // Calculate sequential unlock condition for video capsules
-  const allVideoLessons = course.modules
-    .flatMap(m => m.lessons)
-    .filter(l => l.type === 'microclass' && !l.slug.includes('sesion-en-vivo'));
-  const currentLessonIndex = allVideoLessons.findIndex(l => l.id === lesson.id);
-  const isUnlocked = currentLessonIndex <= 0 || progressInfo.completedLessonIds.includes(allVideoLessons[currentLessonIndex - 1]?.id);
+  // DEV MODE: All lessons freely accessible for evaluation
+  const isUnlocked = true;
 
   return (
     <main className="flex-1 min-w-0 max-w-[1440px] w-full mx-auto p-6 md:p-10 space-y-6 transition-colors min-h-[85vh]">

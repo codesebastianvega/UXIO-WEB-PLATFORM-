@@ -7,10 +7,12 @@ import MagicDustHeading from '@/components/ui/MagicDustHeading';
 interface SlideTitleProps {
   slide: SlideData;
   theme?: 'light' | 'dark';
+  lang?: string;
 }
 
-export default function SlideTitle({ slide, theme = 'light' }: SlideTitleProps) {
+export default function SlideTitle({ slide, theme = 'light', lang = 'es' }: SlideTitleProps) {
   const isDark = theme === 'dark';
+  const isEs = lang === 'es';
 
   return (
     <div className="w-full h-full flex items-center justify-between p-8 sm:p-12 lg:p-16 select-none relative gap-8">
@@ -65,57 +67,50 @@ export default function SlideTitle({ slide, theme = 'light' }: SlideTitleProps) 
         )}
       </div>
 
-      {/* Right Column: Hero Visual Glass Card */}
+      {/* Right Column: Hero Visual Glass Card (Dynamic) */}
       <div
         className="hidden md:flex flex-col gap-3.5 w-80 shrink-0 relative z-10 animate-element-in"
         style={{ animationDelay: '140ms' }}
       >
         <div
-          className={`p-6 rounded-3xl border space-y-4 shadow-xl backdrop-blur-2xl ${
+          className={`p-5 rounded-3xl border space-y-3.5 shadow-xl backdrop-blur-2xl ${
             isDark
               ? 'bg-[#121214]/80 border-white/[0.1] text-white shadow-[0_15px_40px_rgba(0,0,0,0.6)]'
               : 'bg-white/90 border-black/[0.08] text-[#111111] shadow-[0_15px_40px_rgba(0,0,0,0.06)]'
           }`}
         >
-          <div className="flex items-center justify-between border-b pb-3 border-black/[0.06] dark:border-white/[0.06]">
+          <div className="flex items-center justify-between border-b pb-2.5 border-black/[0.06] dark:border-white/[0.06]">
             <span className="font-mono text-[10px] uppercase font-bold text-[#8E8E93]">
-              // PROGRAMA EJECUTIVO
+              {slide.titleCard?.tag || (isEs ? '// TEMAS CLAVE' : '// KEY TAKEAWAYS')}
             </span>
             <span className="font-mono text-[10px] font-bold text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded-full border border-[#10B981]/20">
-              COHORTE 01
+              {slide.titleCard?.badge || (isEs ? 'MICROCLASE' : 'LESSON')}
             </span>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#FE385B]/10 text-[#FE385B] flex items-center justify-center border border-[#FE385B]/20">
-                <Video size={16} />
+          <div className="space-y-2.5">
+            {(slide.titleCard?.items || [
+              { title: isEs ? '100% Práctico' : '100% Actionable', desc: isEs ? 'Metodología aplicada a tu negocio' : 'Applied to your real business', color: '#FE385B' },
+              { title: isEs ? 'Fórmulas & Ganchos' : 'Formulas & Hooks', desc: isEs ? 'Estructuras listas para grabar' : 'Ready to film frameworks', color: '#FF7F07' },
+              { title: isEs ? 'Conversión a Ventas' : 'Sales Conversion', desc: isEs ? 'Cierre directo hacia WhatsApp' : 'Direct WhatsApp acquisition', color: '#10B981' },
+            ]).map((item, idx) => (
+              <div key={idx} className="flex items-center gap-2.5">
+                <div
+                  className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border"
+                  style={{
+                    backgroundColor: `${item.color || '#FE385B'}15`,
+                    borderColor: `${item.color || '#FE385B'}30`,
+                    color: item.color || '#FE385B',
+                  }}
+                >
+                  <Sparkles size={14} />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="font-display font-bold text-xs truncate">{item.title}</h4>
+                  {item.desc && <p className="text-[10px] text-[#8E8E93] truncate">{item.desc}</p>}
+                </div>
               </div>
-              <div>
-                <h4 className="font-display font-bold text-xs">Banco de 30 Clips</h4>
-                <p className="text-[11px] text-[#8E8E93]">B-roll grabado con celular</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#FF7F07]/10 text-[#FF7F07] flex items-center justify-center border border-[#FF7F07]/20">
-                <Users size={16} />
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-xs">5 Semanas de Acompañamiento</h4>
-                <p className="text-[11px] text-[#8E8E93]">Sesiones en vivo y feedback</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#10B981]/10 text-[#10B981] flex items-center justify-center border border-[#10B981]/20">
-                <TrendingUp size={16} />
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-xs">Conversión Directa</h4>
-                <p className="text-[11px] text-[#8E8E93]">Embudos hacia WhatsApp</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

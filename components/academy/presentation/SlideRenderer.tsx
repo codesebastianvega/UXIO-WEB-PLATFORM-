@@ -76,13 +76,13 @@ export default function SlideRenderer({
     case 'closing':
       return <SlideClosing slide={slide} theme={theme} />;
     case 'example':
-      return <SlideExample slide={slide} />;
+      return <SlideExample slide={slide} theme={theme} />;
     case 'checklist':
-      return <SlideChecklist slide={slide} />;
+      return <SlideChecklist slide={slide} theme={theme} />;
     case 'summary':
       return <SlideSummary slide={slide} theme={theme} />;
     default:
-      return <SlideFallback slide={slide} />;
+      return <SlideFallback slide={slide} theme={theme} />;
   }
 }
 

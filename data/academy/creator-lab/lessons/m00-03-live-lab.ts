@@ -32,12 +32,12 @@ export const getLessonM0003 = (lang: Locale = 'es'): Lesson => {
     resources: [
       {
         id: 'res-00-03-01',
-        title: isEs ? 'Diapositivas de la Sesión en Vivo (PDF 16:9)' : 'Live Session Slide Deck (16:9 PDF)',
+        title: isEs ? 'Guía de Inicio Rápido & Acuerdos (PDF)' : 'Quickstart Guide & Agreements (PDF)',
         type: 'pdf',
-        url: '/resources/kickoff-live-slides.pdf',
+        url: '#quickstart-guide',
         description: isEs
-          ? 'Descarga la presentación maestra con los acuerdos y fechas clave de la cohorte.'
-          : 'Download master presentation with agreements and key dates.',
+          ? 'Consulta los acuerdos clave, fechas de sesiones y mapa de la cohorte.'
+          : 'Review key agreements, session dates, and cohort roadmap.',
       },
       {
         id: 'res-00-03-02',

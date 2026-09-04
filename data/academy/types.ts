@@ -3,7 +3,7 @@ import { Locale } from '@/types';
 export type CohortStatus = 'open' | 'filling_fast' | 'last_spots' | 'closed';
 export type VideoProvider = 'youtube' | 'vimeo' | 'custom';
 export type LessonType = 'microclass' | 'live_lab';
-export type ResourceType = 'template' | 'pdf' | 'link' | 'prompt_pack';
+export type ResourceType = 'template' | 'pdf' | 'link' | 'prompt_pack' | 'guide';
 
 export interface CohortCapacity {
   capacity: number;

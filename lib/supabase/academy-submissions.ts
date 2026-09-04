@@ -6,7 +6,7 @@ export type SubmissionStatus =
   | 'needs_revision'
   | 'approved';
 
-export type SubmissionType = 'link' | 'document' | 'image' | 'video';
+export type SubmissionType = 'link' | 'document' | 'image' | 'video' | 'text';
 
 export interface LessonSubmission {
   id: string;

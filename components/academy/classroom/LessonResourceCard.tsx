@@ -20,6 +20,38 @@ interface LessonResourceCardProps {
 
 function getResourceMeta(resource: LessonResource, isEs: boolean) {
   const url = resource.url || '';
+  if (url === '#quickstart-guide') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Guía Rápida' : 'Quickstart',
+      cta: isEs ? 'Ver Guía Rápida ➔' : 'View Quickstart ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#commercial-vs-native') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Ficha UGC' : 'UGC Worksheet',
+      cta: isEs ? 'Ver Ficha UGC ➔' : 'View UGC Sheet ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#objection-mining') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Minería Objeciones' : 'Objection Mining',
+      cta: isEs ? 'Ver Minería ➔' : 'View Mining ➔',
+      colorClass: 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-md shadow-[#FF7F07]/20',
+    };
+  }
+  if (url === '#content-matrix') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Matriz 30 Ideas' : '30-Day Matrix',
+      cta: isEs ? 'Ver Matriz 30 Ideas ➔' : 'View 30-Day Matrix ➔',
+      colorClass: 'bg-[#10B981] hover:bg-[#10B981]/90 text-white shadow-md shadow-[#10B981]/20',
+    };
+  }
   if (url === '#setup-checklist') {
     return {
       icon: FileText,
@@ -36,6 +68,94 @@ function getResourceMeta(resource: LessonResource, isEs: boolean) {
       colorClass: 'bg-[#7928CA] hover:bg-[#7928CA]/90 text-white shadow-md shadow-[#7928CA]/20',
     };
   }
+  if (url === '#hook-formulas') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Swipe File' : 'Swipe File',
+      cta: isEs ? 'Ver 15 Ganchos ➔' : 'View 15 Hooks ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#broll-angles-guide') {
+    return {
+      icon: FileText,
+      badge: isEs ? 'Guía B-Roll' : 'B-Roll Guide',
+      cta: isEs ? 'Ver 6 Ángulos ➔' : 'View 6 Angles ➔',
+      colorClass: 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-md shadow-[#FF7F07]/20',
+    };
+  }
+  if (url === '#camera-calibration') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Cheat Sheet' : 'Cheat Sheet',
+      cta: isEs ? 'Ver Calibración ➔' : 'View Calibration ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#broll-30-checklist') {
+    return {
+      icon: FileText,
+      badge: isEs ? 'Checklist B-Roll' : 'B-Roll Checklist',
+      cta: isEs ? 'Ver 30 Clips ➔' : 'View 30 Clips ➔',
+      colorClass: 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-md shadow-[#FF7F07]/20',
+    };
+  }
+  if (url === '#script-4-blocks') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Plantilla Guion' : 'Script Template',
+      cta: isEs ? 'Ver 4 Bloques ➔' : 'View 4 Blocks ➔',
+      colorClass: 'bg-[#10B981] hover:bg-[#10B981]/90 text-white shadow-md shadow-[#10B981]/20',
+    };
+  }
+  if (url === '#hook-master-swipefile') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Bóveda Ganchos' : 'Hooks Vault',
+      cta: isEs ? 'Ver 30 Ganchos ➔' : 'View 30 Hooks ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#script-frameworks-vault') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Frameworks Guion' : 'Script Frameworks',
+      cta: isEs ? 'Ver Frameworks ➔' : 'View Frameworks ➔',
+      colorClass: 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-md shadow-[#FF7F07]/20',
+    };
+  }
+  if (url === '#multiformat-pack-template') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Kit Multiformato' : 'Multiformat Pack',
+      cta: isEs ? 'Ver Kit 1x3 ➔' : 'View 1x3 Pack ➔',
+      colorClass: 'bg-[#10B981] hover:bg-[#10B981]/90 text-white shadow-md shadow-[#10B981]/20',
+    };
+  }
+  if (url === '#capcut-shortcuts-cheat-sheet') {
+    return {
+      icon: Sparkles,
+      badge: isEs ? 'Cheat Sheet' : 'Cheat Sheet',
+      cta: isEs ? 'Ver Atajos CapCut ➔' : 'View CapCut Shortcuts ➔',
+      colorClass: 'bg-[#FE385B] hover:bg-[#FE385B]/90 text-white shadow-md shadow-[#FE385B]/20',
+    };
+  }
+  if (url === '#sound-design-vault') {
+    return {
+      icon: FileSpreadsheet,
+      badge: isEs ? 'Bóveda SFX' : 'SFX Vault',
+      cta: isEs ? 'Ver Mezcla Audio ➔' : 'View Audio Mix ➔',
+      colorClass: 'bg-[#FF7F07] hover:bg-[#FF7F07]/90 text-white shadow-md shadow-[#FF7F07]/20',
+    };
+  }
+  if (url === '#ai-creator-prompt-pack') {
+    return {
+      icon: Terminal,
+      badge: isEs ? 'Prompts IA' : 'AI Prompts',
+      cta: isEs ? 'Ver Prompts IA ➔' : 'View AI Prompts ➔',
+      colorClass: 'bg-[#10B981] hover:bg-[#10B981]/90 text-white shadow-md shadow-[#10B981]/20',
+    };
+  }
 
   switch (resource.type) {
     case 'template':
@@ -45,6 +165,7 @@ function getResourceMeta(resource: LessonResource, isEs: boolean) {
         cta: isEs ? 'Abrir Plantilla ➔' : 'Open Template ➔',
         colorClass: 'bg-[#10B981] hover:bg-[#10B981]/90 text-white shadow-md shadow-[#10B981]/20',
       };
+    case 'guide':
     case 'pdf':
       return {
         icon: FileText,

@@ -99,6 +99,16 @@ export interface SlideData {
   blockColor?: string;
   auroraColors?: string[];
   autoRevealMs?: number;
+  titleCard?: {
+    tag?: string;
+    badge?: string;
+    items: Array<{
+      title: string;
+      desc?: string;
+      icon?: string;
+      color?: string;
+    }>;
+  };
 }
 
 export interface PresentationContent {

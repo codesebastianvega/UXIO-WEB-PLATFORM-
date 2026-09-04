@@ -118,34 +118,8 @@ export default function ClassroomSidebar({
                     const isLessonActive =
                       lesson.slug === activeLessonSlug || lesson.id === activeLessonSlug;
                     const isCompleted = completedLessonIds.includes(lesson.id);
-                    const allLessonsList = course.modules.flatMap(m => m.lessons);
-                    const lessonIndex = allLessonsList.findIndex(l => l.id === lesson.id);
-                    const isUnlocked = lessonIndex === 0 || completedLessonIds.includes(allLessonsList[lessonIndex - 1]?.id);
-
-                    if (!isUnlocked) {
-                      return (
-                        <div
-                          key={lesson.id}
-                          className="flex items-start gap-2.5 p-2.5 rounded-xl text-xs font-sans text-[#8E8E93]/60 cursor-not-allowed select-none opacity-60"
-                          title={isEs ? 'Completa la clase anterior para desbloquear' : 'Complete previous lesson to unlock'}
-                        >
-                          <div className="mt-0.5 shrink-0">
-                            <Lock size={13} className="text-[#8E8E93]/70" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="leading-snug line-clamp-2">{lesson.title}</p>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className="font-mono text-[10px] text-[#8E8E93]/60">
-                                {lesson.duration}
-                              </span>
-                              <span className="font-mono text-[9px] text-[#FF7F07]/80">
-                                🔒 {isEs ? 'Bloqueada' : 'Locked'}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
+                    // DEV MODE: All lessons unlocked for smooth testing
+                    const isUnlocked = true;
 
                     return (
                       <Link
