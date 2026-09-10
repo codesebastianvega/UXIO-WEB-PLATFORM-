@@ -16,6 +16,7 @@ export interface InsightArticle {
   };
   tags: string[];
   featured?: boolean;
+  imageUrl?: string;
 }
 
 export function getInsightsData(lang: Locale = 'es') {
@@ -49,6 +50,7 @@ export function getInsightsData(lang: Locale = 'es') {
         role: 'Principal Architect',
       },
       tags: ['Next.js 16', 'Framer Motion', 'Web Performance', 'LERP Physics'],
+      imageUrl: '/services/cards/web-apps-platform.jpg',
       featured: true,
     },
     {
@@ -70,6 +72,7 @@ export function getInsightsData(lang: Locale = 'es') {
         role: 'Lead Mentor',
       },
       tags: ['UGC Mobile', 'Ventas Directas', 'Psicología Visual', 'Creator Economy'],
+      imageUrl: '/academy/creator-lab/hero-creator-setup.jpg',
       featured: false,
     },
     {
@@ -91,6 +94,7 @@ export function getInsightsData(lang: Locale = 'es') {
         role: 'Design System',
       },
       tags: ['Bento Grid', 'Design Tokens', 'Dark Aesthetics', 'Figma to Code'],
+      imageUrl: '/services/cards/experience-ui-ux.jpg',
       featured: false,
     },
     {
@@ -112,6 +116,7 @@ export function getInsightsData(lang: Locale = 'es') {
         role: 'Principal Architect',
       },
       tags: ['Supabase SSR', 'Next.js 16', 'App Router', 'Edge Cookies'],
+      imageUrl: '/services/cards/digital-solutions.jpg',
       featured: false,
     },
     {
@@ -133,6 +138,7 @@ export function getInsightsData(lang: Locale = 'es') {
         role: 'Founder',
       },
       tags: ['Venture Building', 'Lean Prototyping', 'Product Market Fit', 'Labs'],
+      imageUrl: '/services/cards/brand-identity.jpg',
       featured: false,
     },
   ];

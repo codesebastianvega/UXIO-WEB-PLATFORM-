@@ -23,6 +23,7 @@ export interface Project {
   customPath?: string;
   client?: string;
   stack?: string[];
+  imageUrl?: string;
 }
 
 export interface Subroute {

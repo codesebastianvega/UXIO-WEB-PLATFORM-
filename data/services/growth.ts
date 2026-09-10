@@ -11,8 +11,10 @@ export const growthService: ServiceItem = {
     {
       id: "cro-conversion",
       slug: "cro-conversion",
-      title: "Conversión & CRO",
-      description: "Afinamos la experiencia para que cada visitante entienda el valor y se convierta en usuario activo o cliente recurrente.",
+      title: "Optimización de Conversión & Ventas",
+      description: "Rediseñamos tus embudos y páginas de aterrizaje para que más visitantes se conviertan en clientes que pagan.",
+      imageUrl: "/services/cards/growth-analytics.jpg",
+      badge: "Optimización CRO",
       startingPrice: { COP: 1500000, USD: 350 },
       timeline: "2 Semanas",
       tiers: [
@@ -44,8 +46,10 @@ export const growthService: ServiceItem = {
     {
       id: "acquisition-ads",
       slug: "acquisition-ads",
-      title: "Adquisición & Performance",
-      description: "Estrategias de pauta publicitaria que respetan la estética de tu marca mientras escalan tus resultados comerciales con un ROAS positivo.",
+      title: "Publicidad Digital & Adquisición",
+      description: "Campañas de pauta en Meta y Google Ads diseñadas para generar clientes calificados con retorno positivo (ROAS).",
+      imageUrl: "/services/cards/growth-analytics.jpg",
+      badge: "Meta & Google Ads",
       startingPrice: { COP: 1200000, USD: 300 },
       timeline: "Mes a Mes",
       tiers: [
@@ -63,13 +67,13 @@ export const growthService: ServiceItem = {
         { 
           name: "Gestión Mensual", 
           isRecommended: true, 
-          price: { COP: 2500000, USD: 600 }, 
-          description: "Gestión y optimización continua de adquisición para marcas en aceleración.",
+          price: { COP: 2200000, USD: 550 }, 
+          description: "Optimización continua, diseño de creativos y escalado de presupuesto rentable.",
           features: [
-            "Optimización diaria de pauta, pujas y presupuestos",
-            "Creación de copys y creativos persuasivos continuos",
-            "Reportes semanales de rendimiento y análisis de ROAS",
-            "Acompañamiento estratégico continuo sin ataduras"
+            "Optimización y monitoreo semanal de rendimiento y ROAS",
+            "Diseño y prueba continua de nuevos anuncios y copies",
+            "Ajustes de puja, audiencias y exclusiones",
+            "Reporte mensual de rendimiento y ventas generadas"
           ] 
         }
       ]
@@ -77,8 +81,10 @@ export const growthService: ServiceItem = {
     {
       id: "automation-retention",
       slug: "automation-retention",
-      title: "Automatización & Retención",
-      description: "Sistemas automáticos para recuperar ventas perdidas y aumentar el ciclo de vida (LTV) de tus clientes sin esfuerzo manual.",
+      title: "Automatización de Ventas & Retención",
+      description: "Flujos de email automáticos para recuperar carritos abandonados, educar prospectos y fidelizar a tus clientes.",
+      imageUrl: "/services/cards/growth-analytics.jpg",
+      badge: "Email & Retención",
       startingPrice: { COP: 1800000, USD: 450 },
       timeline: "2 Semanas",
       tiers: [

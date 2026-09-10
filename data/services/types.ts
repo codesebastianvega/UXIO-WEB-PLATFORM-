@@ -29,6 +29,7 @@ export interface PlatformGroup {
   startingPrice?: PriceMap;
   tiers: CapabilityTier[];
   microServices?: MicroService[];
+  imageUrl?: string;
 }
 
 export interface PricingTier {

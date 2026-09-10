@@ -48,20 +48,42 @@ export default function InsightsCatalog({ categories, articles, lang }: Insights
 
       {/* Featured Lead Insight (Only shown on 'all') */}
       {selectedCat === 'all' && featuredArticle && (
-        <article className="group relative p-7 sm:p-10 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.18] dark:hover:border-white/[0.22] transition-all space-y-6 hover:shadow-soft-xl">
+        <article className="group relative p-6 sm:p-8 lg:p-10 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.18] dark:hover:border-white/[0.22] transition-all space-y-6 hover:shadow-soft-xl overflow-hidden">
+          {featuredArticle.imageUrl && (
+            <div className="relative w-full aspect-[16/9] sm:aspect-[24/9] rounded-2xl overflow-hidden border border-black/[0.06] dark:border-white/[0.08]">
+              <img
+                src={featuredArticle.imageUrl}
+                alt={featuredArticle.title}
+                className="w-full h-full object-cover select-none transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between text-white font-mono text-[11px] pointer-events-none">
+                <span className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 font-bold uppercase tracking-wider text-[10px] text-[#00F0FF]">
+                  FEATURED ESSAY // {featuredArticle.categoryLabel}
+                </span>
+                <span className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-[11px] flex items-center gap-1.5">
+                  <Clock size={12} />
+                  {featuredArticle.readTime}
+                </span>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span className="font-mono text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-[#00F0FF]/10 border border-[#00F0FF]/25 text-[#00F0FF]">
-                FEATURED // {featuredArticle.categoryLabel}
+                {featuredArticle.categoryLabel}
               </span>
               <span className="font-mono text-[11px] text-[#8E8E93]">
                 {featuredArticle.publishedAt}
               </span>
             </div>
-            <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#8E8E93]">
-              <Clock size={13} />
-              <span>{featuredArticle.readTime}</span>
-            </div>
+            {!featuredArticle.imageUrl && (
+              <div className="flex items-center gap-1.5 font-mono text-[11px] text-[#8E8E93]">
+                <Clock size={13} />
+                <span>{featuredArticle.readTime}</span>
+              </div>
+            )}
           </div>
 
           <div className="space-y-3 max-w-3xl">
@@ -102,21 +124,40 @@ export default function InsightsCatalog({ categories, articles, lang }: Insights
         {listArticles.map((article) => (
           <article
             key={article.id}
-            className="group relative p-6 sm:p-7 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.2] transition-all flex flex-col justify-between space-y-5 hover:shadow-soft-lg"
+            className="group relative p-5 sm:p-6 rounded-3xl bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.16] dark:hover:border-white/[0.2] transition-all flex flex-col justify-between space-y-4 hover:shadow-soft-lg overflow-hidden"
           >
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2">
+            {article.imageUrl && (
+              <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08]">
+                <img
+                  src={article.imageUrl}
+                  alt={article.title}
+                  className="w-full h-full object-cover select-none transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                 <span
-                  className="font-mono text-[9.5px] uppercase font-bold px-2 py-0.5 rounded-full"
-                  style={{
-                    backgroundColor: `${article.accent}15`,
-                    color: article.accent,
-                    borderColor: `${article.accent}30`,
-                    borderWidth: 1,
-                  }}
+                  className="absolute top-2.5 right-2.5 font-mono text-[9px] uppercase font-bold px-2.5 py-0.5 rounded-full text-white shadow-sm"
+                  style={{ backgroundColor: article.accent }}
                 >
                   {article.categoryLabel}
                 </span>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                {!article.imageUrl && (
+                  <span
+                    className="font-mono text-[9.5px] uppercase font-bold px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: `${article.accent}15`,
+                      color: article.accent,
+                      borderColor: `${article.accent}30`,
+                      borderWidth: 1,
+                    }}
+                  >
+                    {article.categoryLabel}
+                  </span>
+                )}
                 <span className="font-mono text-[10px] text-[#8E8E93]">
                   {article.readTime}
                 </span>

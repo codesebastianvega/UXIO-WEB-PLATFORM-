@@ -4,8 +4,10 @@ export const experienceCapabilities: Capability[] = [
   {
     id: "service-design",
     slug: "service-design",
-    title: "Service Design & Operaciones",
-    description: "Optimización de procesos híbridos (Físico + Digital). Analizamos cómo se mueve la información y el personal en tu negocio para evitar el caos operativo y fugas de rentabilidad.",
+    title: "Optimización de Procesos & Servicios",
+    description: "Optimización de flujos de trabajo (físicos y digitales). Analizamos cómo opera tu equipo y tus clientes para eliminar cuellos de botella y pérdidas de tiempo y dinero.",
+    imageUrl: "/services/cards/digital-solutions.jpg",
+    badge: "Eficiencia Operativa",
     startingPrice: { USD: 600, COP: 2500000 },
     timeline: "1-2 Semanas",
     tiers: [
@@ -43,8 +45,10 @@ export const experienceCapabilities: Capability[] = [
   {
     id: "ux-research",
     slug: "ux-research",
-    title: "UX Research & Validación",
-    description: "Investigación profunda para entender a tus usuarios antes de invertir en desarrollo o validar un producto recién lanzado con métricas reales.",
+    title: "Investigación con Usuarios & Validación",
+    description: "Pruebas con clientes reales para entender por qué abandonan o qué necesitan, antes de invertir semanas programando a ciegas.",
+    imageUrl: "/services/cards/experience-ui-ux.jpg",
+    badge: "Validación Real",
     startingPrice: { USD: 450, COP: 1800000 },
     timeline: "1-2 Semanas",
     tiers: [
@@ -58,23 +62,23 @@ export const experienceCapabilities: Capability[] = [
           "Grabaciones completas de pantalla y voz con análisis cualitativo",
           "Métricas duras de tasa de éxito, tiempos y puntos de abandono",
           "Heatmaps de clicks y mapa de navegación real de los usuarios",
-          "Loom ejecutivo de 25 min explicando los hallazgos críticos",
-          "Checklist de correcciones prioritarias para entregar a desarrollo"
+          "Informe visual de hallazgos críticos con recomendaciones",
+          "Sesión de entrega de 60 min explicando cada fricción"
         ] 
       },
       { 
-        name: "Discovery Sprint", 
+        name: "Discovery & Validación", 
         isRecommended: true, 
-        price: { USD: 850, COP: 3500000 }, 
-        description: "Investigación holística de mercado y usuario para validar tu producto antes de gastar millones en código.",
+        price: { USD: 750, COP: 3000000 }, 
+        description: "Investigación completa con entrevistas a profundidad, benchmarking y validación de hipótesis de negocio antes de programar.",
         features: [
-          "8 a 10 entrevistas a profundidad 1-a-1 con clientes y prospectos",
-          "Mapas de Empatía detallados: dolores, motivadores y objeciones",
-          "Customer Journey Map de 360° con todas las etapas de decisión",
-          "Benchmark competitivo de UX analizando fortalezas y debilidades",
-          "Matriz de propuesta de valor y validación de disposición a pagar (WTP)",
-          "Definición del Product Backlog con priorización RICE",
-          "Taller de co-creación y presentación ejecutiva con stakeholders"
+          "10 entrevistas a profundidad con usuarios y clientes potenciales",
+          "Mapa de empatía y definición clara de User Personas reales",
+          "Customer Journey Map detallando emociones y frustraciones",
+          "Benchmark competitivo analizando fortalezas y debilidades de rivales",
+          "Matriz de oportunidades de negocio y diferenciación",
+          "Validación de propuesta de valor con prototipo conceptual",
+          "Presentación ejecutiva para socios e inversores"
         ] 
       }
     ]
@@ -82,8 +86,10 @@ export const experienceCapabilities: Capability[] = [
   {
     id: "ux-architecture",
     slug: "ux-architecture",
-    title: "Arquitectura UX (Software)",
-    description: "Estructura, lógica y planos arquitectónicos para productos digitales. Reducimos la carga cognitiva de tus usuarios y eliminamos retrabajos.",
+    title: "Diseño de Interfaz UI/UX & Prototipos",
+    description: "Planos arquitectónicos, flujos de navegación y pantallas interactivas en Figma. Prototipos clickeables para validar tu producto con clientes e inversores.",
+    imageUrl: "/services/cards/experience-ui-ux.jpg",
+    badge: "Figma & Prototipos",
     startingPrice: { USD: 350, COP: 1500000 },
     timeline: "1-2 Semanas",
     tiers: [

@@ -1,19 +1,6 @@
 import { Project, Locale } from '@/types';
-
-export interface ProjectDetail extends Project {
-  client: string;
-  timeline: string;
-  role: string;
-  liveUrl?: string;
-  lead: string;
-  challenge: string;
-  solution: string;
-  disciplinesUsed: string[];
-  deliverables: string[];
-  stack: string[];
-  stats: Array<{ label: string; value: string }>;
-  categories: string[];
-}
+import { ProjectDetail } from './projects-types';
+export type { ProjectDetail };
 
 export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
   const isEs = lang === 'es';
@@ -69,6 +56,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'Booking' },
         { label: 'Next.js 16' }
       ],
+      imageUrl: '/works/cards/sie-travel.jpg',
       canvasType: 'preview'
     },
     {
@@ -121,6 +109,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'Luxury' },
         { label: 'Headless' }
       ],
+      imageUrl: '/works/cards/by-saralu.jpg',
       canvasType: 'preview'
     },
     {
@@ -173,6 +162,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'DTC' },
         { label: 'Subscriptions' }
       ],
+      imageUrl: '/works/cards/alto-andino.jpg',
       canvasType: 'preview'
     },
     {
@@ -225,6 +215,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'Hospitality OS' },
         { label: 'Realtime KDS' }
       ],
+      imageUrl: '/works/cards/aluna-pos.jpg',
       canvasType: 'preview'
     },
     {
@@ -277,6 +268,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'Nova AI' },
         { label: 'PWA' }
       ],
+      imageUrl: '/works/cards/arca-fintech.jpg',
       canvasType: 'preview'
     },
     {
@@ -328,6 +320,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'UX/UI' },
         { label: 'POS Kiosks' }
       ],
+      imageUrl: '/services/cards/brand-identity.jpg',
       canvasType: 'preview'
     }
   ];

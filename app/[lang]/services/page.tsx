@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Cpu, Layers, Palette, TrendingUp, Sparkles, Clock } from 'lucide-react';
+import { ArrowRight, Clock } from 'lucide-react';
 import { getDictionary } from '@/lib/dictionary';
 import { Locale } from '@/types';
+import { DisciplineCard } from '@/components/services/DisciplineCard';
 
 export async function generateStaticParams() {
   return [{ lang: 'es' }, { lang: 'en' }];
@@ -22,50 +23,55 @@ export default async function ServicesPage({
   const disciplines = [
     {
       id: "technology",
-      title: isEs ? "Desarrollo" : "Development",
+      title: isEs ? "Desarrollo & Tecnología" : "Development & Technology",
       badge: isEs ? "Web & Apps" : "Web & Apps",
-      description: isEs ? "Construimos sitios web, aplicaciones y plataformas digitales." : "We build websites, apps, and digital platforms.",
+      description: isEs ? "Construimos sitios web modernos, tiendas online y plataformas digitales a medida." : "We build modern websites, online stores, and bespoke digital platforms.",
       path: `/${lang}/services/technology`,
+      image: "/services/cards/web-apps-platform.jpg",
       accent: "#00F0FF",
       auroraGradient: "from-[#00F0FF]/20 via-[#3B82F6]/10 to-transparent",
       chips: ["Next.js", "TypeScript", "APIs Reactivas", "Cloud Infrastructure", "IA Aplicada"]
     },
     {
       id: "experience",
-      title: isEs ? "Diseño y Experiencia" : "Design & Experience",
+      title: isEs ? "Diseño & Experiencia" : "Design & Experience",
       badge: isEs ? "UI / UX" : "UI / UX",
-      description: isEs ? "Diseñamos interfaces claras, atractivas y fáciles de usar." : "We design clear, engaging, and easy-to-use interfaces.",
+      description: isEs ? "Diseñamos interfaces claras, atractivas y fáciles de usar en Figma y código." : "We design clear, engaging, and easy-to-use interfaces in Figma and code.",
       path: `/${lang}/services/experience`,
+      image: "/services/cards/experience-ui-ux.jpg",
       accent: "#FE385B",
       auroraGradient: "from-[#FE385B]/20 via-[#F06C83]/10 to-transparent",
       chips: ["Diseño de Interfaz", "Experiencia de Usuario", "Sistemas de Diseño", "UX Móvil", "Micro-Interacciones"]
     },
     {
       id: "brand",
-      title: isEs ? "Marca" : "Brand & Identity",
+      title: isEs ? "Marca & Identidad" : "Brand & Identity",
       badge: isEs ? "Identidad & Branding" : "Identity & Branding",
-      description: isEs ? "Construimos identidades que hacen reconocible y memorable una marca." : "We build brand identities that are memorable and distinct.",
+      description: isEs ? "Construimos identidades que hacen reconocible, prestigiosa y memorable una marca." : "We build brand identities that are memorable, prestigious, and distinct.",
       path: `/${lang}/services/brand`,
+      image: "/services/cards/brand-identity.jpg",
       accent: "#FFCC48",
       auroraGradient: "from-[#FFCC48]/20 via-[#FF7F07]/10 to-transparent",
       chips: ["Identidad Visual", "Logotipos", "Tipografía", "Guías de Marca", "Dirección de Arte"]
     },
     {
       id: "growth",
-      title: isEs ? "Marketing y Crecimiento" : "Marketing & Growth",
+      title: isEs ? "Marketing & Crecimiento" : "Marketing & Growth",
       badge: isEs ? "Conversión & Escala" : "Conversion & Scale",
-      description: isEs ? "Ayudamos a convertir más visitas en clientes y hacer crecer el negocio." : "We help convert visitors into customers and grow the business.",
+      description: isEs ? "Ayudamos a convertir más visitas en clientes y hacer crecer las ventas de tu negocio." : "We help convert visitors into customers and scale your business revenue.",
       path: `/${lang}/services/growth`,
+      image: "/services/cards/growth-analytics.jpg",
       accent: "#FF7F07",
       auroraGradient: "from-[#FF7F07]/20 via-[#FE385B]/10 to-transparent",
       chips: ["Optimización de Conversión", "Pruebas A/B", "Retención", "Analítica", "Estrategia"]
     },
     {
       id: "content",
-      title: isEs ? "Contenido" : "Content & Media",
+      title: isEs ? "Contenido & Audiovisual" : "Content & Media",
       badge: isEs ? "Audiovisual & Media" : "Audiovisual & Media",
-      description: isEs ? "Producimos contenido visual, audiovisual y digital para comunicar mejor." : "We produce visual, audiovisual, and digital content to communicate better.",
+      description: isEs ? "Producimos contenido visual, videos verticales y piezas de alto impacto para vender." : "We produce visual content, vertical videos, and high-impact assets to sell.",
       path: `/${lang}/services/content`,
+      image: "/services/cards/content-media.jpg",
       accent: "#10B981",
       auroraGradient: "from-[#10B981]/20 via-[#00F0FF]/10 to-transparent",
       chips: ["Video Móvil", "Guiones", "Fotografía", "Formatos Verticales", "Estrategia"]
@@ -74,32 +80,14 @@ export default async function ServicesPage({
       id: "solutions",
       title: isEs ? "Soluciones Digitales" : "Digital Solutions",
       badge: isEs ? "SaaS & Automatización" : "SaaS & Automation",
-      description: isEs ? "Construimos herramientas digitales adaptadas a necesidades específicas." : "We build custom digital tools adapted to specific needs.",
+      description: isEs ? "Construimos herramientas digitales, portales y automatizaciones adaptadas a tu empresa." : "We build custom digital tools, portals, and automations tailored to your business.",
       path: `/${lang}/services/solutions`,
+      image: "/services/cards/digital-solutions.jpg",
       accent: "#7928CA",
       auroraGradient: "from-[#7928CA]/20 via-[#FE385B]/10 to-transparent",
       chips: ["Plataformas Web", "Automatización", "Integraciones", "Portales", "SaaS"]
     }
   ];
-
-  const getDisciplineIcon = (id: string) => {
-    switch (id) {
-      case 'technology':
-        return <Cpu size={18} className="text-[#00F0FF]" />;
-      case 'experience':
-        return <Layers size={18} className="text-[#FE385B]" />;
-      case 'brand':
-        return <Palette size={18} className="text-[#FFCC48]" />;
-      case 'growth':
-        return <TrendingUp size={18} className="text-[#FF7F07]" />;
-      case 'content':
-        return <Sparkles size={18} className="text-[#10B981]" />;
-      case 'solutions':
-        return <Cpu size={18} className="text-[#7928CA]" />;
-      default:
-        return <Sparkles size={18} className="text-[#00F0FF]" />;
-    }
-  };
 
   const sprintModels = isEs ? [
     {
@@ -191,78 +179,12 @@ export default async function ServicesPage({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {disciplines.map((disc: any) => (
-              <div
+            {disciplines.map((disc) => (
+              <DisciplineCard
                 key={disc.id}
-                className="group relative rounded-2xl p-6 bg-white dark:bg-[#171719] border border-black/[0.08] dark:border-white/[0.08] hover:border-black/[0.18] dark:hover:border-white/[0.2] shadow-soft-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between overflow-hidden"
-              >
-                <div 
-                  className={`absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-15 dark:opacity-25 blur-3xl transition-all duration-300 group-hover:opacity-35 group-hover:scale-125 pointer-events-none bg-gradient-to-br ${disc.auroraGradient}`}
-                ></div>
-
-                <div className="relative z-10 space-y-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="p-2 rounded-xl bg-[#F7F7F5] dark:bg-[#0D0D0E] border border-black/[0.04] dark:border-white/[0.06] shadow-2xs">
-                        {getDisciplineIcon(disc.id)}
-                      </div>
-                      <h2 className="font-display font-bold text-lg text-[#111111] dark:text-white tracking-tight">
-                        {disc.title}
-                      </h2>
-                    </div>
-
-                    <span 
-                      className="font-mono text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold shadow-2xs"
-                      style={{
-                        backgroundColor: `${disc.accent}15`,
-                        color: disc.accent,
-                        border: `1px solid ${disc.accent}35`
-                      }}
-                    >
-                      {disc.badge}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans">
-                    {disc.description}
-                  </p>
-
-                  <div className="space-y-1.5 pt-1">
-                    <div className="font-mono text-[9px] uppercase text-[#8E8E93] tracking-wider">
-                      {isEs ? 'CAPACIDADES & STACK' : 'CORE CAPABILITIES'}
-                    </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {disc.chips?.map((chip: string, cIdx: number) => (
-                        <span
-                          key={cIdx}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono bg-[#F7F7F5] dark:bg-[#0D0D0E] border border-black/[0.04] dark:border-white/[0.06] text-[#111111] dark:text-[#EDEDEE]"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: disc.accent }}></span>
-                          <span>{chip}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 mt-4 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
-                  <Link
-                    href={disc.path}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#111111] dark:text-white group-hover:text-[#FE385B] transition-colors"
-                  >
-                    <span>{isEs ? 'Explorar servicios y soluciones' : 'Explore services & solutions'}</span>
-                    <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-                  </Link>
-
-                  <div 
-                    className="w-2 h-2 rounded-full"
-                    style={{ 
-                      backgroundColor: disc.accent,
-                      boxShadow: `0 0 6px ${disc.accent}` 
-                    }}
-                  ></div>
-                </div>
-              </div>
+                discipline={disc}
+                isEs={isEs}
+              />
             ))}
           </div>
         </section>

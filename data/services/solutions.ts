@@ -11,8 +11,10 @@ export const solutionsService: ServiceItem = {
     {
       id: "venture-builder",
       slug: "venture-builder",
-      title: "Venture Builder (End-to-End)",
-      description: "Construimos plataformas complejas, SaaS y aplicaciones robustas desde cero, operando como tu propio departamento de tecnología.",
+      title: "Construcción de Productos Digitales & SaaS",
+      description: "Construimos plataformas digitales complejas, herramientas SaaS y aplicaciones robustas operando como tu propio equipo de tecnología.",
+      imageUrl: "/services/cards/digital-solutions.jpg",
+      badge: "Venture Builder",
       startingPrice: "Cotizar según alcance",
       timeline: "8 a 12 Semanas",
       tiers: [
@@ -44,8 +46,10 @@ export const solutionsService: ServiceItem = {
     {
       id: "hardware-wearables",
       slug: "hardware-wearables",
-      title: "Hardware, Wearables & IoT",
-      description: "Llevamos tu producto más allá del teléfono. Diseñamos y desarrollamos experiencias para smartwatches, terminales punto de venta (POS) y dispositivos conectados.",
+      title: "Dispositivos Conectados & Wearables",
+      description: "Llevamos tu producto a smartwatches, terminales punto de venta (POS) y hardware conectado con interfaces intuitivas.",
+      imageUrl: "/services/cards/digital-solutions.jpg",
+      badge: "Wearables & IoT",
       startingPrice: "Cotizar según hardware",
       timeline: "4 a 8 Semanas",
       tiers: [

@@ -59,39 +59,66 @@ export default function ProjectCard({
           </span>
         </div>
 
-        {/* Realistic Web UI Canvas (Without Duplicate Title) */}
-        <div className="h-36 sm:h-40 p-4 sm:p-5 relative overflow-hidden flex flex-col justify-between group-hover:scale-[1.02] transition-transform duration-500 bg-gradient-to-br from-black/[0.01] to-black/[0.04] dark:from-white/[0.02] dark:to-white/[0.04]">
-          {/* Subtle Ambient Glow */}
-          <div
-            className="absolute -top-10 -right-10 w-36 h-36 rounded-full opacity-20 blur-2xl transition-all group-hover:opacity-40 pointer-events-none"
-            style={{ backgroundColor: project.accentColor }}
-          />
+        {/* Realistic Web UI Canvas / Real Mockup */}
+        <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/[0.02] dark:bg-[#0E0E10]">
+          {project.imageUrl ? (
+            <div className="relative w-full h-full group-hover:scale-105 transition-transform duration-500">
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                className="w-full h-full object-cover select-none"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+              
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/15 font-mono text-[9.5px] text-white">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: project.accentColor }} />
+                  <span>{project.category.toUpperCase()}</span>
+                </div>
 
-          {/* Web UI Mockup Elements */}
-          <div className="relative z-10 space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.08] font-mono text-[9.5px] text-[#666666] dark:text-[#A1A1AA]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-              <span>LIVE WEB PLATFORM</span>
+                {project.liveUrl && (
+                  <span className="font-mono text-[10px] text-white bg-[#FE385B] px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 shadow-sm">
+                    <span>{isEs ? 'Ver Web' : 'Open'}</span>
+                    <ArrowUpRight size={11} />
+                  </span>
+                )}
+              </div>
             </div>
-            <p className="font-display font-semibold text-sm sm:text-base text-[#222222] dark:text-[#EEEEEE] tracking-tight leading-snug line-clamp-2">
-              {project.tagline}
-            </p>
-          </div>
+          ) : (
+            <div className="h-36 sm:h-40 p-4 sm:p-5 relative overflow-hidden flex flex-col justify-between group-hover:scale-[1.02] transition-transform duration-500 bg-gradient-to-br from-black/[0.01] to-black/[0.04] dark:from-white/[0.02] dark:to-white/[0.04]">
+              {/* Subtle Ambient Glow */}
+              <div
+                className="absolute -top-10 -right-10 w-36 h-36 rounded-full opacity-20 blur-2xl transition-all group-hover:opacity-40 pointer-events-none"
+                style={{ backgroundColor: project.accentColor }}
+              />
 
-          <div className="relative z-10 flex items-center justify-between pt-2">
-            <div className="flex items-center gap-1 font-mono text-[10px] text-[#8E8E93]">
-              <span>Next.js 16</span>
-              <span>·</span>
-              <span>120 FPS</span>
+              {/* Web UI Mockup Elements */}
+              <div className="relative z-10 space-y-1.5">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/[0.04] dark:bg-white/[0.08] border border-black/[0.06] dark:border-white/[0.08] font-mono text-[9.5px] text-[#666666] dark:text-[#A1A1AA]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                  <span>LIVE WEB PLATFORM</span>
+                </div>
+                <p className="font-display font-semibold text-sm sm:text-base text-[#222222] dark:text-[#EEEEEE] tracking-tight leading-snug line-clamp-2">
+                  {project.tagline}
+                </p>
+              </div>
+
+              <div className="relative z-10 flex items-center justify-between pt-2">
+                <div className="flex items-center gap-1 font-mono text-[10px] text-[#8E8E93]">
+                  <span>Next.js 16</span>
+                  <span>·</span>
+                  <span>120 FPS</span>
+                </div>
+
+                {project.liveUrl && (
+                  <span className="font-mono text-[10px] text-[#FE385B] font-semibold flex items-center gap-1">
+                    <span>{isEs ? 'Ver Web' : 'Open'}</span>
+                    <ArrowUpRight size={11} />
+                  </span>
+                )}
+              </div>
             </div>
-
-            {project.liveUrl && (
-              <span className="font-mono text-[10px] text-[#FE385B] font-semibold flex items-center gap-1">
-                <span>{isEs ? 'Ver Web' : 'Open'}</span>
-                <ArrowUpRight size={11} />
-              </span>
-            )}
-          </div>
+          )}
         </div>
       </div>
 

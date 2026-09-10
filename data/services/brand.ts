@@ -11,8 +11,10 @@ export const brandService: ServiceItem = {
     {
       id: "brand-strategy",
       slug: "brand-strategy",
-      title: "Naming & Estrategia",
-      description: "Encontramos el nombre perfecto y definimos la personalidad de tu negocio antes de dibujar un solo píxel.",
+      title: "Estrategia de Marca & Naming",
+      description: "Encontramos el nombre perfecto y definimos la personalidad y mensaje de tu negocio para conectar con tu cliente ideal.",
+      imageUrl: "/services/cards/brand-identity.jpg",
+      badge: "Estrategia & Naming",
       startingPrice: { COP: 1200000, USD: 300 },
       timeline: "1 a 2 Semanas",
       tiers: [
@@ -47,7 +49,9 @@ export const brandService: ServiceItem = {
       id: "visual-identity",
       slug: "visual-identity",
       title: "Diseño de Logo & Identidad Visual",
-      description: "Creación desde cero y rediseño de logotipos con sistemas visuales completos que transmiten autoridad y confianza.",
+      description: "Logotipo profesional, paleta de colores, tipografías y manual de marca para que tu negocio transmita prestigio y autoridad.",
+      imageUrl: "/services/cards/brand-identity.jpg",
+      badge: "Logo & Manual",
       startingPrice: { COP: 1400000, USD: 350 },
       timeline: "2 a 3 Semanas",
       tiers: [
@@ -58,20 +62,22 @@ export const brandService: ServiceItem = {
           features: [
             "Diseño de logotipo principal, secundario e isotipo",
             "3 direcciones conceptuales desarrolladas en contexto",
-            "Paleta cromática con códigos HEX, RGB y CMYK",
-            "Selección tipográfica y jerarquía para web y print",
-            "Exportación vectorial en AI, SVG, EPS, PNG y WebP"
+            "Paleta cromática con códigos de color para pantalla e impresión",
+            "Selección tipográfica institucional (Primaria y secundaria)",
+            "Manual básico de uso de marca en PDF interactivo",
+            "Exportación de archivos en todos los formatos (AI, SVG, PNG, EPS)"
           ] 
         },
         { 
-          name: "Sistema Completo", 
+          name: "Sistema de Identidad Completo", 
           isRecommended: true, 
-          price: { COP: 3800000, USD: 950 }, 
-          description: "Identidad visual de clase mundial con manual de marca integral y biblioteca de activos lista para escalar.",
+          price: { COP: 2900000, USD: 725 }, 
+          description: "Ecosistema visual exhaustivo con patrones, iconografía, mockups y manual de identidad 360°.",
           features: [
-            "Diseño de logotipo, isotipo, versiones y patrones visuales",
-            "Brandbook interactivo (Manual de normas y uso de marca)",
-            "Set de aplicaciones digitales básicas (Web, Email, Social)",
+            "Todo lo incluido en el paquete Logo & Esenciales",
+            "Sistema de patrones gráficos, texturas y elementos visuales de apoyo",
+            "Set de 20 iconos corporativos personalizados",
+            "Mockups de aplicación real en papelería, web y redes sociales",
             "Guía de estilo para fotografía e iconografía corporativa",
             "Archivos fuente editables + biblioteca organizada en la nube"
           ] 
@@ -81,8 +87,10 @@ export const brandService: ServiceItem = {
     {
       id: "packaging-apps",
       slug: "packaging-apps",
-      title: "Empaques & Aplicaciones",
-      description: "Llevamos tu marca al mundo físico y digital. Desde el diseño de envases hasta tus plantillas de comunicación.",
+      title: "Empaques, Etiquetas & Piezas Digitales",
+      description: "Llevamos tu marca al mundo físico y digital: diseño de cajas, etiquetas para productos, plantillas para redes y papelería corporativa.",
+      imageUrl: "/services/cards/brand-identity.jpg",
+      badge: "Empaques & Digital",
       startingPrice: { COP: 1200000, USD: 300 },
       timeline: "1 a 2 Semanas",
       tiers: [

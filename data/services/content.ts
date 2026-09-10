@@ -15,6 +15,8 @@ export const contentService: ServiceItem = {
     description: p.description,
     startingPrice: p.startingPrice,
     tiers: p.tiers,
+    badge: p.badge,
+    imageUrl: p.imageUrl,
   })),
   platforms: contentPlatforms,
   microServices: contentPlatforms.flatMap(p => p.microServices || []),

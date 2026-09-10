@@ -91,7 +91,33 @@ export default async function AcademyPage({
         </div>
 
         {/* Featured Course Card */}
-        <AuroraSpotlightCard color="#FE385B" className="p-1">
+        <AuroraSpotlightCard color="#FE385B" className="p-1 sm:p-2">
+          {/* Visual Masterclass Cover Header */}
+          <div className="relative w-full aspect-[16/9] sm:aspect-[24/9] rounded-2xl overflow-hidden mb-2 border border-black/[0.06] dark:border-white/[0.08] shadow-soft group">
+            <img
+              src="/academy/creator-lab/hero-creator-setup.jpg"
+              alt="UXIO Creator Lab"
+              className="w-full h-full object-cover select-none transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
+            <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
+              <span className="font-mono text-[10px] font-bold text-white bg-[#FE385B] px-3 py-1 rounded-full uppercase shadow-md">
+                {isEs ? 'PROGRAMA INSIGNIA' : 'FLAGSHIP COHORT'}
+              </span>
+              <span className="font-mono text-[10px] text-white/90 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+                {creatorLab.cohortName.toUpperCase()}
+              </span>
+            </div>
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between pointer-events-none text-white font-mono text-[11px]">
+              <span className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-[11px]">
+                {isEs ? 'Aprende a convertir lo que haces en contenido que vende' : 'Turn what you do into high-converting content'}
+              </span>
+              <span className="hidden sm:inline-block bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-[11px]">
+                {creatorLab.commercialDuration}
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6 items-center">
             <div className="lg:col-span-8 space-y-4">
               <div className="flex flex-wrap items-center gap-2">
