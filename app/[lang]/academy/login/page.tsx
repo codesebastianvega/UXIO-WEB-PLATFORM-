@@ -32,12 +32,13 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams?: Promise<{ redirectTo?: string }>;
+  searchParams?: Promise<{ redirectTo?: string; error?: string }>;
 }) {
   const { lang: rawLang } = await params;
   const lang: Locale = rawLang === 'en' ? 'en' : 'es';
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const redirectTo = resolvedSearchParams?.redirectTo;
+  const oauthError = resolvedSearchParams?.error;
   const isEs = lang === 'es';
 
   return (
@@ -55,7 +56,7 @@ export default async function LoginPage({
 
       {/* Centered Login Card */}
       <div className="py-8">
-        <LoginForm lang={lang} redirectTo={redirectTo} />
+        <LoginForm lang={lang} redirectTo={redirectTo} oauthError={oauthError} />
       </div>
 
       {/* Footer System Disclaimer */}

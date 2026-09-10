@@ -24,5 +24,6 @@ export async function GET(request: Request) {
   }
 
   // Return to login with error if code exchange fails
-  return NextResponse.redirect(`${origin}/es/academy/login?error=auth_callback_failed`);
+  const detectedLang = next.startsWith('/en') ? 'en' : 'es';
+  return NextResponse.redirect(`${origin}/${detectedLang}/academy/login?error=auth_callback_failed&redirectTo=${encodeURIComponent(next)}`);
 }

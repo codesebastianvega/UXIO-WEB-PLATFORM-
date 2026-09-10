@@ -26,16 +26,35 @@ export async function signInAction(
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
+    const rawMsg = error.message?.toLowerCase() || '';
+
+    if (rawMsg.includes('email not confirmed')) {
+      return {
+        error: lang === 'es'
+          ? 'Tu correo aún no ha sido verificado. Revisa tu bandeja de entrada o confirma tu cuenta en Supabase.'
+          : 'Your email has not been confirmed yet. Please check your inbox or confirm your account in Supabase.',
+      };
+    }
+
+    if (rawMsg.includes('invalid login credentials')) {
+      return {
+        error: lang === 'es'
+          ? 'Credenciales inválidas o cuenta no registrada.'
+          : 'Invalid credentials or user not registered.',
+      };
+    }
+
+    // Network / Configuration / Rate limit errors
     return {
-      error: lang === 'es'
-        ? 'Credenciales inválidas o cuenta no registrada.'
-        : 'Invalid credentials or user not registered.',
+      error: error.message || (lang === 'es'
+        ? 'Error al iniciar sesión. Por favor verifica tus datos o la configuración del servidor.'
+        : 'Failed to sign in. Please verify your credentials or server configuration.'),
     };
   }
 

@@ -53,12 +53,20 @@ export async function updateSession(request: NextRequest) {
     if (isClassroomRoute && !user) {
       const loginUrl = new URL(`/${lang}/academy/login`, request.url);
       loginUrl.searchParams.set('redirectTo', pathname);
-      return NextResponse.redirect(loginUrl);
+      const redirectResponse = NextResponse.redirect(loginUrl);
+      response.cookies.getAll().forEach(cookie => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+      });
+      return redirectResponse;
     }
 
     // Login Route: authenticated users redirect to classroom
     if (isLoginRoute && user) {
-      return NextResponse.redirect(new URL(`/${lang}/academy/classroom`, request.url));
+      const redirectResponse = NextResponse.redirect(new URL(`/${lang}/academy/classroom`, request.url));
+      response.cookies.getAll().forEach(cookie => {
+        redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+      });
+      return redirectResponse;
     }
   }
 

@@ -24,10 +24,11 @@ function getLocale(request: NextRequest): string {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Strictly ignore all internal Next.js assets, static files, and APIs
+  // Strictly ignore all internal Next.js assets, static files, APIs, and auth handlers
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
+    pathname.startsWith('/auth') ||
     pathname.startsWith('/static') ||
     pathname.includes('.') ||
     pathname === '/favicon.ico' ||

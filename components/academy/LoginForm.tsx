@@ -9,9 +9,10 @@ import { signInAction, signUpAction, AuthActionResult } from '@/app/[lang]/acade
 interface LoginFormProps {
   lang: Locale;
   redirectTo?: string;
+  oauthError?: string;
 }
 
-export default function LoginForm({ lang, redirectTo }: LoginFormProps) {
+export default function LoginForm({ lang, redirectTo, oauthError }: LoginFormProps) {
   const isEs = lang === 'es';
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -140,10 +141,16 @@ export default function LoginForm({ lang, redirectTo }: LoginFormProps) {
       </div>
 
       {/* Messages */}
-      {activeState?.error && (
+      {(activeState?.error || oauthError) && (
         <div className="p-3.5 rounded-xl bg-[#FE385B]/10 border border-[#FE385B]/20 text-xs font-sans text-[#FE385B] flex items-start gap-2.5 animate-fadeIn">
           <AlertCircle size={16} className="shrink-0 mt-0.5" />
-          <p className="leading-snug">{activeState.error}</p>
+          <p className="leading-snug">
+            {activeState?.error || (
+              isEs
+                ? 'No se pudo completar el inicio de sesión con el proveedor externo. Por favor intenta de nuevo.'
+                : 'Could not complete sign in with external provider. Please try again.'
+            )}
+          </p>
         </div>
       )}
 
