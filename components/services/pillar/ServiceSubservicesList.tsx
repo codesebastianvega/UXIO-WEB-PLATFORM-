@@ -45,7 +45,7 @@ export default function ServiceSubservicesList({
 
   if (!microServices || microServices.length === 0) return null;
 
-  const defaultTitle = isEs ? '// MICRO-SERVICIOS & SPRINTS ÁGILES (24H - 72H)' : '// AGILE MICRO-SERVICES (24H - 72H)';
+  const defaultTitle = isEs ? 'Soluciones rápidas y sprints ágiles (24h a 72h)' : 'Quick turnarounds and agile sprints (24h - 72h)';
 
   return (
     <section className="space-y-4 pt-4">

@@ -94,8 +94,8 @@ export default function ServiceDetailView({
             {/* Standard Core Capabilities Cards */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-black/[0.08] dark:border-white/[0.08]">
-                <span className="font-mono text-[11px] font-medium text-[#8E8E93] tracking-tight block">
-                  // SERVICIOS CORE & CAPABILITIES
+                <span className="font-display font-bold text-sm sm:text-base text-[#111111] dark:text-white tracking-tight block">
+                  {isEs ? '¿Qué podemos construir para tu negocio?' : 'What can we build for your business?'}
                 </span>
                 <span className="font-mono text-[10px] text-[#8E8E93]">
                   {service.capabilities.length} {isEs ? 'especialidades' : 'capabilities'}

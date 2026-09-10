@@ -54,7 +54,7 @@ export default function ServicePillarHero({ service, lang }: ServicePillarHeroPr
             }}
           >
             {getDisciplineIcon(service.slug)}
-            <span>// DISCIPLINA · {service.slug.toUpperCase()}</span>
+            <span>{isEs ? 'Disciplina' : 'Discipline'} · {service.title}</span>
           </span>
         </div>
 

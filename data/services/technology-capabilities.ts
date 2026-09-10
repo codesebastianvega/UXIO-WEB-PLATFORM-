@@ -4,8 +4,10 @@ export const technologyCapabilities: Capability[] = [
   { 
     id: "custom-software",
     slug: "apps",
-    title: "Software a Medida & Web Apps", 
-    description: "Construimos el motor digital de tu empresa. Desde plataformas web de alta velocidad hasta aplicaciones móviles nativas, combinamos diseño de vanguardia y arquitectura sólida para convertir ideas complejas en productos rentables, rápidos y listos para escalar.",
+    title: "Plataformas Web & Apps a Medida", 
+    description: "Construimos el sistema exclusivo para tu empresa. Portales de clientes, paneles de control y aplicaciones web de alta velocidad diseñadas para automatizar tu operación y escalar ventas.",
+    imageUrl: "/services/cards/web-apps-platform.jpg",
+    badge: "Alta Demanda",
     startingPrice: { USD: 1100, COP: 4500000 },
     timeline: "2-4 Semanas",
     tiers: [
@@ -54,8 +56,10 @@ export const technologyCapabilities: Capability[] = [
   { 
     id: "cms-web",
     slug: "core-architecture",
-    title: "Desarrollo Web & CMS", 
-    description: "Implementación ágil sobre plantillas de alta conversión. Configuramos tu sitio web en WordPress o tu tienda en Shopify usando estructuras probadas para vender, reduciendo tiempos y costos de lanzamiento al mínimo.",
+    title: "Páginas Web & Tiendas Online", 
+    description: "Sitios web modernos y tiendas en Shopify o WordPress diseñadas para convertir visitas en clientes reales. Rápidas, autoadministrables y 100% optimizadas para vender desde celulares.",
+    imageUrl: "/services/cards/ecommerce-store.jpg",
+    badge: "Lanzamiento Rápido",
     startingPrice: { USD: 300, COP: 1200000 },
     timeline: "3 Días a 2 Semanas",
     platforms: [
@@ -189,8 +193,10 @@ export const technologyCapabilities: Capability[] = [
   { 
     id: "api-ai",
     slug: "automation-ai",
-    title: "Integraciones, APIs & IA", 
-    description: "Conectamos tu ecosistema digital y automatizamos operaciones con modelos de IA (OpenAI, Claude), APIs REST/GraphQL, webhooks y pipelines de datos.",
+    title: "Automatizaciones & Inteligencia Artificial", 
+    description: "Conectamos tu ecosistema digital: bots de atención por WhatsApp, pasarelas de pago, CRM e Inteligencia Artificial para que tu negocio atienda prospectos y opere en piloto automático.",
+    imageUrl: "/services/cards/ai-automation.jpg",
+    badge: "IA Aplicada",
     startingPrice: { USD: 450, COP: 1800000 },
     timeline: "1 a 3 Semanas",
     tiers: [

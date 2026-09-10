@@ -54,8 +54,8 @@ export default function TechStackMarquee({ lang }: TechStackMarqueeProps) {
       {/* Label Header */}
       <div className="flex items-center gap-2">
         <Sparkles size={12} className="text-[#00F0FF] dark:text-[#00F0FF]" />
-        <span className="font-mono text-[10.5px] font-semibold text-[#8E8E93] uppercase tracking-wider">
-          {isEs ? '// ARSENAL TÉCNICO & HERRAMIENTAS QUE DOMINAMOS:' : '// TECH STACK & TOOLS WE MASTER:'}
+        <span className="font-mono text-[11px] font-semibold text-[#8E8E93] uppercase tracking-wider">
+          {isEs ? 'Tecnologías modernas y confiables que utilizamos:' : 'Modern & reliable technologies we use:'}
         </span>
       </div>
 

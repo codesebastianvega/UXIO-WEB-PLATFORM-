@@ -247,10 +247,10 @@ export default async function ServicesPage({
 
                 <div className="relative z-10 pt-4 mt-4 border-t border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between">
                   <Link
-                    href={`/${lang}${disc.path}`}
+                    href={disc.path}
                     className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#111111] dark:text-white group-hover:text-[#FE385B] transition-colors"
                   >
-                    <span>{isEs ? 'Ver sub-disciplina' : 'View sub-discipline'}</span>
+                    <span>{isEs ? 'Explorar servicios y soluciones' : 'Explore services & solutions'}</span>
                     <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                   </Link>
 

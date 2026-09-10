@@ -74,6 +74,8 @@ export interface Capability {
   description: string;
   startingPrice?: string | PriceMap;
   timeline?: string;
+  imageUrl?: string;
+  badge?: string;
   tiers?: CapabilityTier[];
   platforms?: PlatformGroup[];
 }

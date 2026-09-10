@@ -60,25 +60,58 @@ export default function ServiceCapabilityCard({
       color={singleColor}
       className="h-full flex flex-col justify-between"
     >
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-mono text-[10px] text-[#8E8E93] block">
-            [ 0{idx + 1} ]
-          </span>
-          {cap.timeline && (
-            <span className="font-mono text-[10px] text-[#8E8E93] flex items-center gap-1">
-              <Clock size={10} /> {cap.timeline}
-            </span>
-          )}
-        </div>
+      <div>
+        {/* 1. Card Top Image / Cover Preview */}
+        {cap.imageUrl ? (
+          <Link href={basePath} className="block relative w-full aspect-[16/10] rounded-2xl overflow-hidden mb-4 bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] group/img shadow-2xs">
+            <img
+              src={cap.imageUrl}
+              alt={cap.title}
+              className="w-full h-full object-cover object-center select-none transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+            
+            {/* Badges on image */}
+            <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+              <span className="font-mono text-[9px] uppercase px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-white/90 border border-white/10 font-bold">
+                [ 0{idx + 1} ]
+              </span>
+              {cap.badge && (
+                <span
+                  className="font-mono text-[9px] uppercase px-2.5 py-0.5 rounded-full text-white font-bold shadow-sm"
+                  style={{ backgroundColor: singleColor }}
+                >
+                  {cap.badge}
+                </span>
+              )}
+            </div>
 
-        <h3 className="font-display font-bold text-base text-[#111111] dark:text-white tracking-tight">
+            {cap.timeline && (
+              <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 font-mono text-[10px] text-white/90 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-md border border-white/10">
+                <Clock size={10} className="text-white/80" /> {cap.timeline}
+              </div>
+            )}
+          </Link>
+        ) : (
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <span className="font-mono text-[10px] text-[#8E8E93] block">
+              [ 0{idx + 1} ]
+            </span>
+            {cap.timeline && (
+              <span className="font-mono text-[10px] text-[#8E8E93] flex items-center gap-1">
+                <Clock size={10} /> {cap.timeline}
+              </span>
+            )}
+          </div>
+        )}
+
+        <h3 className="font-display font-bold text-base sm:text-lg text-[#111111] dark:text-white tracking-tight">
           <Link href={basePath} className="hover:text-[#FE385B] transition-colors">
             {cap.title}
           </Link>
         </h3>
 
-        <p className="text-xs text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans line-clamp-3">
+        <p className="text-xs sm:text-[13px] text-[#666666] dark:text-[#8E8E93] leading-relaxed font-sans line-clamp-3 mt-1.5">
           {cap.description}
         </p>
       </div>
@@ -89,8 +122,8 @@ export default function ServiceCapabilityCard({
           <div className="space-y-1.5">
             <div className="font-mono text-[9px] text-[#8E8E93] uppercase tracking-wider font-semibold">
               {platformsList.length > 0 
-                ? (isEs ? '// PLATAFORMAS DISPONIBLES:' : '// AVAILABLE PLATFORMS:')
-                : (isEs ? '// PLANES & ALCANCE:' : '// TIERS & SCOPE:')}
+                ? (isEs ? 'Plataformas disponibles:' : 'Available platforms:')
+                : (isEs ? 'Planes disponibles:' : 'Available packages:')}
             </div>
 
             <div className={`grid gap-1.5 w-full ${
@@ -144,10 +177,10 @@ export default function ServiceCapabilityCard({
 
         <Link
           href={basePath}
-          className="w-full py-2.5 px-3 rounded-xl bg-[#111111] dark:bg-white text-white dark:text-black font-display font-semibold text-xs flex items-center justify-center gap-1.5 transition-all hover:scale-[1.01] active:scale-95 shadow-sm"
+          className="w-full py-2.5 px-3 rounded-xl bg-[#111111] dark:bg-white text-white dark:text-black font-display font-semibold text-xs flex items-center justify-center gap-1.5 transition-all hover:scale-[1.01] active:scale-95 shadow-sm group/cta"
         >
-          <span>{isEs ? 'Ver Tiers & Configurar Cotización' : 'View Tiers & Configure Quote'}</span>
-          <ArrowRight size={13} />
+          <span>{isEs ? 'Ver opciones y qué incluye' : 'View packages & what’s included'}</span>
+          <ArrowRight size={13} className="group-hover/cta:translate-x-0.5 transition-transform" />
         </Link>
       </div>
     </AuroraSpotlightCard>
