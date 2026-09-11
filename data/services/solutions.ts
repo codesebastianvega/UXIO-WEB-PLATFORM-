@@ -117,8 +117,9 @@ export const solutionsService: ServiceItem = {
   microServices: [
     {
       id: "tech-feasibility",
-      title: "Taller de Viabilidad Técnica (2 Hrs)",
-      description: "Sesión 1 a 1 con nuestro arquitecto de software para evaluar factibilidad y stack.",
+      title: "Taller de Viabilidad y Arquitectura Técnica",
+      description: "2 horas con nuestro arquitecto de software para validar si tu idea es viable, elegir las mejores tecnologías y evitar sobrecostos.",
+      imageUrl: "/services/sprints/sprint-tech-feasibility.jpg",
       price: { USD: 100, COP: 400000 },
       accent: "#00F0FF",
       timeline: "En vivo (2h)",
@@ -131,8 +132,9 @@ export const solutionsService: ServiceItem = {
     },
     {
       id: "cloud-audit",
-      title: "Auditoría de Arquitectura Cloud y Bases de Datos",
-      description: "Revisión profunda de seguridad, costos y escalabilidad en AWS/GCP/Supabase.",
+      title: "Auditoría de Servidores Cloud y Bases de Datos",
+      description: "Diagnóstico profundo de seguridad, consumo de recursos y costos en la nube para que tu sistema escale sin caerse.",
+      imageUrl: "/services/sprints/sprint-cloud-audit.jpg",
       price: { USD: 200, COP: 800000 },
       accent: "#2563EB",
       timeline: "24h a 48h",
@@ -145,8 +147,9 @@ export const solutionsService: ServiceItem = {
     },
     {
       id: "phygital-ideation",
-      title: "Sesión de Ideación Phygital para Retail/Restaurantes",
-      description: "Taller creativo de 90 min para digitalizar tu espacio físico con tecnología interactiva.",
+      title: "Ideación Phygital para Tiendas y Restaurantes",
+      description: "Diseñamos experiencias digitales interactivas para tu local físico: kioscos de autoservicio, pedidos ágiles y pantallas táctiles.",
+      imageUrl: "/services/sprints/sprint-phygital-ideation.jpg",
       price: { USD: 125, COP: 500000 },
       accent: "#7928CA",
       timeline: "En vivo (90m)",

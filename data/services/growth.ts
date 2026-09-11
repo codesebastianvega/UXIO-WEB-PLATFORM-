@@ -117,8 +117,9 @@ export const growthService: ServiceItem = {
   microServices: [
     { 
       id: "ga4-setup", 
-      title: "Setup Google Analytics 4", 
-      description: "Configuración profesional de eventos y conversiones en GA4.", 
+      title: "Configuración Completa de Google Analytics 4", 
+      description: "Instalación profesional de eventos de compra, clics a WhatsApp y formularios sin ralentizar la velocidad de tu web.", 
+      imageUrl: "/services/sprints/sprint-ga4-setup.jpg",
       price: { USD: 100, COP: 400000 },
       accent: "#10B981",
       timeline: "24h",
@@ -131,8 +132,9 @@ export const growthService: ServiceItem = {
     },
     { 
       id: "ads-audit", 
-      title: "Auditoría de Meta/Google Ads", 
-      description: "Revisión profunda de tus campañas actuales para frenar el desperdicio de presupuesto.", 
+      title: "Auditoría de Campañas en Meta y Google Ads", 
+      description: "Revisión exhaustiva de tus anuncios para detectar fugas de dinero, optimizar la segmentación y multiplicar tu retorno de inversión.", 
+      imageUrl: "/services/sprints/sprint-ads-audit.jpg",
       price: { USD: 150, COP: 600000 },
       accent: "#FF7F07",
       timeline: "24h a 48h",
@@ -145,8 +147,9 @@ export const growthService: ServiceItem = {
     },
     { 
       id: "looker-dashboard", 
-      title: "Dashboard Ejecutivo", 
-      description: "Panel en Looker Studio con tus KPIs de negocio en tiempo real.", 
+      title: "Tablero de Control Ejecutivo en Tiempo Real", 
+      description: "Panel interactivo que reúne tus ventas, clientes y anuncios en una sola pantalla clara, lista para compartir con socios e inversionistas.", 
+      imageUrl: "/services/sprints/sprint-looker-dashboard.jpg",
       price: { USD: 200, COP: 800000 },
       accent: "#2563EB",
       timeline: "48h",

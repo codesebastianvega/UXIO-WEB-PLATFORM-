@@ -125,8 +125,9 @@ export const brandService: ServiceItem = {
   microServices: [
     { 
       id: "logo-creation", 
-      title: "Creación de Logotipo Express", 
-      description: "Diseño de logotipo profesional desde cero con 3 propuestas vectoriales y variantes.", 
+      title: "Diseño de Logotipo e Isotipo Express", 
+      description: "3 propuestas conceptuales vectoriales desarrolladas en aplicaciones reales, listas para imprenta, bordado y medios digitales.", 
+      imageUrl: "/services/sprints/sprint-logo-creation.jpg",
       price: { USD: 200, COP: 800000 },
       accent: "#FE385B",
       timeline: "48h a 72h",
@@ -139,8 +140,9 @@ export const brandService: ServiceItem = {
     },
     { 
       id: "logo-redesign", 
-      title: "Rediseño & Vectorización de Logo", 
-      description: "Modernización, ajuste geométrico y digitalización en alta definición de tu logo actual.", 
+      title: "Rediseño & Vectorización en Alta Definición", 
+      description: "Modernizamos y corregimos las curvas de tu logo actual para que luzca nítido, profesional y adaptable en cualquier tamaño.", 
+      imageUrl: "/services/sprints/sprint-logo-redesign.jpg",
       price: { USD: 120, COP: 450000 },
       accent: "#FF7F07",
       timeline: "24h a 48h",
@@ -153,8 +155,9 @@ export const brandService: ServiceItem = {
     },
     { 
       id: "social-kit", 
-      title: "Set de Redes Sociales (Figma)", 
-      description: "5 plantillas estratégicas listas para que tu equipo edite.", 
+      title: "Kit de Plantillas Editables para Redes Sociales", 
+      description: "5 plantillas profesionales en Figma listas para que tu equipo publique contenido coherente y atractivo sin depender de diseñadores.", 
+      imageUrl: "/services/sprints/sprint-social-kit.jpg",
       price: { USD: 100, COP: 400000 },
       accent: "#10B981",
       timeline: "24h",
@@ -167,8 +170,9 @@ export const brandService: ServiceItem = {
     },
     { 
       id: "pitch-deck", 
-      title: "Diseño de Pitch Deck", 
-      description: "Diseño premium de tu presentación comercial o para inversionistas (10 slides).", 
+      title: "Presentación Comercial y Pitch Deck de Impacto", 
+      description: "10 diapositivas estructuradas con narrativa persuasiva, gráficos claros y diseño de nivel internacional para convencer inversionistas.", 
+      imageUrl: "/services/sprints/sprint-pitch-deck.jpg",
       price: { USD: 250, COP: 1000000 },
       accent: "#7928CA",
       timeline: "48h a 72h",

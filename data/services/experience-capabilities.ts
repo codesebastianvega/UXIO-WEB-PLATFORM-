@@ -129,8 +129,9 @@ export const experienceCapabilities: Capability[] = [
 export const experienceMicroServices: MicroService[] = [
   { 
     id: "ux-roast", 
-    title: "UX Roast (Video Teardown)", 
-    description: "Grabación de 20 min analizando los errores de tu web/app.", 
+    title: "Diagnóstico UX en Video (Teardown 20 Min)", 
+    description: "Grabación personalizada analizando tu web o app pantalla por pantalla, detectando exactamente dónde se pierden tus clientes.", 
+    imageUrl: "/services/sprints/sprint-ux-roast.jpg",
     price: { USD: 85, COP: 350000 },
     accent: "#FFCC48",
     timeline: "24h",
@@ -143,8 +144,9 @@ export const experienceMicroServices: MicroService[] = [
   },
   { 
     id: "consulting-1on1", 
-    title: "Consultoría de Fricción (1hr)", 
-    description: "Sesión 1 a 1 para destrabar flujos y resolver dudas de UX.", 
+    title: "Sesión 1 a 1 de Fricción & Conversión", 
+    description: "60 minutos en vivo con un especialista UX para resolver dudas, revisar wireframes y destrabar tus flujos de venta.", 
+    imageUrl: "/services/sprints/sprint-consulting-1on1.jpg",
     price: { USD: 45, COP: 180000 },
     accent: "#FF7F07",
     timeline: "En vivo",
@@ -157,8 +159,9 @@ export const experienceMicroServices: MicroService[] = [
   },
   { 
     id: "ux-surveys", 
-    title: "Setup de Encuestas sin Sesgo", 
-    description: "Diseño de 10 preguntas estratégicas para descubrir por qué compran o se van.", 
+    title: "Encuestas de Clientes sin Sesgo Cognitivo", 
+    description: "10 preguntas estratégicas integradas en tu plataforma para descubrir por qué los usuarios compran o abandonan.", 
+    imageUrl: "/services/sprints/sprint-ux-surveys.jpg",
     price: { USD: 100, COP: 400000 },
     accent: "#10B981",
     timeline: "24 a 48h",
@@ -171,8 +174,9 @@ export const experienceMicroServices: MicroService[] = [
   },
   { 
     id: "5-sec-test", 
-    title: "Test de 5 Segundos", 
-    description: "Validación rápida de claridad de tu Landing Page con usuarios reales.", 
+    title: "Test de Primer Impacto (5 Segundos)", 
+    description: "Validación exprés con 10 usuarios reales para comprobar si tu mensaje principal se entiende en los primeros 5 segundos.", 
+    imageUrl: "/services/sprints/sprint-5-sec-test.jpg",
     price: { USD: 125, COP: 500000 },
     accent: "#635BFF",
     timeline: "24h",
