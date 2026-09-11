@@ -65,7 +65,7 @@ export const technologyMicroServices: MicroService[] = [
     id: "wpo-speed",
     title: "Optimización de Carga Ultra Rápida",
     description: "Aceleramos tu sitio para que abra en menos de 2 segundos y ningún cliente lo abandone por esperar.",
-    imageUrl: "/services/sprints/sprint-speed-optimization.jpg",
+    imageUrl: "/services/sprints/sprint-speed-optimization-v2.jpg",
     accent: "#FE385B",
     deliverables: [
       "Optimización y compresión inteligente de fotos y videos pesados.",

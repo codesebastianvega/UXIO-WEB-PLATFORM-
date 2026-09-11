@@ -2,8 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Clock, ArrowRight } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
+import WeldingBorderButton from './WeldingBorderButton';
 import { Capability } from '@/data/services';
 import { Locale } from '@/types';
 
@@ -175,13 +176,11 @@ export default function ServiceCapabilityCard({
           </div>
         )}
 
-        <Link
+        <WeldingBorderButton
           href={basePath}
-          className="w-full py-2.5 px-3 rounded-xl bg-[#111111] dark:bg-white text-white dark:text-black font-display font-semibold text-xs flex items-center justify-center gap-1.5 transition-all hover:scale-[1.01] active:scale-95 shadow-sm group/cta"
-        >
-          <span>{isEs ? 'Ver opciones y qué incluye' : 'View packages & what’s included'}</span>
-          <ArrowRight size={13} className="group-hover/cta:translate-x-0.5 transition-transform" />
-        </Link>
+          label={isEs ? 'Ver opciones y qué incluye' : 'View packages & what’s included'}
+          accent={singleColor}
+        />
       </div>
     </AuroraSpotlightCard>
   );
