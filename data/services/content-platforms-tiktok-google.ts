@@ -6,7 +6,7 @@ export const contentPlatformsTikTokGoogle: PlatformGroup[] = [
     name: "Ecosistema TikTok",
     badge: "TikTok",
     tagline: "Lenguaje nativo, tendencias y crecimiento orgánico acelerado.",
-    imageUrl: "/services/cards/content-tiktok.jpg",
+    imageUrl: "/services/cards/content-tiktok-v2.jpg",
     description: "Estrategias de contenido vertical nativo para conectar con audiencias masivas, viralidad y Spark Ads en TikTok.",
     startingPrice: { COP: 1200000, USD: 300 },
     tiers: [
@@ -109,7 +109,7 @@ export const contentPlatformsTikTokGoogle: PlatformGroup[] = [
     name: "Ecosistema Google & YouTube",
     badge: "Google & YouTube",
     tagline: "Captura la intención de búsqueda e impacta con video.",
-    imageUrl: "/services/cards/content-youtube-google.jpg",
+    imageUrl: "/services/cards/content-google-v2.jpg",
     description: "Estrategias de pauta publicitaria en Google Search, Performance Max, Display y anuncios audiovisuales en YouTube.",
     startingPrice: { COP: 1500000, USD: 350 },
     tiers: [

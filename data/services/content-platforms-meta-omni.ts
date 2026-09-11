@@ -6,7 +6,7 @@ export const contentPlatformsMetaOmni: PlatformGroup[] = [
     name: "Paquetes Omnicanal (Mixtos)",
     badge: "Omnicanal",
     tagline: "Presencia total y distribución de contenido cruzado.",
-    imageUrl: "/services/cards/content-media.jpg",
+    imageUrl: "/services/cards/content-omnicanal-v2.jpg",
     description: "Estrategia integral de contenidos cruzados para amplificar el alcance de tu marca en todos los canales simultáneamente.",
     startingPrice: { COP: 1200000, USD: 300 },
     tiers: [
@@ -109,7 +109,7 @@ export const contentPlatformsMetaOmni: PlatformGroup[] = [
     name: "Ecosistema Meta (Instagram & Facebook)",
     badge: "Meta",
     tagline: "Dominio absoluto de la comunidad visual y conversión directa.",
-    imageUrl: "/services/cards/content-meta-instagram.jpg",
+    imageUrl: "/services/cards/content-meta-v2.jpg",
     description: "Posicionamiento visual impecable, gestión de comunidad y campañas de tráfico y conversión en Instagram y Facebook.",
     startingPrice: { COP: 1500000, USD: 350 },
     tiers: [
