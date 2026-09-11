@@ -320,7 +320,7 @@ export const getProjectsData = (lang: Locale = 'es'): ProjectDetail[] => {
         { label: 'UX/UI' },
         { label: 'POS Kiosks' }
       ],
-      imageUrl: '/services/cards/brand-identity.jpg',
+      imageUrl: '/works/cards/boku-bento.jpg',
       canvasType: 'preview'
     }
   ];

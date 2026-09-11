@@ -48,7 +48,7 @@ export const solutionsService: ServiceItem = {
       slug: "hardware-wearables",
       title: "Dispositivos Conectados & Wearables",
       description: "Llevamos tu producto a smartwatches, terminales punto de venta (POS) y hardware conectado con interfaces intuitivas.",
-      imageUrl: "/services/cards/digital-solutions.jpg",
+      imageUrl: "/services/cards/solutions-wearables-iot.jpg",
       badge: "Wearables & IoT",
       startingPrice: "Cotizar según hardware",
       timeline: "4 a 8 Semanas",
@@ -83,6 +83,8 @@ export const solutionsService: ServiceItem = {
       slug: "phygital-experiences",
       title: "Experiencias Phygitales (Físico + Digital)",
       description: "Diseñamos ecosistemas donde el mundo físico interactúa con el digital. Gamificación en espacios comerciales, turismo inmersivo y automatización retail.",
+      imageUrl: "/services/cards/solutions-phygital.jpg",
+      badge: "Retail & Phygital",
       startingPrice: "Cotizar según espacio",
       timeline: "4 a 10 Semanas",
       tiers: [

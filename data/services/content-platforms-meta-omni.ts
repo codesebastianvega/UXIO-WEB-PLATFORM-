@@ -109,7 +109,7 @@ export const contentPlatformsMetaOmni: PlatformGroup[] = [
     name: "Ecosistema Meta (Instagram & Facebook)",
     badge: "Meta",
     tagline: "Dominio absoluto de la comunidad visual y conversión directa.",
-    imageUrl: "/services/cards/growth-analytics.jpg",
+    imageUrl: "/services/cards/content-meta-instagram.jpg",
     description: "Posicionamiento visual impecable, gestión de comunidad y campañas de tráfico y conversión en Instagram y Facebook.",
     startingPrice: { COP: 1500000, USD: 350 },
     tiers: [
