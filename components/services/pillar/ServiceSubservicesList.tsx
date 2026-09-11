@@ -84,23 +84,52 @@ export default function ServiceSubservicesList({
               }}
               className="group p-5 rounded-2xl bg-white dark:bg-[#151517] border border-black/[0.08] dark:border-white/[0.08] transition-all duration-300 flex flex-col justify-between gap-4 shadow-soft-sm hover:-translate-y-0.5 cursor-pointer relative"
             >
-              <div className="space-y-2.5">
-                {/* SPRINT Tag & Timeline */}
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className="font-mono text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider transition-colors"
-                    style={{
-                      backgroundColor: `${accent}15`,
-                      color: accent,
-                      border: `1px solid ${accent}30`
-                    }}
-                  >
-                    // SPRINT {item.timeline || '24H-72H'}
-                  </span>
-                  <span className="font-mono text-[10.5px] text-[#8E8E93] flex items-center gap-1">
-                    <Clock size={10.5} /> {item.timeline || '24 a 48h'}
-                  </span>
-                </div>
+              <div className="space-y-3">
+                {/* 1. Top Cover Image with Floating Tags */}
+                {item.imageUrl ? (
+                  <div className="relative w-full aspect-[16/9] max-h-[115px] rounded-xl overflow-hidden bg-black/[0.04] dark:bg-white/[0.04] border border-black/[0.06] dark:border-white/[0.08] shadow-2xs">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover object-center select-none transition-transform duration-500 ease-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+
+                    {/* SPRINT Tag & Timeline floating over image */}
+                    <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                      <span
+                        className="font-mono text-[9px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider backdrop-blur-md shadow-xs"
+                        style={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.65)',
+                          color: accent,
+                          border: `1px solid ${accent}40`,
+                        }}
+                      >
+                        // SPRINT {item.timeline || '24H-72H'}
+                      </span>
+                      <span className="font-mono text-[9.5px] font-medium text-white/95 bg-black/65 backdrop-blur-md px-1.5 py-0.5 rounded-md border border-white/15 flex items-center gap-1 shadow-xs">
+                        <Clock size={9.5} /> {item.timeline || '24 a 48h'}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  /* Fallback when no image is configured */
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className="font-mono text-[9.5px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider transition-colors"
+                      style={{
+                        backgroundColor: `${accent}15`,
+                        color: accent,
+                        border: `1px solid ${accent}30`
+                      }}
+                    >
+                      // SPRINT {item.timeline || '24H-72H'}
+                    </span>
+                    <span className="font-mono text-[10.5px] text-[#8E8E93] flex items-center gap-1">
+                      <Clock size={10.5} /> {item.timeline || '24 a 48h'}
+                    </span>
+                  </div>
+                )}
 
                 {/* Title and 1-Line Description */}
                 <div>

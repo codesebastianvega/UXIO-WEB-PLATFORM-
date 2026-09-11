@@ -92,6 +92,8 @@ export interface MicroService {
   price?: PriceMap;
   startingPrice?: string;
   timeline?: string;
+  imageUrl?: string;
+  badge?: string;
 }
 
 export interface ServiceItem {
