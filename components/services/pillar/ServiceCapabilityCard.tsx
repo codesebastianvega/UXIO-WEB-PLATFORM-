@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Clock } from 'lucide-react';
 import AuroraSpotlightCard from '@/components/ui/AuroraSpotlightCard';
-import WeldingBorderButton from './WeldingBorderButton';
+import AuroraBeamButton from '@/components/ui/AuroraBeamButton';
 import { Capability } from '@/data/services';
 import { Locale } from '@/types';
 
@@ -176,7 +176,7 @@ export default function ServiceCapabilityCard({
           </div>
         )}
 
-        <WeldingBorderButton
+        <AuroraBeamButton
           href={basePath}
           label={isEs ? 'Ver opciones y qué incluye' : 'View packages & what’s included'}
           accent={singleColor}
