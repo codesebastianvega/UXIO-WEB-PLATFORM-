@@ -57,6 +57,18 @@ import { getPresentationM0403 } from './m04-03-live-lab';
 import { getPresentationM040401 } from './m04-04-01-ai-prompting-creators';
 import { getPresentationM040402 } from './m04-04-02-repurposing-engine';
 
+// Semana 5: Contenido que Vende (Cierre por WhatsApp, Métricas & Sistema)
+import { getPresentationM050101 } from './m05-01-01-call-to-actions';
+import { getPresentationM050102 } from './m05-01-02-commercial-offers';
+
+import { getPresentationM050201 } from './m05-02-01-dm-to-whatsapp-bridge';
+import { getPresentationM050202 } from './m05-02-02-closing-conversations-scripts';
+
+import { getPresentationM0503 } from './m05-03-live-lab';
+
+import { getPresentationM050401 } from './m05-04-01-retention-vs-vanity-metrics';
+import { getPresentationM050402 } from './m05-04-02-four-hour-batching-system';
+
 export * from './types';
 export * from './m00-01-welcome';
 export * from './m00-01-01-manifesto';
@@ -112,6 +124,17 @@ export * from './m04-03-live-lab';
 export * from './m04-04-01-ai-prompting-creators';
 export * from './m04-04-02-repurposing-engine';
 
+export * from './m05-01-01-call-to-actions';
+export * from './m05-01-02-commercial-offers';
+
+export * from './m05-02-01-dm-to-whatsapp-bridge';
+export * from './m05-02-02-closing-conversations-scripts';
+
+export * from './m05-03-live-lab';
+
+export * from './m05-04-01-retention-vs-vanity-metrics';
+export * from './m05-04-02-four-hour-batching-system';
+
 export function getAllPresentations(lang: Locale = 'es'): PresentationContent[] {
   return [
     // Semana 0: Inducción & Setup
@@ -156,6 +179,14 @@ export function getAllPresentations(lang: Locale = 'es'): PresentationContent[] 
     getPresentationM0403(lang),
     getPresentationM040401(lang),
     getPresentationM040402(lang),
+    // Semana 5: Contenido que Vende (Cierre por WhatsApp, Métricas & Sistema)
+    getPresentationM050101(lang),
+    getPresentationM050102(lang),
+    getPresentationM050201(lang),
+    getPresentationM050202(lang),
+    getPresentationM0503(lang),
+    getPresentationM050401(lang),
+    getPresentationM050402(lang),
   ];
 }
 

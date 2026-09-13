@@ -26,6 +26,12 @@ import { getLessonM0402 } from './m04-02-sound-design-covers';
 import { getLessonM0403 } from './m04-03-live-lab';
 import { getLessonM0404 } from './m04-04-ai-repurposing';
 
+// Semana 5: Contenido que Vende (Cierre por WhatsApp, Métricas & Sistema)
+import { getLessonM0501 } from './m05-01-cta-commercial-content';
+import { getLessonM0502 } from './m05-02-whatsapp-sales-funnel';
+import { getLessonM0503 } from './m05-03-live-lab';
+import { getLessonM0504 } from './m05-04-metrics-production-system';
+
 export * from './m00-01-welcome';
 export * from './m00-02-creator-kit';
 export * from './m00-03-live-lab';
@@ -48,6 +54,11 @@ export * from './m04-01-capcut-editing';
 export * from './m04-02-sound-design-covers';
 export * from './m04-03-live-lab';
 export * from './m04-04-ai-repurposing';
+
+export * from './m05-01-cta-commercial-content';
+export * from './m05-02-whatsapp-sales-funnel';
+export * from './m05-03-live-lab';
+export * from './m05-04-metrics-production-system';
 
 export function getAllLessons(lang: Locale = 'es'): Lesson[] {
   return [
@@ -75,6 +86,11 @@ export function getAllLessons(lang: Locale = 'es'): Lesson[] {
     getLessonM0402(lang),
     getLessonM0403(lang),
     getLessonM0404(lang),
+    // Semana 5: Contenido que Vende (Cierre por WhatsApp, Métricas & Sistema)
+    getLessonM0501(lang),
+    getLessonM0502(lang),
+    getLessonM0503(lang),
+    getLessonM0504(lang),
   ];
 }
 
